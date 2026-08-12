@@ -1,0 +1,17 @@
+# Dependências e artefatos de build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Configuração local e segredos
+.vercel/
+.env
+.env.*
+
+# Logs e arquivos do sistema
+*.log
+.DS_Store
+Thumbs.db
