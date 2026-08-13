@@ -1,0 +1,448 @@
+{
+  "benchmarks": {
+    "gini": "PASS",
+    "mean": "PASS",
+    "population": "PASS",
+    "quantiles": {
+      "P10": {
+        "calculated": 450.7467676623,
+        "calculatedRounded": 451,
+        "differenceRounded": 0,
+        "published": 451
+      },
+      "P20": {
+        "calculated": 693.9428296997,
+        "calculatedRounded": 694,
+        "differenceRounded": 0,
+        "published": 694
+      },
+      "P30": {
+        "calculated": 905.8353909869,
+        "calculatedRounded": 906,
+        "differenceRounded": 0,
+        "published": 906
+      },
+      "P40": {
+        "calculated": 1154.1939357946,
+        "calculatedRounded": 1154,
+        "differenceRounded": 0,
+        "published": 1154
+      },
+      "P5": {
+        "calculated": 298.6600188033,
+        "calculatedRounded": 299,
+        "differenceRounded": 0,
+        "published": 299
+      },
+      "P50": {
+        "calculated": 1489.9901921271,
+        "calculatedRounded": 1490,
+        "differenceRounded": 0,
+        "published": 1490
+      },
+      "P60": {
+        "calculated": 1697.1185281974,
+        "calculatedRounded": 1697,
+        "differenceRounded": 0,
+        "published": 1697
+      },
+      "P70": {
+        "calculated": 2158.1105828585,
+        "calculatedRounded": 2158,
+        "differenceRounded": 0,
+        "published": 2158
+      },
+      "P80": {
+        "calculated": 2958.3887369774,
+        "calculatedRounded": 2958,
+        "differenceRounded": 0,
+        "published": 2958
+      },
+      "P90": {
+        "calculated": 4610.1557817898,
+        "calculatedRounded": 4610,
+        "differenceRounded": 1,
+        "published": 4609
+      },
+      "P95": {
+        "calculated": 6899.6769528034,
+        "calculatedRounded": 6900,
+        "differenceRounded": 0,
+        "published": 6900
+      },
+      "P99": {
+        "calculated": 15214.5091425709,
+        "calculatedRounded": 15215,
+        "differenceRounded": 1,
+        "published": 15214
+      }
+    },
+    "ufMeans": {
+      "matches": 27,
+      "status": "PASS",
+      "total": 27
+    }
+  },
+  "configSha256": "E59072300295303097867BC8D1D0A78BCE9A942E050AA33FB4DE408AED5B55F1",
+  "dataset": "brazil-income-distribution",
+  "environment": {
+    "numpy": "2.3.5",
+    "python": "3.12.13",
+    "xlrd": "2.0.2"
+  },
+  "formula": "sum_household(VD4019 * CO1 + VD4048 * CO1e) / VD2003",
+  "generatedArtifacts": {
+    "datasetLocalPath": "data\\processed\\brazil\\pnad-2025\\brazil-income-distribution-2025.csv",
+    "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+    "datasetSizeBytes": 12921128,
+    "manifestSha256": "78768286699B8F230E686008E340EF4A1F79400BFE0568EE338D066F9B5CF9EC"
+  },
+  "knownDifferences": {
+    "P90": "calculado arredondado = publicado + R$ 1",
+    "P99": "calculado arredondado = publicado + R$ 1"
+  },
+  "methodologyVersion": "1.0.0",
+  "reproducibility": {
+    "datasetChecksumsIdentical": true,
+    "manifestChecksumsIdentical": true,
+    "status": "PASS"
+  },
+  "runs": {
+    "run1": {
+      "benchmarks": {
+        "gini": "PASS",
+        "mean": "PASS",
+        "population": "PASS",
+        "quantiles": {
+          "P10": {
+            "calculated": 450.7467676623,
+            "calculatedRounded": 451,
+            "differenceRounded": 0,
+            "published": 451
+          },
+          "P20": {
+            "calculated": 693.9428296997,
+            "calculatedRounded": 694,
+            "differenceRounded": 0,
+            "published": 694
+          },
+          "P30": {
+            "calculated": 905.8353909869,
+            "calculatedRounded": 906,
+            "differenceRounded": 0,
+            "published": 906
+          },
+          "P40": {
+            "calculated": 1154.1939357946,
+            "calculatedRounded": 1154,
+            "differenceRounded": 0,
+            "published": 1154
+          },
+          "P5": {
+            "calculated": 298.6600188033,
+            "calculatedRounded": 299,
+            "differenceRounded": 0,
+            "published": 299
+          },
+          "P50": {
+            "calculated": 1489.9901921271,
+            "calculatedRounded": 1490,
+            "differenceRounded": 0,
+            "published": 1490
+          },
+          "P60": {
+            "calculated": 1697.1185281974,
+            "calculatedRounded": 1697,
+            "differenceRounded": 0,
+            "published": 1697
+          },
+          "P70": {
+            "calculated": 2158.1105828585,
+            "calculatedRounded": 2158,
+            "differenceRounded": 0,
+            "published": 2158
+          },
+          "P80": {
+            "calculated": 2958.3887369774,
+            "calculatedRounded": 2958,
+            "differenceRounded": 0,
+            "published": 2958
+          },
+          "P90": {
+            "calculated": 4610.1557817898,
+            "calculatedRounded": 4610,
+            "differenceRounded": 1,
+            "published": 4609
+          },
+          "P95": {
+            "calculated": 6899.6769528034,
+            "calculatedRounded": 6900,
+            "differenceRounded": 0,
+            "published": 6900
+          },
+          "P99": {
+            "calculated": 15214.5091425709,
+            "calculatedRounded": 15215,
+            "differenceRounded": 1,
+            "published": 15214
+          }
+        },
+        "ufMeans": {
+          "matches": 27,
+          "status": "PASS",
+          "total": 27
+        }
+      },
+      "datasetPath": "data\\processed\\brazil\\validation-runs\\run-1\\brazil-income-distribution-2025.csv",
+      "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+      "datasetSizeBytes": 12921128,
+      "manifestPath": "data\\processed\\brazil\\validation-runs\\run-1\\brazil-income-distribution-2025.manifest.json",
+      "manifestSha256": "78768286699B8F230E686008E340EF4A1F79400BFE0568EE338D066F9B5CF9EC",
+      "metrics": {
+        "gini": 0.5112237274249047,
+        "giniRounded3": 0.511,
+        "maximum": 200165.7922757916,
+        "mean": 2264.0378278979997,
+        "meanRounded": 2264,
+        "minimum": 0.0,
+        "negativeRecords": 0,
+        "population": 212624284.80064434,
+        "populationThousandRounded": 212624,
+        "quantiles": {
+          "P10": 450.7467676623,
+          "P20": 693.9428296997,
+          "P30": 905.8353909869,
+          "P40": 1154.1939357946,
+          "P5": 298.6600188033,
+          "P50": 1489.9901921271,
+          "P60": 1697.1185281974,
+          "P70": 2158.1105828585,
+          "P80": 2958.3887369774,
+          "P90": 4610.1557817898,
+          "P95": 6899.6769528034,
+          "P99": 15214.5091425709,
+          "P99.5": 20507.9792045905,
+          "P99.9": 38991.6613583962
+        },
+        "records": 408243,
+        "ufMeans": {
+          "11": 1970.3409810149844,
+          "12": 1372.3019639755003,
+          "13": 1449.791182880979,
+          "14": 1870.42637298885,
+          "15": 1434.5647511114846,
+          "16": 1674.9554719269538,
+          "17": 1978.8685964955835,
+          "21": 1230.700061558839,
+          "22": 1533.7250764159794,
+          "23": 1378.664317043728,
+          "24": 1778.5411685723195,
+          "25": 1542.467514321867,
+          "26": 1568.2745812815058,
+          "27": 1401.432117100664,
+          "28": 1688.473571761521,
+          "29": 1451.792607564062,
+          "31": 2289.2244659531834,
+          "32": 2209.4898998667722,
+          "33": 2732.240296146256,
+          "35": 2862.0606672472695,
+          "41": 2687.329947544331,
+          "42": 2751.698331150667,
+          "43": 2771.8036128147455,
+          "50": 2369.1471178899806,
+          "51": 2297.4590793313478,
+          "52": 2377.676373273589,
+          "53": 4400.753412659516
+        },
+        "zeroRecords": 4682,
+        "zeroWeight": 2365090.63973513
+      }
+    },
+    "run2": {
+      "benchmarks": {
+        "gini": "PASS",
+        "mean": "PASS",
+        "population": "PASS",
+        "quantiles": {
+          "P10": {
+            "calculated": 450.7467676623,
+            "calculatedRounded": 451,
+            "differenceRounded": 0,
+            "published": 451
+          },
+          "P20": {
+            "calculated": 693.9428296997,
+            "calculatedRounded": 694,
+            "differenceRounded": 0,
+            "published": 694
+          },
+          "P30": {
+            "calculated": 905.8353909869,
+            "calculatedRounded": 906,
+            "differenceRounded": 0,
+            "published": 906
+          },
+          "P40": {
+            "calculated": 1154.1939357946,
+            "calculatedRounded": 1154,
+            "differenceRounded": 0,
+            "published": 1154
+          },
+          "P5": {
+            "calculated": 298.6600188033,
+            "calculatedRounded": 299,
+            "differenceRounded": 0,
+            "published": 299
+          },
+          "P50": {
+            "calculated": 1489.9901921271,
+            "calculatedRounded": 1490,
+            "differenceRounded": 0,
+            "published": 1490
+          },
+          "P60": {
+            "calculated": 1697.1185281974,
+            "calculatedRounded": 1697,
+            "differenceRounded": 0,
+            "published": 1697
+          },
+          "P70": {
+            "calculated": 2158.1105828585,
+            "calculatedRounded": 2158,
+            "differenceRounded": 0,
+            "published": 2158
+          },
+          "P80": {
+            "calculated": 2958.3887369774,
+            "calculatedRounded": 2958,
+            "differenceRounded": 0,
+            "published": 2958
+          },
+          "P90": {
+            "calculated": 4610.1557817898,
+            "calculatedRounded": 4610,
+            "differenceRounded": 1,
+            "published": 4609
+          },
+          "P95": {
+            "calculated": 6899.6769528034,
+            "calculatedRounded": 6900,
+            "differenceRounded": 0,
+            "published": 6900
+          },
+          "P99": {
+            "calculated": 15214.5091425709,
+            "calculatedRounded": 15215,
+            "differenceRounded": 1,
+            "published": 15214
+          }
+        },
+        "ufMeans": {
+          "matches": 27,
+          "status": "PASS",
+          "total": 27
+        }
+      },
+      "datasetPath": "data\\processed\\brazil\\validation-runs\\run-2\\brazil-income-distribution-2025.csv",
+      "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+      "datasetSizeBytes": 12921128,
+      "manifestPath": "data\\processed\\brazil\\validation-runs\\run-2\\brazil-income-distribution-2025.manifest.json",
+      "manifestSha256": "78768286699B8F230E686008E340EF4A1F79400BFE0568EE338D066F9B5CF9EC",
+      "metrics": {
+        "gini": 0.5112237274249047,
+        "giniRounded3": 0.511,
+        "maximum": 200165.7922757916,
+        "mean": 2264.0378278979997,
+        "meanRounded": 2264,
+        "minimum": 0.0,
+        "negativeRecords": 0,
+        "population": 212624284.80064434,
+        "populationThousandRounded": 212624,
+        "quantiles": {
+          "P10": 450.7467676623,
+          "P20": 693.9428296997,
+          "P30": 905.8353909869,
+          "P40": 1154.1939357946,
+          "P5": 298.6600188033,
+          "P50": 1489.9901921271,
+          "P60": 1697.1185281974,
+          "P70": 2158.1105828585,
+          "P80": 2958.3887369774,
+          "P90": 4610.1557817898,
+          "P95": 6899.6769528034,
+          "P99": 15214.5091425709,
+          "P99.5": 20507.9792045905,
+          "P99.9": 38991.6613583962
+        },
+        "records": 408243,
+        "ufMeans": {
+          "11": 1970.3409810149844,
+          "12": 1372.3019639755003,
+          "13": 1449.791182880979,
+          "14": 1870.42637298885,
+          "15": 1434.5647511114846,
+          "16": 1674.9554719269538,
+          "17": 1978.8685964955835,
+          "21": 1230.700061558839,
+          "22": 1533.7250764159794,
+          "23": 1378.664317043728,
+          "24": 1778.5411685723195,
+          "25": 1542.467514321867,
+          "26": 1568.2745812815058,
+          "27": 1401.432117100664,
+          "28": 1688.473571761521,
+          "29": 1451.792607564062,
+          "31": 2289.2244659531834,
+          "32": 2209.4898998667722,
+          "33": 2732.240296146256,
+          "35": 2862.0606672472695,
+          "41": 2687.329947544331,
+          "42": 2751.698331150667,
+          "43": 2771.8036128147455,
+          "50": 2369.1471178899806,
+          "51": 2297.4590793313478,
+          "52": 2377.676373273589,
+          "53": 4400.753412659516
+        },
+        "zeroRecords": 4682,
+        "zeroWeight": 2365090.63973513
+      }
+    }
+  },
+  "scope": {
+    "cdfCreated": false,
+    "deploymentPerformed": false,
+    "frontendChanged": false,
+    "lookupCreated": false,
+    "rawCommitted": false
+  },
+  "source": {
+    "file": "PNADC_2025_visita1_20260508.zip",
+    "release": "20260508",
+    "sha256": "556C68467941FCF8FB1251CDBAD3E42F6912C7938D73FD75F900BEE1C79548A5"
+  },
+  "status": "PASS",
+  "structural": {
+    "eligibleHouseholds": 152488,
+    "eligiblePersons": 408243,
+    "nominalRecompositionMaxAbsoluteDifference": 0.0,
+    "nominalRecompositionMismatches": 0,
+    "sourceRecords": 408364,
+    "uniquePersonKeys": 408364
+  },
+  "tests": {
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/data/brazil",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "status": "PASS",
+    "transcript": "test_components_use_distinct_deflators_and_return_to_people (test_pipeline.PipelineUnitTests.test_components_use_distinct_deflators_and_return_to_people) ... ok\ntest_deterministic_csv_has_identical_checksum (test_pipeline.PipelineUnitTests.test_deterministic_csv_has_identical_checksum) ... ok\ntest_excluded_condition_does_not_enter_household_or_distribution (test_pipeline.PipelineUnitTests.test_excluded_condition_does_not_enter_household_or_distribution) ... ok\ntest_inconsistent_declared_household_size_fails (test_pipeline.PipelineUnitTests.test_inconsistent_declared_household_size_fails) ... ok\ntest_invalid_weight_fails (test_pipeline.PipelineUnitTests.test_invalid_weight_fails) ... ok\ntest_layout_parser_requires_configured_variables (test_pipeline.PipelineUnitTests.test_layout_parser_requires_configured_variables) ... ok\ntest_missing_deflator_fails_safely (test_pipeline.PipelineUnitTests.test_missing_deflator_fails_safely) ... ok\ntest_structural_blank_is_zero_but_invalid_text_fails (test_pipeline.PipelineUnitTests.test_structural_blank_is_zero_but_invalid_text_fails) ... ok\ntest_weighted_gini_properties (test_pipeline.PipelineUnitTests.test_weighted_gini_properties) ... ok\ntest_zero_income_is_preserved (test_pipeline.PipelineUnitTests.test_zero_income_is_preserved) ... ok\n\n----------------------------------------------------------------------\nRan 10 tests in 0.917s\n\nOK"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "dataset": "PNAD Contínua — Rendimento de Todas as Fontes 2025",
+  "methodologyVersion": "1.0.0",
+  "year": 2025,
+  "release": "20260508",
+  "visit": "primeira visita",
+  "sourceFile": "PNADC_2025_visita1_20260508.zip",
+  "sourceSha256": "556C68467941FCF8FB1251CDBAD3E42F6912C7938D73FD75F900BEE1C79548A5",
+  "sourceSizeBytes": 188972248,
+  "sourceMember": "PNADC_2025_visita1.txt",
+  "sourceMemberSizeBytes": 1508496616,
+  "sourceLineLength": 3692,
+  "paths": {
+    "rawZip": "data/raw/ibge/pnadc/2025/20260508/PNADC_2025_visita1_20260508.zip",
+    "layout": "data/raw/ibge/pnadc/2025/20260508/documentation/input_PNADC_2025_visita1_20260508.txt",
+    "deflator": "data/raw/ibge/pnadc/2025/20260508/documentation/deflator_PNADC_2025.xls"
+  },
+  "workIncomeVariable": "VD4019",
+  "workDeflator": "CO1",
+  "otherIncomeVariable": "VD4048",
+  "otherIncomeDeflator": "CO1e",
+  "eligibleComponentsVariable": "VD2003",
+  "weightVariable": "V1032",
+  "ufVariable": "UF",
+  "priceReference": "preços médios de 2025",
+  "householdKeyVariables": [
+    "Ano",
+    "Trimestre",
+    "UF",
+    "UPA",
+    "Estrato",
+    "V1008",
+    "V1014"
+  ],
+  "personKeyVariable": "V2003",
+  "conditionVariable": "V2005",
+  "excludedConditionCodes": [17, 18, 19],
+  "nominalHouseholdValidationVariable": "VD5007",
+  "requiredVariables": [
+    "Ano",
+    "Trimestre",
+    "UF",
+    "UPA",
+    "Estrato",
+    "V1008",
+    "V1014",
+    "V2003",
+    "V2005",
+    "V1032",
+    "VD2003",
+    "VD4019",
+    "VD4048",
+    "VD5007"
+  ],
+  "output": {
+    "fileName": "brazil-income-distribution-2025.csv",
+    "manifestFileName": "brazil-income-distribution-2025.manifest.json",
+    "columns": ["rdpc_real_2025", "weight", "UF"],
+    "rdpcDecimalPlaces": 10,
+    "weightDecimalPlaces": 8,
+    "lineTerminator": "LF"
+  },
+  "expectedStructure": {
+    "sourceRecords": 408364,
+    "eligiblePersons": 408243,
+    "eligibleHouseholds": 152488,
+    "deflatorKeys": 108,
+    "zeroRecords": 4682,
+    "negativeRecords": 0
+  },
+  "benchmarks": {
+    "mean": {
+      "diagnostic": 2264.0378279,
+      "absoluteTolerance": 0.000001,
+      "publishedRounded": 2264
+    },
+    "gini": {
+      "diagnostic": 0.5112237274,
+      "absoluteTolerance": 0.000000001,
+      "publishedRounded3": 0.511
+    },
+    "population": {
+      "diagnostic": 212624284.8006,
+      "absoluteTolerance": 0.01,
+      "published": 212624000,
+      "publishedThousand": 212624
+    },
+    "quantiles": {
+      "P5": {"published": 299, "expectedRoundedDifference": 0},
+      "P10": {"published": 451, "expectedRoundedDifference": 0},
+      "P20": {"published": 694, "expectedRoundedDifference": 0},
+      "P30": {"published": 906, "expectedRoundedDifference": 0},
+      "P40": {"published": 1154, "expectedRoundedDifference": 0},
+      "P50": {"published": 1490, "expectedRoundedDifference": 0},
+      "P60": {"published": 1697, "expectedRoundedDifference": 0},
+      "P70": {"published": 2158, "expectedRoundedDifference": 0},
+      "P80": {"published": 2958, "expectedRoundedDifference": 0},
+      "P90": {"published": 4609, "expectedRoundedDifference": 1},
+      "P95": {"published": 6900, "expectedRoundedDifference": 0},
+      "P99": {"published": 15214, "expectedRoundedDifference": 1}
+    },
+    "ufMeansRounded": {
+      "11": 1970,
+      "12": 1372,
+      "13": 1450,
+      "14": 1870,
+      "15": 1435,
+      "16": 1675,
+      "17": 1979,
+      "21": 1231,
+      "22": 1534,
+      "23": 1379,
+      "24": 1779,
+      "25": 1542,
+      "26": 1568,
+      "27": 1401,
+      "28": 1688,
+      "29": 1452,
+      "31": 2289,
+      "32": 2209,
+      "33": 2732,
+      "35": 2862,
+      "41": 2687,
+      "42": 2752,
+      "43": 2772,
+      "50": 2369,
+      "51": 2297,
+      "52": 2378,
+      "53": 4401
+    }
+  }
+}

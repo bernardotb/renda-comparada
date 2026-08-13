@@ -9,6 +9,15 @@ vite.config.d.ts
 # Microdados brutos e documentação oficial baixada para pesquisa
 data/raw/
 
+# Artefatos locais gerados pelo pipeline de dados
+data/processed/
+data/production/
+
+# Caches locais do pipeline Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
 # Configuração local e segredos
 .vercel/
 .env
