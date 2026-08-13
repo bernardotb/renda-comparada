@@ -1,8 +1,11 @@
 ---
 title: Visão Do Projeto
 created: 2026-08-12T16:37:36.000-03:00
-modified: 2026-08-12T16:38:29.946-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
+
+> [!WARNING] ARQUIVO HISTÓRICO — NÃO CANÔNICO
+> Este arquivo preserva a visão e o brainstorm originais do projeto. Ele não deve orientar diretamente a implementação. Em caso de conflito, prevalecem os documentos canônicos atuais; a visão oficial está em `docs/01-visao-produto.md`.
 
 Claro. Vou consolidar o projeto como ele está **até agora**, separando o que já ficou decidido do que ficou para uma etapa posterior.
 

@@ -1,10 +1,10 @@
 ---
-title: 04-metodologia-de-dados
+title: 04-metodologia-dados
 created: 2026-08-12T17:07:15.000-03:00
-modified: 2026-08-12T17:21:49.296-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
 
-# 04-metodologia-de-dados
+# 04-metodologia-dados
 
 **Produto:** Renda Comparada  
 **Versão do documento:** 1.0  

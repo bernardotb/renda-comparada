@@ -1,7 +1,7 @@
 ---
 title: 09-fontes-referencias
 created: 2026-08-12T17:40:00.000-03:00
-modified: 2026-08-12T17:51:05.883-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
 
 # 09-fontes-referencias
@@ -25,7 +25,6 @@ Documentos relacionados:
 - `07-seo-analytics-crescimento.md`
 - `08-roadmap-backlog.md`
 - `10-testes-validacao.md`
-$1
 
 ---
 
@@ -46,7 +45,6 @@ O objetivo é evitar:
 - troca silenciosa de fontes;
 - utilização de dados desatualizados;
 - mistura entre fonte primária e inspiração.
-$1
 
 ---
 
@@ -91,7 +89,6 @@ Fonte oficial utilizada para:
 - validação;
 - ferramentas;
 - conteúdo.
-$1
 
 Não necessariamente entra no cálculo principal.
 
@@ -104,7 +101,6 @@ Documentação oficial para:
 - analytics;
 - infraestrutura;
 - segurança.
-$1
 
 ## `LEGAL`
 
@@ -118,7 +114,6 @@ Fonte útil para:
 - comparação;
 - pesquisa;
 - benchmark.
-$1
 
 Não é fonte primária do cálculo.
 
@@ -136,7 +131,6 @@ O Codex não deve substituir uma fonte `CANÔNICA` por outra fonte sem:
 6. atualizar este documento;
 7. executar testes de regressão;
 8. obter aprovação explícita.
-$1
 
 ---
 
@@ -158,7 +152,6 @@ Também utilizada para:
 - percentis;
 - recortes futuros;
 - séries históricas quando metodologicamente comparáveis.
-$1
 
 Fonte:
 
@@ -181,7 +174,6 @@ A página oficial da PNAD disponibiliza:
 - documentação;
 - informações técnicas;
 - edições anuais.
-$1
 
 Fonte:
 
@@ -217,7 +209,6 @@ Utilizar para:
 - explicação pública;
 - contextualização;
 - sanity checks.
-$1
 
 Fonte:
 
@@ -254,7 +245,6 @@ O SIDRA poderá ser utilizado para:
 - séries históricas;
 - recortes geográficos;
 - conferência de estatísticas oficiais.
-$1
 
 Fonte:
 
@@ -281,7 +271,6 @@ Utilizar para:
 - atualização monetária;
 - comparação entre valores de anos diferentes;
 - histórico futuro.
-$1
 
 ---
 
@@ -330,7 +319,6 @@ A POF permite estudar:
 - outras despesas;
 - classes de rendimento;
 - condições de vida.
-$1
 
 ---
 
@@ -418,7 +406,6 @@ O PIP será utilizado para:
 - dados agregados;
 - curvas distributivas;
 - comparação global.
-$1
 
 O cálculo exato deve seguir:
 
@@ -443,7 +430,6 @@ A API disponibiliza recursos relacionados a:
 - agregações;
 - curvas de Lorenz;
 - parâmetros auxiliares.
-$1
 
 A API deve ser utilizada principalmente pelo:
 
@@ -485,7 +471,6 @@ Pode ser utilizado para:
 - conferência;
 - comparação;
 - análise de tendências.
-$1
 
 Fonte:
 
@@ -532,7 +517,6 @@ Utilizar para:
 - metodologia;
 - revisão das paridades;
 - validação.
-$1
 
 O ciclo internacional mais recente consolidado é:
 
@@ -555,7 +539,6 @@ Utilizar para entender:
 - por que difere do câmbio;
 - comparação de preços;
 - interpretação internacional.
-$1
 
 ---
 
@@ -637,7 +620,6 @@ O portal reúne:
 - golpes;
 - ferramentas;
 - cursos.
-$1
 
 ---
 
@@ -691,7 +673,6 @@ Uso futuro:
 - consumo;
 - poupança;
 - proteção financeira.
-$1
 
 ---
 
@@ -713,7 +694,6 @@ Pode ser utilizada para indicar:
 - crédito;
 - poupança;
 - proteção.
-$1
 
 ---
 
@@ -734,7 +714,6 @@ O Renda Comparada deve:
 - explicar;
 - orientar;
 - encaminhar.
-$1
 
 Não deve:
 
@@ -742,7 +721,6 @@ Não deve:
 - receber credenciais;
 - imitar o serviço;
 - atuar como intermediário de autenticação.
-$1
 
 ---
 
@@ -768,7 +746,6 @@ Uso futuro:
 - financiamentos;
 - compromissos financeiros;
 - apoiar organização de dívidas.
-$1
 
 ---
 
@@ -808,7 +785,6 @@ Pode servir para:
 - referência;
 - educação;
 - validação de simuladores próprios.
-$1
 
 Entre os cálculos disponíveis:
 
@@ -816,7 +792,6 @@ Entre os cálculos disponíveis:
 - financiamento;
 - valor futuro;
 - correção monetária.
-$1
 
 ---
 
@@ -857,7 +832,6 @@ Utilizar especialmente para:
 - riscos;
 - educação do investidor;
 - formação de patrimônio.
-$1
 
 ---
 
@@ -887,7 +861,6 @@ Pode ser recomendado para usuários interessados em:
 - organização;
 - planejamento;
 - acompanhamento financeiro.
-$1
 
 ---
 
@@ -907,7 +880,6 @@ Pode ser utilizado como material de aprofundamento para:
 - gestão de riscos;
 - patrimônio;
 - sucessão.
-$1
 
 ---
 
@@ -927,7 +899,6 @@ Temas particularmente alinhados ao Renda Comparada:
 - objetivos;
 - comportamento;
 - investimentos.
-$1
 
 ---
 
@@ -948,7 +919,6 @@ Uso:
 - endividamento;
 - superendividamento;
 - relações financeiras.
-$1
 
 ---
 
@@ -966,7 +936,6 @@ Uso futuro:
 - economia doméstica;
 - planejamento;
 - direitos do consumidor.
-$1
 
 ---
 
@@ -988,7 +957,6 @@ Pode ser recomendado quando o check-up futuro identificar necessidade relacionad
 - crédito;
 - renegociação;
 - superendividamento.
-$1
 
 ---
 
@@ -1027,7 +995,6 @@ Utilizar para:
 - incidentes;
 - direitos dos titulares;
 - agentes de tratamento.
-$1
 
 ---
 
@@ -1045,7 +1012,6 @@ Referências relevantes:
 - encarregado;
 - legítimo interesse;
 - direitos dos titulares.
-$1
 
 ---
 
@@ -1089,7 +1055,6 @@ Uso:
 - renderização;
 - conteúdo JavaScript;
 - troubleshooting.
-$1
 
 ---
 
@@ -1104,7 +1069,6 @@ Uso:
 - sitemap;
 - descoberta de URLs;
 - indexação técnica.
-$1
 
 ---
 
@@ -1122,7 +1086,6 @@ Uso:
 - impressões;
 - erros;
 - inspeção de URLs.
-$1
 
 ---
 
@@ -1152,7 +1115,6 @@ Uso possível:
 - páginas;
 - referrers;
 - eventos personalizados.
-$1
 
 A adoção definitiva deve respeitar:
 
@@ -1173,7 +1135,6 @@ Uso:
 - Core Web Vitals;
 - performance real;
 - acompanhamento de experiência.
-$1
 
 ---
 
@@ -1193,7 +1154,6 @@ Uso:
 - UX;
 - comparação metodológica;
 - benchmark de produto.
-$1
 
 Não utilizar seus números como fonte primária quando os dados originais puderem ser obtidos no Banco Mundial.
 
@@ -1216,7 +1176,6 @@ Uso:
 - pesquisa metodológica;
 - comparação de alternativas;
 - estudos sobre desigualdade.
-$1
 
 ### Regra
 
@@ -1247,7 +1206,6 @@ Pode ser usada para:
 - visualização;
 - localização de estudos;
 - conferência.
-$1
 
 Quando a estatística tiver origem no Banco Mundial, IBGE ou outra fonte primária:
 
@@ -1269,7 +1227,6 @@ Uso:
 - abordagem de PPP;
 - UX;
 - comunicação de percentis.
-$1
 
 Não é fonte primária do Renda Comparada.
 
@@ -1286,7 +1243,6 @@ Veículos jornalísticos podem ser utilizados para:
 - contexto;
 - oportunidades editoriais;
 - comportamento de busca.
-$1
 
 Não devem ser utilizados como fonte principal do dataset quando a origem oficial estiver disponível.
 
@@ -1316,7 +1272,6 @@ Utilizar para estudar:
 - funcionalidades;
 - compartilhamento;
 - concorrência.
-$1
 
 Não utilizar automaticamente seus números como verdade estatística.
 
@@ -1464,7 +1419,6 @@ registrar também:
 - release;
 - checksum;
 - data do download.
-$1
 
 ---
 
@@ -1501,7 +1455,6 @@ A página `/metodologia` deve detalhar:
 - versões;
 - definições;
 - limitações.
-$1
 
 Ela deve refletir este documento e:
 
@@ -1537,7 +1490,6 @@ Antes de recomendar um curso:
 4. verificar carga horária;
 5. verificar entidade responsável;
 6. verificar se o link continua oficial.
-$1
 
 Cursos podem mudar com mais frequência que datasets.
 
@@ -1575,21 +1527,18 @@ Prioridade:
 - PPP;
 - Registrato;
 - Valores a Receber.
-$1
 
 ### Média
 
 - cursos;
 - CVM;
 - Senacon.
-$1
 
 ### Técnica
 
 - Google;
 - Vercel;
 - ANPD.
-$1
 
 ---
 
@@ -1630,7 +1579,6 @@ Investigar:
 - preço corrente/constante;
 - amostra;
 - metodologia.
-$1
 
 Muitas divergências aparentes são diferenças conceituais.
 
@@ -1644,7 +1592,6 @@ Uma base nova pode:
 - mudar pesos;
 - mudar definição;
 - possuir quebra de série.
-$1
 
 Portanto:
 
@@ -1711,7 +1658,6 @@ Não utilizar diretamente como fonte definitiva:
 - calculadora concorrente;
 - snippet do Google;
 - resumo automático de buscador.
-$1
 
 Esses recursos podem ajudar a localizar:
 
@@ -1728,7 +1674,6 @@ Uma LLM pode:
 - programar;
 - comparar;
 - verificar documentação.
-$1
 
 Ela não pode ser registrada como:
 
@@ -1759,7 +1704,6 @@ Antes de adicionar:
 - Há licença ou condição de uso relevante?
 - Substitui alguma fonte existente?
 - Exige atualização do `04-metodologia-dados.md`?
-$1
 
 ---
 
@@ -1781,7 +1725,6 @@ Antes do lançamento da V1:
 - metodologia pública atualizada;
 - fontes exibidas na interface;
 - nenhuma fonte secundária sustentando cálculo principal.
-$1
 
 ---
 

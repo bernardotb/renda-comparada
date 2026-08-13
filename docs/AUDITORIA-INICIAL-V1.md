@@ -168,7 +168,7 @@ Consequências:
 - não há validação contra a média oficial 2025;
 - a interface atribui a fonte ao IBGE, mas o mecanismo numérico imediato é uma distribuição do PIP.
 
-O resultado Brasil atual não atende D006–D009 nem a parte Brasil de `04-metodologia-de-dados.md`.
+O resultado Brasil atual não atende D006–D009 nem a parte Brasil de `04-metodologia-dados.md`.
 
 ### D.2 P0 — conversão PPP/PPC não validada
 
@@ -409,7 +409,7 @@ As fontes são carregadas do Google Fonts por `@import`, criando requisição ex
 - **P3:** o ícone do botão de metodologia permanece “+” quando os detalhes estão abertos.
 - **P3:** `site-shell` usa `overflow: hidden`, o que pode mascarar overflow em vez de evidenciá-lo.
 - **P3:** `compact()` pode produzir traduções pouco precisas como “1 bi”.
-- **P3:** a documentação contém resíduos `$1`, referências a nomes de arquivos inexistentes e cercas Markdown inconsistentes.
+- **P3 (corrigido na Fase 0.5):** à época da auditoria, a documentação continha artefatos editoriais residuais, referências a nomes de arquivos inexistentes e cercas Markdown inconsistentes.
 - **P3:** o projeto alterna “renda familiar”, “renda da casa”, “pessoas sustentadas” e “moradores”; a terminologia precisa ser normalizada.
 
 ## G. Metodologia atual
@@ -711,7 +711,7 @@ Nenhuma fase abaixo deve começar automaticamente. A fase escolhida precisa ser 
 
 **Objetivo:** produzir a CDF brasileira ponderada e validada.
 
-**Arquivos afetados:** novos diretórios de pipeline/data/validation, configuração metodológica e atualização explícita de `04-metodologia-de-dados.md` e `decisoes.md`.
+**Arquivos afetados:** novos diretórios de pipeline/data/validation, configuração metodológica e atualização explícita de `04-metodologia-dados.md` e `decisoes.md`.
 
 **Dependências:** arquivo PNAD, visita, variável RDPC, peso, filtros, missing, renda zero, deflator e referência de preços aprovados.
 

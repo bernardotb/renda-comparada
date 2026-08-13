@@ -1,10 +1,10 @@
 ---
-title: 01-visao-do-produto
+title: 01-visao-produto
 created: 2026-08-12T17:03:01.000-03:00
-modified: 2026-08-12T17:11:22.464-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
 
-# 01-visao-do-produto
+# 01-visao-produto
 
 ## 1. Propósito
 

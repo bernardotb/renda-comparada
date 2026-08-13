@@ -1,7 +1,7 @@
 ---
 title: README
 created: 2026-08-12T17:00:21.000-03:00
-modified: 2026-08-12T17:11:32.824-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
 
 # Renda Comparada
@@ -18,13 +18,11 @@ O usuário informa:
 
 - renda mensal total do domicílio;
 - número total de moradores, incluindo adultos e crianças.
-$1
 
 A ferramenta apresenta sua posição aproximada:
 
 - na distribuição de renda brasileira;
 - na distribuição mundial.
-$1
 
 Depois do resultado e da possibilidade de compartilhamento, o usuário pode, **opcionalmente**, continuar para uma segunda experiência:
 
@@ -57,7 +55,6 @@ O Renda Comparada não pretende ser:
 - consultoria financeira individual;
 - recomendador de produtos financeiros;
 - portal genérico de calculadoras.
-$1
 
 O produto oferece:
 
@@ -67,25 +64,33 @@ O produto oferece:
 - diagnóstico geral;
 - orientação;
 - acesso a fontes e ferramentas oficiais.
-$1
 
 ---
 
 # Estado Atual
 
-**Status:** definição e evolução da primeira versão do produto.
+**Status:** preparação metodológica da primeira versão do produto.
+
+O projeto possui atualmente:
+
+- documentação canônica criada e reunida em `/docs`;
+- Fase 0 concluída, com uma única raiz canônica consolidada;
+- baseline Git rastreável;
+- instalação e build reproduzíveis pelo lockfile;
+- auditoria inicial concluída em `docs/AUDITORIA-INICIAL-V1.md`;
+- Fase 0.5 concluída, com higiene e governança documental normalizadas.
 
 Site atualmente publicado:
 
 `https://renda-familiar-brasil-mundo.vercel.app/`
 
-A implementação existente deve ser auditada antes de alterações relevantes nos cálculos ou na arquitetura.
+A metodologia Brasil ainda não foi validada. A metodologia Mundo também ainda não foi validada. Por isso, os percentis atualmente publicados devem ser tratados como resultados do protótipo existente, não como resultados oficiais da V1.
 
 ---
 
 # Documentação Do Projeto
 
-A documentação canônica está em `/docs`.
+A documentação canônica está em `/docs`. Materiais preservados em `/docs/archive` são históricos e não canônicos.
 
 ## Ordem De Leitura
 
@@ -99,7 +104,6 @@ Explica:
 - posicionamento;
 - limites do produto;
 - visão de longo prazo.
-$1
 
 Use este documento para entender **por que o produto existe**.
 
@@ -114,7 +118,6 @@ Define:
 - comportamento esperado;
 - critérios de aceite;
 - o que entra e o que não entra na primeira versão.
-$1
 
 Use este documento para saber **o que deve ser construído agora**.
 
@@ -130,7 +133,6 @@ Define:
 - momento do resultado;
 - compartilhamento;
 - entrada opcional no check-up financeiro.
-$1
 
 Use este documento para saber **como a experiência deve funcionar**.
 
@@ -151,7 +153,6 @@ Documento de autoridade para:
 - versões dos datasets;
 - atualização dos dados;
 - limitações metodológicas.
-$1
 
 **Nenhuma fórmula ou fonte de dados deve ser alterada sem revisar este documento.**
 
@@ -170,7 +171,6 @@ Define:
 - animações;
 - responsividade;
 - acessibilidade.
-$1
 
 Direção geral:
 
@@ -192,7 +192,6 @@ Define regras para:
 - Registrato;
 - credenciais;
 - dados financeiros sensíveis.
-$1
 
 ---
 
@@ -208,7 +207,6 @@ Define:
 - analytics;
 - crescimento orgânico;
 - estratégia de viralização.
-$1
 
 ---
 
@@ -230,7 +228,6 @@ Pode conter, entre outros:
 - assinaturas;
 - investimentos;
 - novas calculadoras.
-$1
 
 ---
 
@@ -245,7 +242,6 @@ Centraliza fontes institucionais e referências do projeto:
 - Senacon;
 - Enap/EVG;
 - outras fontes aprovadas.
-$1
 
 Sempre que possível, priorizar **fontes primárias e oficiais**.
 
@@ -265,7 +261,6 @@ Define:
 - compartilhamento;
 - privacidade;
 - atualização de datasets.
-$1
 
 Mudanças em cálculos devem ser acompanhadas de testes.
 
@@ -290,7 +285,6 @@ Em caso de conflito entre documentos, utilizar esta ordem:
 5. `docs/05-design-system.md` — para interface;
 6. `docs/01-visao-produto.md` — para princípios e direção;
 7. `docs/08-roadmap-backlog.md` — apenas ideias e futuro.
-$1
 
 O backlog **nunca prevalece sobre o PRD**.
 
@@ -324,7 +318,6 @@ e
 - CVM;
 - Senacon;
 - Enap/EVG.
-$1
 
 ---
 
@@ -344,7 +337,6 @@ A interface deve informar:
 - ano;
 - versão quando aplicável;
 - data da última atualização.
-$1
 
 ---
 
@@ -363,7 +355,6 @@ $1
 - Não pedir senha ou credenciais do gov.br.
 - Não transformar orientação financeira em recomendação de produto específico.
 - Não implementar itens do backlog sem solicitação explícita.
-$1
 
 ---
 
@@ -419,7 +410,6 @@ A interface deve ser:
 - minimalista;
 - baseada em dados;
 - mobile first.
-$1
 
 Evitar:
 
@@ -431,7 +421,6 @@ Evitar:
 - estética de cassino;
 - clichês visuais financeiros;
 - excesso de gamificação.
-$1
 
 A prioridade é transmitir:
 
@@ -451,7 +440,6 @@ Antes de implementar mudanças significativas:
 6. apontar divergências entre código e documentação;
 7. executar ou criar testes;
 8. somente então modificar a implementação.
-$1
 
 Não assumir que uma funcionalidade mencionada em brainstorm ou backlog deve ser construída.
 
@@ -463,17 +451,29 @@ Registrar a dúvida antes de alterar comportamento estatístico.
 
 # Próximas Etapas
 
-Prioridade atual:
+Sequência de trabalho aprovada:
 
-1. consolidar documentação canônica;
-2. criar PRD da V1;
-3. definir jornada UX;
-4. especificar metodologia e datasets;
-5. criar testes de referência;
-6. criar `AGENTS.md`;
-7. auditar a implementação existente;
-8. implementar a V1 validada.
-$1
+```text
+Fase 0.5 — higiene e governança documental
+↓
+Fase 1 — metodologia Brasil / PNAD 2025
+↓
+Fase 2 — metodologia Mundo / PIP + PPP
+↓
+Fase 3 — domínio + testes + golden cases
+↓
+Fase 4 — formulário e estados
+↓
+Fase 5 — resultado e compartilhamento
+↓
+Fase 6 — metodologia pública, SEO, analytics e segurança
+↓
+Fase 7 — design, acessibilidade e performance
+↓
+Fase 8 — release controlada
+```
+
+Esta sequência é planejamento. A conclusão da Fase 0.5 não autoriza automaticamente nenhuma fase posterior.
 
 ---
 

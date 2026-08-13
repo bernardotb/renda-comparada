@@ -1,16 +1,16 @@
 ---
-title: Decisoes
+title: Registro de Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-12T18:09:55.798-03:00
+modified: 2026-08-13T09:50:34.315-03:00
 ---
-````markdown
+
 # Registro de Decisões — Renda Comparada
 
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
 **Versão:** 1.0  
-**Última revisão:** 12/08/2026
+**Última revisão:** 13/08/2026
 
 Documentos relacionados:
 
@@ -56,21 +56,18 @@ Decisão
 Motivo
 Consequências
 Documentos afetados
-````
+```
 
 Status possíveis:
 
 - `ATIVA`
-    
 - `SUBSTITUÍDA`
-    
 - `REVOGADA`
-    
 - `EM REVISÃO`
 
 ---
 
-# D001 — Tese central do produto
+# D001 — Tese Central Do Produto
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -90,20 +87,16 @@ A comparação de renda é a porta de entrada.
 O produto pode evoluir para:
 
 - saúde financeira;
-    
 - orientação;
-    
 - ferramentas oficiais;
-    
 - simuladores;
-    
 - custos da vida familiar.
 
 Mas não deve virar um portal genérico de calculadoras.
 
 ---
 
-# D002 — Chamada principal
+# D002 — Chamada Principal
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -118,7 +111,7 @@ Subtítulo:
 
 > **Descubra onde a renda da sua família está no Brasil — e onde ela estaria no mundo.**
 
-## Limite conceitual
+## Limite Conceitual
 
 A interface deve esclarecer:
 
@@ -126,7 +119,7 @@ A interface deve esclarecer:
 
 ---
 
-# D003 — Renda versus patrimônio
+# D003 — Renda versus Patrimônio
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -140,16 +133,14 @@ O produto mede:
 e não:
 
 - patrimônio;
-    
 - riqueza líquida;
-    
 - fortuna.
 
 Nunca apresentar resultado de renda como se fosse uma medição de patrimônio.
 
 ---
 
-# D004 — Entrada principal
+# D004 — Entrada Principal
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -159,32 +150,23 @@ Nunca apresentar resultado de renda como se fosse uma medição de patrimônio.
 A V1 pede apenas:
 
 1. renda mensal total da casa;
-    
 2. número de moradores.
 
 Não pedir antes do resultado:
 
 - nome;
-    
 - CPF;
-    
 - e-mail;
-    
 - telefone;
-    
 - dívidas;
-    
 - patrimônio;
-    
 - gastos;
-    
 - cidade;
-    
 - profissão.
 
 ---
 
-# D005 — Todos os moradores entram no cálculo brasileiro
+# D005 — Todos Os Moradores Entram no Cálculo Brasileiro
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -194,9 +176,7 @@ Não pedir antes do resultado:
 O número de moradores deve incluir:
 
 - adultos;
-    
 - crianças;
-    
 - pessoas sem renda;
 
 conforme a metodologia do rendimento domiciliar per capita adotado.
@@ -207,7 +187,7 @@ A interface deve explicitar:
 
 ---
 
-# D006 — Conceito brasileiro principal
+# D006 — Conceito Brasileiro Principal
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -228,7 +208,7 @@ número de moradores
 
 ---
 
-# D007 — Fonte brasileira
+# D007 — Fonte Brasileira
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -247,7 +227,7 @@ até aprovação de edição metodologicamente equivalente mais recente.
 
 ---
 
-# D008 — Média não calcula percentil
+# D008 — Média Não Calcula Percentil
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -264,7 +244,7 @@ ou representação derivada validada.
 
 ---
 
-# D009 — Uso de microdados e pesos
+# D009 — Uso De Microdados E Pesos
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -274,16 +254,14 @@ ou representação derivada validada.
 A distribuição brasileira deve respeitar:
 
 - microdados adequados;
-    
 - pesos amostrais oficiais;
-    
 - unidade estatística definida.
 
 Não tratar registros da PNAD como observações de peso igual.
 
 ---
 
-# D010 — Fonte mundial
+# D010 — Fonte Mundial
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -298,7 +276,7 @@ Não utilizar WID e PIP misturados no mesmo cálculo.
 
 ---
 
-# D011 — Poder de compra internacional
+# D011 — Poder De Compra Internacional
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -315,7 +293,7 @@ A fonte principal será o Banco Mundial / ICP.
 
 ---
 
-# D012 — Resultado mundial é estimativa
+# D012 — Resultado Mundial É Estimativa
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -329,20 +307,16 @@ O resultado mundial deve ser apresentado como:
 porque o PIP combina dados domiciliares de:
 
 - renda;
-    
 - consumo;
-    
 - diferentes anos;
-    
 - diferentes países;
-    
 - interpolações ou nowcasts quando aplicáveis.
 
 Não apresentar como ranking exato mundial de renda bruta.
 
 ---
 
-# D013 — Atualização dos dados
+# D013 — Atualização Dos Dados
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -369,7 +343,7 @@ produção
 
 ---
 
-# D014 — Publicação de nova base
+# D014 — Publicação De Nova Base
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -398,7 +372,7 @@ publicar
 
 ---
 
-# D015 — Ordem da jornada principal
+# D015 — Ordem Da Jornada Principal
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -425,7 +399,7 @@ CONTINUAÇÃO OPCIONAL
 
 ---
 
-# D016 — Compartilhamento vem antes do check-up
+# D016 — Compartilhamento Vem Antes Do Check-up
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -437,18 +411,15 @@ O usuário pode compartilhar imediatamente após o resultado.
 Nenhum:
 
 - questionário;
-    
 - cadastro;
-    
 - check-up;
-    
 - curso;
 
 pode bloquear o compartilhamento.
 
 ---
 
-# D017 — Compartilhamento privado por padrão
+# D017 — Compartilhamento Privado Por Padrão
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -458,16 +429,14 @@ pode bloquear o compartilhamento.
 O compartilhamento padrão não mostra:
 
 - renda;
-    
 - renda per capita;
-    
 - moradores.
 
 Pode mostrar posição apenas mediante ação explícita.
 
 ---
 
-# D018 — Check-up é opcional
+# D018 — Check-up É Opcional
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -503,7 +472,7 @@ Preferir:
 
 ---
 
-# D020 — Check-up sem score único
+# D020 — Check-up Sem Score Único
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -519,18 +488,14 @@ ou score financeiro único.
 Preferir dimensões separadas:
 
 - renda;
-    
 - dívidas;
-    
 - reserva;
-    
 - orçamento;
-    
 - capacidade de poupança.
 
 ---
 
-# D021 — Prioridades antes de produtos
+# D021 — Prioridades Antes De Produtos
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -553,7 +518,7 @@ Não recomendar produtos específicos.
 
 ---
 
-# D022 — Orientação, não consultoria financeira
+# D022 — Orientação, Não Consultoria Financeira
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -567,14 +532,12 @@ O produto será apresentado como:
 e não como:
 
 - consultoria financeira individual;
-    
 - assessoria de investimentos;
-    
 - recomendação de ativos.
 
 ---
 
-# D023 — Uso de ferramentas públicas
+# D023 — Uso De Ferramentas Públicas
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -584,13 +547,9 @@ e não como:
 O produto poderá orientar o usuário a ferramentas oficiais como:
 
 - Registrato;
-    
 - SCR;
-    
 - Valores a Receber;
-    
 - Calculadora do Cidadão;
-    
 - taxas do Banco Central.
 
 O site explica e encaminha.
@@ -599,7 +558,7 @@ Não pede credenciais gov.br.
 
 ---
 
-# D024 — Cursos públicos
+# D024 — Cursos Públicos
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -609,18 +568,14 @@ Não pede credenciais gov.br.
 Antes de criar cursos próprios, priorizar curadoria contextual de conteúdos públicos de:
 
 - Banco Central;
-    
 - Enap;
-    
 - CVM;
-    
 - Senacon;
-    
 - outras instituições aprovadas.
 
 ---
 
-# D025 — POF para padrões de gasto
+# D025 — POF Para Padrões De Gasto
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -639,7 +594,7 @@ Não inventar estilo de vida a partir da renda.
 
 ---
 
-# D026 — Não prescrever estilo de vida
+# D026 — Não Prescrever Estilo De Vida
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -656,7 +611,7 @@ Preferir:
 
 ---
 
-# D027 — Custo real das escolhas
+# D027 — Custo Real Das Escolhas
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -677,7 +632,7 @@ Exemplo:
 
 ---
 
-# D028 — Não virar portal genérico de calculadoras
+# D028 — Não Virar Portal Genérico De Calculadoras
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -687,9 +642,7 @@ Exemplo:
 Calculadoras como:
 
 - tinta;
-    
 - BTU;
-    
 - conversores genéricos;
 
 não pertencem ao núcleo.
@@ -697,9 +650,7 @@ não pertencem ao núcleo.
 Uma nova ferramenta deve contribuir para:
 
 - compreensão financeira;
-    
 - orçamento;
-    
 - decisão econômica familiar.
 
 ---
@@ -718,16 +669,13 @@ Direção visual:
 Evitar aparência de:
 
 - fintech;
-    
 - dashboard;
-    
 - portal de calculadoras;
-    
 - cassino.
 
 ---
 
-# D030 — Mobile first
+# D030 — Mobile First
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -752,7 +700,7 @@ Mobile é prioridade de design e teste.
 
 ---
 
-# D031 — SEO progressivo
+# D031 — SEO Progressivo
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -764,11 +712,8 @@ Não criar dezenas de páginas SEO automaticamente na V1.
 Primeiro:
 
 - produto confiável;
-    
 - metodologia;
-    
 - compartilhamento;
-    
 - indexação.
 
 Depois:
@@ -777,7 +722,7 @@ Depois:
 
 ---
 
-# D032 — Métrica principal da V1
+# D032 — Métrica Principal Da V1
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -796,7 +741,7 @@ Não usar apenas pageviews como medida de sucesso.
 
 ---
 
-# D033 — Analytics sem renda
+# D033 — Analytics Sem Renda
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -808,18 +753,14 @@ Analytics mede comportamento.
 Não enviar:
 
 - renda;
-    
 - moradores;
-    
 - renda per capita;
-    
 - percentis individuais;
-    
 - faixas de renda.
 
 ---
 
-# D034 — Coleta mínima
+# D034 — Coleta Mínima
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -834,7 +775,7 @@ A renda não deve ser persistida por padrão.
 
 ---
 
-# D035 — Renda fora de URLs
+# D035 — Renda Fora De URLs
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -844,18 +785,14 @@ A renda não deve ser persistida por padrão.
 Não colocar renda em:
 
 - query string;
-    
 - pathname;
-    
 - hash;
-    
 - Open Graph;
-    
 - URLs compartilhadas.
 
 ---
 
-# D036 — Preferência por cálculo local
+# D036 — Preferência Por Cálculo Local
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -868,7 +805,7 @@ Evitar transmitir valores financeiros desnecessariamente ao servidor.
 
 ---
 
-# D037 — Backlog não é escopo
+# D037 — Backlog Não É Escopo
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -883,7 +820,7 @@ não devem ser implementados sem promoção explícita para um PRD ativo.
 
 ---
 
-# D038 — V1 congelada em torno do núcleo
+# D038 — V1 Congelada Em Torno Do Núcleo
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -893,28 +830,20 @@ não devem ser implementados sem promoção explícita para um PRD ativo.
 A V1 prioriza:
 
 - Brasil;
-    
 - Mundo;
-    
 - interpretação;
-    
 - compartilhamento;
-    
 - metodologia;
-    
 - privacidade;
-    
 - SEO técnico;
-    
 - analytics;
-    
 - mobile.
 
 Não ampliar escopo sem decisão explícita.
 
 ---
 
-# D039 — Golden cases somente após auditoria
+# D039 — Golden Cases Somente Após Auditoria
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -935,7 +864,7 @@ Os percentis ainda precisam ser validados.
 
 ---
 
-# D040 — Falhar com segurança
+# D040 — Falhar Com Segurança
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -956,7 +885,7 @@ preferir:
 
 ---
 
-# D041 — Fonte primária antes de conveniência
+# D041 — Fonte Primária Antes De Conveniência
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -979,7 +908,7 @@ Calculadoras concorrentes e matérias são referências, não fonte do cálculo.
 
 ---
 
-# D042 — AllTools como inspiração, não fonte
+# D042 — AllTools Como Inspiração, Não Fonte
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -993,14 +922,12 @@ A AllTools é:
 Dados de produção devem vir de:
 
 - IBGE;
-    
 - Banco Mundial;
-    
 - outras fontes oficiais aprovadas.
 
 ---
 
-# D043 — Hierarquia documental
+# D043 — Hierarquia Documental
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1009,11 +936,11 @@ Dados de produção devem vir de:
 
 Para temas específicos:
 
-### Cálculos e dados
+### Cálculos E Dados
 
 `04-metodologia-dados.md`
 
-### Escopo da versão
+### Escopo Da Versão
 
 `02-prd-v1.md`
 
@@ -1039,7 +966,7 @@ Para temas específicos:
 
 ---
 
-# D044 — Codex não decide escopo
+# D044 — Codex Não Decide Escopo
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1049,28 +976,21 @@ Para temas específicos:
 O Codex pode:
 
 - analisar;
-    
 - propor;
-    
 - apontar divergências;
-    
 - implementar requisitos aprovados.
 
 Não pode, por iniciativa própria:
 
 - adicionar grandes features;
-    
 - trocar metodologia;
-    
 - instalar tracking;
-    
 - persistir renda;
-    
 - promover backlog.
 
 ---
 
-# D045 — Primeiro trabalho do Codex
+# D045 — Primeiro Trabalho Do Codex
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1080,24 +1000,17 @@ Não pode, por iniciativa própria:
 Antes de grandes alterações, o Codex deve:
 
 1. ler a documentação;
-    
 2. auditar o repositório;
-    
 3. identificar stack;
-    
 4. localizar cálculos atuais;
-    
 5. identificar fontes atuais;
-    
 6. comparar código × documentação;
-    
 7. relatar divergências;
-    
 8. só então propor implementação.
 
 ---
 
-# D046 — Testes antes de mudança estatística
+# D046 — Testes Antes De Mudança Estatística
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1107,20 +1020,16 @@ Antes de grandes alterações, o Codex deve:
 Toda mudança em:
 
 - dataset;
-    
 - fórmula;
-    
 - PPP;
-    
 - peso;
-    
 - percentil;
 
 deve passar por testes e regressão.
 
 ---
 
-# D047 — Documentação é parte do produto
+# D047 — Documentação É Parte Do Produto
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1133,25 +1042,20 @@ O código não deve divergir silenciosamente da documentação canônica.
 
 ---
 
-# 3. Como revisar uma decisão
+# 3. Como Revisar Uma Decisão
 
 Para revisar uma decisão:
 
 1. não apagar a decisão antiga;
-    
 2. marcar como `SUBSTITUÍDA` ou `REVOGADA`;
-    
 3. criar nova decisão;
-    
 4. registrar motivo;
-    
 5. atualizar documentos afetados;
-    
 6. atualizar testes quando necessário.
 
 ---
 
-# 4. Modelo para nova decisão
+# 4. Modelo Para Nova Decisão
 
 ```markdown
 # decisoes
@@ -1179,7 +1083,7 @@ O que muda?
 
 ---
 
-# 5. Regra final
+# 5. Regra Final
 
 Este documento existe para preservar:
 
@@ -1196,9 +1100,12 @@ Uma decisão nova deve ser consciente.
 Não deve surgir apenas porque:
 
 > “o Codex achou melhor fazer assim.”
+
+---
+
 # Consolidação Técnica — Fase 0
 
-## D012 — Raiz Canônica Do Projeto
+## D048 — Raiz Canônica Do Projeto
 
 **Data:** 12/08/2026  
 **Status:** aprovada e executada
@@ -1212,5 +1119,87 @@ Ela reúne código-fonte, documentação canônica, manifestos, configurações 
 A antiga raiz técnica em `C:\Users\Usuario\OneDrive\Documentos\ChatGPT\3` foi preservada sem exclusão e não deve receber novas alterações do projeto. Sua remoção ou arquivamento exige decisão posterior.
 
 Esta consolidação não altera funcionalidades, metodologia, percentis, textos da interface ou resultados estatísticos.
+
+---
+
+# Governança Do Repositório — Fase 0.5
+
+## D049 — Git Como Fonte De Verdade
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+O Git é a fonte de verdade para código, documentação versionada e histórico de alterações do projeto Renda Comparada.
+
+### Consequências
+
+Alterações relevantes devem ser registradas no repositório Git da raiz canônica. Cópias sincronizadas ou arquivos avulsos não substituem o histórico versionado.
+
+---
+
+## D050 — Google Drive Como Backup
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+O Google Drive pode manter cópia ou backup documental, mas não é a fonte de verdade para o versionamento do projeto e não deve ser usado como raiz paralela de desenvolvimento.
+
+### Consequências
+
+Arquivos sincronizados não devem substituir silenciosamente arquivos da raiz canônica. O modelo definitivo de backup ainda deverá definir o tratamento de `.git`, `.vercel`, `node_modules`, `dist` e arquivos `*.tsbuildinfo`.
+
+---
+
+## D051 — Uma Única Raiz Ativa De Desenvolvimento
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Existe somente uma raiz ativa de desenvolvimento:
+
+`C:\Users\Usuario\Downloads\Novos Vaults\vault-template-main\vault-template-main\Tools and Knowlegde\Calculadora de renda`
+
+Outras cópias devem ser tratadas como backup, legado ou arquivo e não devem receber desenvolvimento paralelo.
+
+### Consequências
+
+A cópia legada em `C:\Users\Usuario\OneDrive\Documentos\ChatGPT\3` permanece preservada, mas não é uma raiz ativa.
+
+---
+
+## D052 — Repositório Git Remoto Privado
+
+**Data:** 13/08/2026
+**Status:** `EM REVISÃO`
+
+### Decisão Operacional Pendente
+
+Criar futuramente um repositório Git remoto privado como backup e fonte remota do histórico.
+
+### Limite
+
+Nenhum remoto deve ser configurado sem autorização específica. A Fase 0.5 apenas registra a pendência.
+
+---
+
+# Pendências De Segurança
+
+## SEC-001 — Remover `.env.local` Da Cópia Sincronizada
+
+**Status:** `PENDENTE`
+
+Remover o arquivo da cópia sincronizada quando o caminho local exato do backup for fornecido. Seu conteúdo não deve ser aberto, exibido, copiado ou registrado.
+
+## SEC-002 — Revogar E Renovar O Token Vercel Sincronizado
+
+**Status:** `PENDENTE`
+
+Qualquer token ou segredo anteriormente sincronizado deve ser considerado potencialmente exposto. A revogação e a renovação deverão ocorrer quando a autenticação da Vercel for refeita. O token antigo não deve ser reutilizado ou testado.
 
 ---
