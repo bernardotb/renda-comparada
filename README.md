@@ -69,7 +69,7 @@ O produto oferece:
 
 # Estado Atual
 
-**Status:** preparação metodológica da primeira versão do produto.
+**Status:** metodologia brasileira validada e canonizada; preparação para o pipeline reproduzível da V1.
 
 O projeto possui atualmente:
 
@@ -78,13 +78,18 @@ O projeto possui atualmente:
 - baseline Git rastreável;
 - instalação e build reproduzíveis pelo lockfile;
 - auditoria inicial concluída em `docs/AUDITORIA-INICIAL-V1.md`;
-- Fase 0.5 concluída, com higiene e governança documental normalizadas.
+- Fase 0.5 concluída, com higiene e governança documental normalizadas;
+- Fases 1A, 1B, 1C e 1C-R concluídas;
+- metodologia brasileira da PNAD Contínua 2025 validada empiricamente e canonizada;
+- construção brasileira baseada em componentes separados de trabalho e outras fontes, conforme `docs/04-metodologia-dados.md`.
 
 Site atualmente publicado:
 
 `https://renda-familiar-brasil-mundo.vercel.app/`
 
-A metodologia Brasil ainda não foi validada. A metodologia Mundo também ainda não foi validada. Por isso, os percentis atualmente publicados devem ser tratados como resultados do protótipo existente, não como resultados oficiais da V1.
+O pipeline de produção e a CDF brasileira ainda não foram construídos. O alinhamento temporal da renda atual do usuário com a referência de preços de 2025 permanece pendente.
+
+A metodologia Mundo também ainda não foi validada. Por isso, os percentis atualmente publicados continuam sendo resultados do protótipo existente e não devem ser tratados como resultados oficiais da V1.
 
 ---
 
@@ -451,12 +456,12 @@ Registrar a dúvida antes de alterar comportamento estatístico.
 
 # Próximas Etapas
 
-Sequência de trabalho aprovada:
+Sequência planejada de trabalho:
 
 ```text
-Fase 0.5 — higiene e governança documental
+Fase 1D — pipeline brasileiro reproduzível
 ↓
-Fase 1 — metodologia Brasil / PNAD 2025
+Fase 1E — dataset/CDF brasileira e validação final
 ↓
 Fase 2 — metodologia Mundo / PIP + PPP
 ↓
@@ -473,7 +478,7 @@ Fase 7 — design, acessibilidade e performance
 Fase 8 — release controlada
 ```
 
-Esta sequência é planejamento. A conclusão da Fase 0.5 não autoriza automaticamente nenhuma fase posterior.
+Esta sequência é planejamento. A conclusão da Fase 1C-R não autoriza automaticamente a Fase 1D nem qualquer fase posterior.
 
 ---
 
