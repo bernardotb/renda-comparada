@@ -187,7 +187,7 @@ A interface deve explicitar:
 
 ## Revisão
 
-A regra permanece válida para adultos, crianças e pessoas sem renda que pertençam à população elegível. A formulação absoluta “todos os moradores” foi substituída por D056 após a Fase 1A identificar as exclusões específicas do indicador `VD5011`.
+A regra permanece válida para adultos, crianças e pessoas sem renda que pertençam à população elegível. A formulação absoluta “todos os moradores” foi substituída por D056 após a Fase 1A identificar as exclusões específicas do indicador; a construção final foi canonizada posteriormente em D063.
 
 ---
 
@@ -1216,14 +1216,14 @@ As primeiras visitas dos quatro trimestres formam a base anual. Versão oficial 
 
 ### Consequências
 
-A Fase 1C deverá preservar o arquivo oficial e registrar checksum. Esta decisão não autoriza download nesta fase.
+A Fase 1C preservou o arquivo oficial fora do Git e registrou seu SHA-256 no manifesto da fonte. A edição permanece congelada; eventual substituição oficial exige nova decisão.
 
 ---
 
 ## D054 — Variável Brasileira De RDPC
 
 **Data:** 13/08/2026
-**Status:** `ATIVA`
+**Status:** `SUBSTITUÍDA POR D063`
 
 ### Decisão
 
@@ -1237,6 +1237,10 @@ IBGE_RDPC_VARIABLE_STATUS = aprovada para validação na Fase 1C
 ### Consequências
 
 A variável ainda deve ser confirmada no arquivo real quanto a existência, tipo, domínio, missing, zeros, negativos e extremos. Evidência incompatível suspende sua adoção e reabre a decisão.
+
+### Resultado Da Validação
+
+A Fase 1C falsificou essa hipótese: `VD5011 × CO1` resultou em média de R$ 2.331,6688, 0 de 12 cortes nacionais e 0 de 27 médias de UF reproduzidos. A decisão permanece registrada como hipótese histórica submetida a teste; não deve ser usada na produção.
 
 ---
 
@@ -1256,7 +1260,7 @@ Usar o peso calibrado oficial da edição selecionada, que deve incorporar a rep
 
 ### Consequências
 
-`UF` será usada na V1 nacional para controles e validação, sem autorizar percentis estaduais. A Fase 1C verificará a integridade operacional de `V1032`.
+`UF` será usada na V1 nacional para controles e validação, sem autorizar percentis estaduais. A Fase 1C confirmou a integridade operacional de `V1032`: nenhum missing, zero, negativo ou valor não finito foi observado na edição `20260508`.
 
 ---
 
@@ -1269,7 +1273,7 @@ Usar o peso calibrado oficial da edição selecionada, que deve incorporar a rep
 
 A distribuição final é interpretada por **pessoa elegível**, posicionada segundo o rendimento domiciliar per capita do domicílio em que vive.
 
-O universo deve seguir o indicador `VD5011`. Ficam excluídas as pessoas classificadas como:
+O universo deve seguir a população elegível da construção brasileira, operacionalizada por `VD2003`. Ficam excluídas as pessoas classificadas como:
 
 - pensionista;
 - empregado doméstico;
@@ -1286,9 +1290,9 @@ Esta decisão substitui a formulação absoluta de D005. A distribuição não �
 ## D057 — Referência De Preços E Alinhamento Monetário
 
 **Data:** 13/08/2026
-**Status:** `ATIVA`
+**Status:** `PARCIALMENTE SUBSTITUÍDA POR D063`
 
-### Decisão
+### Decisão Original
 
 ```text
 IBGE_PRICE_REFERENCE = preços médios de 2025
@@ -1303,12 +1307,16 @@ A renda do usuário e a distribuição devem estar na mesma referência monetár
 
 Não aplicar `CO1`, `CO2`, IPCA ou fórmula própria até comprovar a regra operacional para `VD5011`. A necessidade de alinhamento está decidida; o método não está.
 
+### Revisão Após A Fase 1C
+
+A pendência do deflator foi resolvida por D063: trabalho habitual usa `CO1` e outras fontes efetivas usam `CO1e`. Permanece ativa somente a exigência de alinhar a renda do usuário e a distribuição na mesma referência monetária; `USER_INCOME_PRICE_ALIGNMENT_METHOD` continua pendente.
+
 ---
 
 ## D058 — Zero, Missing E Valores Inválidos
 
 **Data:** 13/08/2026
-**Status:** `ATIVA`
+**Status:** `ATIVA — COMPLEMENTADA POR D064`
 
 ### Decisão
 
@@ -1326,6 +1334,10 @@ IBGE_RDPC_MAX_OBSERVED
 ### Consequências
 
 Missing não pode virar zero. Negativos, pesos inválidos e outliers não podem ser corrigidos ou excluídos automaticamente. A aceitação de renda zero no formulário continua sendo decisão separada de UX/produto.
+
+### Evidência Da Edição 20260508
+
+A Fase 1C encontrou 4.682 registros de RDPC zero, nenhum RDPC negativo e nenhum peso inválido. Blanks estruturais de componentes significam ausência daquele componente, não missing do RDPC final. Essas constatações devem ser testadas novamente em futuras edições.
 
 ---
 
@@ -1368,28 +1380,28 @@ Ficam proibidos sem nova decisão:
 
 ### Consequências
 
-Máximo, quantis extremos e forma de exibição das caudas permanecem pendentes da Fase 1C. Outliers não serão removidos automaticamente.
+Na construção validada, foram observados P99,5 de aproximadamente R$ 20.507,98, P99,9 de aproximadamente R$ 38.991,66 e máximo de aproximadamente R$ 200.165,79. Esses valores são diagnósticos, não limites artificiais. A política de exibição das caudas permanece pendente e outliers não serão removidos automaticamente.
 
 ---
 
 ## D061 — Benchmarks Brasileiros De 2025
 
 **Data:** 13/08/2026
-**Status:** `ATIVA`
+**Status:** `ATIVA — COMPLEMENTADA POR D064`
 
 ### Decisão
 
 ```text
 BRAZIL_VALIDATION_MEAN_2025 = 2264
 BRAZIL_VALIDATION_MEAN_TYPE = real, preços médios de 2025
-BRAZIL_VALIDATION_STATUS = direto preliminar
+BRAZIL_VALIDATION_STATUS = direto validado na Fase 1C
 ```
 
 R$ 2.316 é `VALIDAÇÃO AUXILIAR / CONTEXTO OFICIAL`, pois pertence ao indicador nominal relacionado à LC 143/2013/FPE, com conceito e população distintos.
 
 ### Consequências
 
-O futuro pipeline de `VD5011` deverá procurar reproduzir R$ 2.264 e outros agregados compatíveis do SIDRA. A tolerância só será definida após inspeção de precisão, filtros, arredondamento e deflator. A diferença para R$ 2.316 não é erro.
+O futuro pipeline da construção definida em D063 deverá reproduzir R$ 2.264 e outros agregados compatíveis do SIDRA. A Fase 1C obteve R$ 2.264,0378279, Gini de aproximadamente 0,511224, 27 de 27 médias de UF e 10 de 12 cortes nacionais após arredondamento. A diferença para R$ 2.316 não é erro.
 
 ---
 
@@ -1405,6 +1417,90 @@ Na documentação metodológica, usar preferencialmente **domicílio** e **morad
 ### Consequências
 
 Família e domicílio não são sinônimos técnicos. A futura microcopy deve explicar a população elegível sem complexidade desnecessária; nenhuma alteração de interface está autorizada nesta fase.
+
+---
+
+# Metodologia Brasileira — Revisão Pós-validação Da Fase 1C
+
+## D063 — Construção Brasileira Do RDPC Real
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Canonizar para a distribuição brasileira da V1:
+
+```text
+RDPC_real_2025 =
+    soma_domiciliar(
+        VD4019 × CO1
+        +
+        VD4048 × CO1e
+    )
+    ÷ VD2003
+
+WORK_INCOME_VARIABLE = VD4019
+WORK_DEFLATOR = CO1
+OTHER_INCOME_VARIABLE = VD4048
+OTHER_INCOME_DEFLATOR = CO1e
+HOUSEHOLD_ELIGIBLE_COMPONENTS = VD2003
+WEIGHT_VARIABLE = V1032
+PRICE_REFERENCE = preços médios de 2025
+```
+
+`VD4019` representa o componente habitual do trabalho e recebe `CO1`. `VD4048` representa outras fontes efetivamente recebidas e recebe `CO1e`. A agregação ocorre no nível de domicílio validado na Fase 1C, antes da divisão pelo número de componentes elegíveis `VD2003`.
+
+Blanks estruturais dos componentes representam ausência daquele componente e entram como zero apenas na soma. Missing do RDPC final não pode ser convertido em zero.
+
+### Delimitação De Cartão/Tíquete
+
+Para reproduzir a distribuição específica de **Rendimento de Todas as Fontes 2025** selecionada pelo projeto, não utilizar os componentes adicionais de cartão/tíquete presentes em `VD5011`. Esta decisão não afirma genericamente que cartão/tíquete não seja renda; delimita o indicador estatístico adotado.
+
+### Evidência
+
+A recomposição nominal domiciliar de `VD4019 + VD4048` reproduziu `VD5007` sem diferenças nos 408.243 registros elegíveis. Após os deflatores próprios, a média resultante foi R$ 2.264,0378279. A construção não foi escolhida apenas para coincidir com a média.
+
+### Consequências
+
+D063 substitui D054 e resolve a parte do deflator que estava pendente em D057. `VD5011 × CO1` e `VD5008 × CO1` permanecem somente como diagnósticos e não devem ser usados como construção de produção. O método de alinhamento temporal da renda do usuário continua pendente.
+
+---
+
+## D064 — Evidências Empíricas Da Edição Brasileira 20260508
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Registrar como validação da construção definida em D063:
+
+```text
+BRAZIL_VALIDATION_MEAN_2025 = 2264
+BRAZIL_RECONSTRUCTED_MEAN_2025 = 2264.0378279
+BRAZIL_RECONSTRUCTED_GINI_2025 = 0.5112237274
+BRAZIL_UF_MEANS_ROUNDED_MATCHES = 27/27
+BRAZIL_NATIONAL_CUTS_ROUNDED_MATCHES = 10/12
+BRAZIL_WEIGHTED_POPULATION_2025 = 212624284.8006
+RDPC_ZERO_RECORDS = 4682
+RDPC_ZERO_WEIGHT = 2365090.6397
+RDPC_ZERO_WEIGHT_SHARE = 1.112333%
+RDPC_NEGATIVE_VALUES_OBSERVED = 0
+RDPC_P99_5_OBSERVED = 20507.98
+RDPC_P99_9_OBSERVED = 38991.66
+RDPC_MAX_OBSERVED = 200165.79
+```
+
+Esses valores descrevem somente a edição `20260508` e devem ser recalculados em toda atualização de dados.
+
+### Resíduos SIDRA
+
+P90 e P99 diferiram em R$ 1 dos cortes publicados; algumas médias acumuladas diferiram em até R$ 2. Esses resíduos devem ser investigados como diferença de procedimento de partição ou arredondamento antes de criar golden cases de cortes. Não ajustar a fórmula para eliminá-los artificialmente.
+
+### Consequências
+
+A média, o Gini, as 27 UFs e a população constituem validação forte da construção principal. Os resíduos pequenos não reabrem D063, mas o procedimento exato de cortes, a tolerância de golden cases e a política de exibição da cauda permanecem pendentes.
 
 ---
 

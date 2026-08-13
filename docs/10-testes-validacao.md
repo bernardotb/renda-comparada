@@ -1,7 +1,7 @@
 ---
 title: 10-testes-validacao
 created: 2026-08-12T17:52:04.000-03:00
-modified: 2026-08-12T17:56:34.516-03:00
+modified: 2026-08-13T18:31:00.000-03:00
 ---
 
 # 10-testes-validacao
@@ -813,7 +813,11 @@ O pipeline deve validar que as variáveis configuradas existem.
 Exemplo:
 
 ```text
-IBGE_RDPC_VARIABLE
+IBGE_WORK_INCOME_VARIABLE
+IBGE_WORK_DEFLATOR
+IBGE_OTHER_INCOME_VARIABLE
+IBGE_OTHER_INCOME_DEFLATOR
+IBGE_HOUSEHOLD_ELIGIBLE_COMPONENTS
 IBGE_WEIGHT_VARIABLE
 ```
 
@@ -3414,4 +3418,3 @@ Para qualquer resultado do Renda Comparada, devemos conseguir responder:
 O padrão de qualidade do Renda Comparada deve ser:
 
 > **reproduzir → comparar → validar → publicar.**
-> 

@@ -203,7 +203,10 @@ Fontes específicas:
 
 - [microdados anuais da primeira visita](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Dados/);
 - [layout da edição 2025](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Documentacao/input_PNADC_2025_visita1_20260508.txt);
-- [definições das variáveis derivadas de rendimento](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Documentacao_Geral/Definicao_variaveis_derivadas_PNADC/06_Definicao_variaveis_derivadas_parte05_Rendimento_de_outras_fontes.pdf).
+- [dicionário da edição 2025](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Documentacao/dicionario_PNADC_microdados_2025_visita1_20260508.xls);
+- [definições das variáveis derivadas de rendimento](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Documentacao_Geral/Definicao_variaveis_derivadas_PNADC/06_Definicao_variaveis_derivadas_parte05_Rendimento_de_outras_fontes.pdf);
+- [arquivo oficial de deflatores 2025](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Documentacao_Geral/deflator_PNADC_2025.xls);
+- [manual oficial dos deflatores anuais por visita](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Documentacao_Geral/PNADcIBGE_Deflator_Anual_Visita.pdf).
 
 Essa base deve ser validada conforme:
 
@@ -217,7 +220,7 @@ antes de gerar o dataset definitivo.
 
 ## Distribuição De Rendimento De Todas As Fontes
 
-**Classificação:** `CANÔNICA PARA VALIDAÇÃO DIRETA PRELIMINAR`
+**Classificação:** `CANÔNICA PARA VALIDAÇÃO DIRETA`
 
 Fonte:
 
@@ -227,7 +230,20 @@ Benchmark médio:
 
 > **R$ 2.264 por pessoa/mês, em valores reais a preços médios de 2025.**
 
-Esse valor é o benchmark direto preliminar para o futuro pipeline de `VD5011`. Somente se tornará operacional definitivo após reprodução nos microdados.
+Esse valor foi reproduzido nos microdados pela construção definida em D063:
+
+```text
+soma_domiciliar(VD4019 × CO1 + VD4048 × CO1e) ÷ VD2003
+```
+
+Resultado não arredondado: R$ 2.264,0378279. `VD5011 × CO1` foi rejeitada como construção principal após resultar em R$ 2.331,6688.
+
+Evidência interna reproduzível:
+
+- `docs/research/fase-1c-inspecao-microdados-pnad-2025.md`;
+- `docs/research/artifacts/fase-1c-source-manifest.json`;
+- `docs/research/artifacts/fase-1c-validation-summary.json`;
+- `scripts/research/inspect-pnad-2025.py`.
 
 ## RDPC Nominal Para LC 143/2013/FPE
 
@@ -262,7 +278,7 @@ e não:
 
 > corte de classe.
 
-Não utilizar diretamente para calcular a posição do usuário e não exigir que o pipeline de `VD5011` o reproduza. A diferença entre R$ 2.264 e R$ 2.316 não é erro.
+Não utilizar diretamente para calcular a posição do usuário e não exigir que o pipeline brasileiro o reproduza. A diferença entre R$ 2.264 e R$ 2.316 não é erro.
 
 ---
 
@@ -1759,12 +1775,14 @@ Antes do lançamento da V1:
 - checksum do arquivo registrado;
 - microdados corretos baixados;
 - dicionário inspecionado;
-- `VD5011` validada no arquivo real;
+- construção `VD4019 × CO1 + VD4048 × CO1e`, agregada por domicílio e dividida por `VD2003`, validada no arquivo real;
+- `VD5011` rejeitada como variável principal e preservada apenas como hipótese histórica;
 - `V1032` validado no arquivo real;
 - missing, zeros, negativos e extremos inspecionados;
 - regra operacional do deflator comprovada;
 - alinhamento da renda do usuário com preços médios de 2025 definido;
 - média de R$ 2.264 e agregados compatíveis reproduzidos;
+- procedimento exato de partição/arredondamento dos cortes documentado antes dos golden cases;
 - PIP versionado;
 - ano global definido;
 - PPP definida;

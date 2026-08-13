@@ -138,7 +138,7 @@ IBGE_RELEASE = 20260508
 IBGE_FILE = PNADC_2025_visita1_20260508.zip
 ```
 
-A versão exata e seu checksum deverão ser registrados no manifesto do dataset produzido pelo projeto.
+A versão exata e seu SHA-256 foram registrados em `docs/research/artifacts/fase-1c-source-manifest.json`. O futuro manifesto do dataset produzido pelo projeto deverá referenciar essa proveniência.
 
 Se o IBGE substituir explicitamente essa edição por arquivo posterior, a atualização deve ser interrompida para comparação e nova decisão. Não utilizar automaticamente a versão mais nova.
 
@@ -152,7 +152,7 @@ A média nacional divulgada pelo IBGE não é suficiente para responder:
 
 O IBGE publicou em 2025 dois valores médios com conceitos distintos que não podem ser confundidos.
 
-Para a distribuição de **Rendimento de Todas as Fontes 2025**, o benchmark direto preliminar é:
+Para a distribuição de **Rendimento de Todas as Fontes 2025**, o benchmark direto validado é:
 
 > **R$ 2.264 por pessoa/mês, em valores reais a preços médios de 2025.**
 
@@ -180,11 +180,12 @@ Para a distribuição principal da V1, o conceito aprovado é:
 
 > **pessoas segundo o rendimento domiciliar per capita do domicílio em que vivem, dentro da população elegível do indicador oficial selecionado.**
 
-A variável derivada candidata aprovada para validação, `VD5011`, combina:
+A construção validada combina, no nível do domicílio:
 
-- rendimento habitual de todos os trabalhos;
-- rendimentos de outras fontes efetivamente recebidos;
-- rendimentos em cartão/tíquete de transporte ou alimentação.
+- `VD4019`: rendimento habitual de todos os trabalhos;
+- `VD4048`: rendimentos de outras fontes efetivamente recebidos.
+
+Para reproduzir a distribuição específica de **Rendimento de Todas as Fontes 2025** selecionada pelo projeto, essa construção não utiliza os componentes adicionais de cartão/tíquete presentes em `VD5011`. Isso não significa afirmar genericamente que cartão/tíquete “não é renda”; é uma delimitação do indicador estatístico adotado.
 
 O indicador exclui da soma e do denominador as pessoas classificadas na condição do domicílio como:
 
@@ -192,7 +193,7 @@ O indicador exclui da soma e do denominador as pessoas classificadas na condiç�
 - empregado doméstico;
 - parente de empregado doméstico.
 
-Não descrever `VD5011` como “todos os rendimentos efetivamente recebidos”, porque o componente de trabalho é habitual.
+Não descrever a construção como “todos os rendimentos efetivamente recebidos”, porque o componente de trabalho é habitual.
 
 ---
 
@@ -255,7 +256,7 @@ Devem ser considerados **os moradores que pertencem à população elegível seg
 - crianças;
 - pessoas sem renda.
 
-Para `VD5011`, pensionistas, empregados domésticos e parentes de empregados domésticos residentes são excluídos da soma e do denominador. Essa é uma qualificação estatística obrigatória da expressão “todos os moradores”.
+Na construção validada, pensionistas, empregados domésticos e parentes de empregados domésticos residentes são excluídos da soma e do denominador, conforme o universo representado por `VD2003`. Essa é uma qualificação estatística obrigatória da expressão “todos os moradores”.
 
 Portanto:
 
@@ -371,7 +372,7 @@ IBGE_WEIGHT_VARIABLE = V1032
 
 `V1032` é o peso com calibração da edição selecionada e deve ser registrado no manifesto do dataset.
 
-A Fase 1C deverá verificar missing, zero, negativos, valores não numéricos, infinitos, extremos e soma ponderada no arquivo real. Não criar correções ad hoc nem substituir `V1032` por outro peso sem nova decisão.
+A Fase 1C confirmou que `V1032` não apresenta missing, zero, negativos ou valores não finitos na edição `20260508`, e que sua soma na população elegível reproduz a população oficial no nível de publicação. Esses testes devem ser repetidos em toda atualização. Não criar correções ad hoc nem substituir `V1032` por outro peso sem nova decisão.
 
 ### Regra
 
@@ -381,27 +382,32 @@ Se a inspeção da edição contradizer a documentação:
 
 ---
 
-# 16. Variável De Rendimento
+# 16. Construção Do Rendimento
 
-A variável aprovada para validação na Fase 1C é:
+A Fase 1C falsificou empiricamente a hipótese de usar `VD5011` como variável principal. A construção brasileira canônica da V1 é:
 
 ```text
-IBGE_RDPC_VARIABLE = VD5011
+RDPC_real_2025 =
+    soma_domiciliar(
+        VD4019 × CO1
+        +
+        VD4048 × CO1e
+    )
+    ÷ VD2003
 ```
 
-`VD5011` representa o rendimento domiciliar per capita habitual de todos os trabalhos e efetivo de outras fontes, inclusive rendimentos em cartão/tíquete de transporte ou alimentação, dentro do universo definido pelo IBGE.
+onde:
 
-O status é:
+- `VD4019` é o rendimento habitual do trabalho;
+- `CO1` é o deflator aplicável ao componente habitual;
+- `VD4048` é o rendimento efetivamente recebido de outras fontes;
+- `CO1e` é o deflator aplicável ao componente efetivo;
+- `VD2003` é o número de componentes elegíveis do domicílio;
+- `V1032` é o peso amostral aplicado às pessoas elegíveis.
 
-> **APROVADA PARA VALIDAÇÃO NA FASE 1C**
+Blanks estruturais em `VD4019` ou `VD4048` representam ausência daquele componente e entram como zero apenas na soma de componentes. Isso não converte missing do RDPC final em zero. Como validação independente, a soma domiciliar nominal de `VD4019 + VD4048` reproduziu `VD5007` sem diferenças nos 408.243 registros elegíveis analisados.
 
-A inspeção deverá confirmar existência, tipo, domínio, missing, zeros, negativos, extremos e aderência aos produtos oficiais. Evidência incompatível suspende a adoção.
-
-Preferência metodológica:
-
-> utilizar a variável derivada oficial do IBGE correspondente ao conceito desejado, quando disponível e adequada.
-
-Evitar reconstruir manualmente dezenas de componentes de renda caso o IBGE já disponibilize uma variável derivada validada.
+`VD5011 × CO1` e `VD5008 × CO1` não são construções oficiais da distribuição de produção. Podem permanecer somente como diagnósticos históricos ou auxiliares.
 
 ---
 
@@ -414,21 +420,23 @@ IBGE_YEAR = 2025
 IBGE_RELEASE = 20260508
 IBGE_FILE = PNADC_2025_visita1_20260508.zip
 IBGE_VISIT = primeira visita
-IBGE_RDPC_VARIABLE = VD5011
-IBGE_RDPC_VARIABLE_STATUS = aprovada para validação na Fase 1C
+IBGE_WORK_INCOME_VARIABLE = VD4019
+IBGE_WORK_DEFLATOR = CO1
+IBGE_OTHER_INCOME_VARIABLE = VD4048
+IBGE_OTHER_INCOME_DEFLATOR = CO1e
+IBGE_HOUSEHOLD_ELIGIBLE_COMPONENTS = VD2003
 IBGE_WEIGHT_VARIABLE = V1032
 IBGE_UF_VARIABLE = UF
 IBGE_PRICE_REFERENCE = preços médios de 2025
-IBGE_RDPC_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
-IBGE_WEIGHT_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
-IBGE_RDPC_NEGATIVE_VALUES = [PENDENTE DE INSPEÇÃO]
-IBGE_RDPC_MAX_OBSERVED = [PENDENTE DE FASE 1C]
-IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
+IBGE_COMPONENT_BLANK_RULE = ausência estrutural do componente; zero somente na soma
+IBGE_WEIGHT_MISSING_CODES = nenhum observado na edição 20260508
+IBGE_RDPC_NEGATIVE_VALUES_OBSERVED = 0
+IBGE_RDPC_MAX_OBSERVED_2025 = 200165.7922757916
 USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
 USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
 ```
 
-Nenhuma pendência acima pode ser preenchida por conveniência. Ela deve ser resolvida pela inspeção e validação autorizadas nas fases seguintes.
+As constatações de missing, negativos e máximo valem para a edição `20260508` e devem ser testadas novamente em toda atualização. O método de alinhamento temporal da renda do usuário permanece pendente.
 
 ---
 
@@ -690,17 +698,21 @@ como substitutos de inflação.
 
 # 30. Regra Operacional Recomendada
 
-A regra do deflator para `VD5011` ainda não está canonizada:
+A regra operacional canônica para a distribuição brasileira é:
 
 ```text
-IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
+IBGE_WORK_INCOME_VARIABLE = VD4019
+IBGE_WORK_DEFLATOR = CO1
+IBGE_OTHER_INCOME_VARIABLE = VD4048
+IBGE_OTHER_INCOME_DEFLATOR = CO1e
+IBGE_HOUSEHOLD_ELIGIBLE_COMPONENTS = VD2003
 USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
 USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
 ```
 
-Embora a documentação oficial identifique `CO1/CO2` para rendimentos habituais, a aplicação exata à composição mista de `VD5011` precisa ser comprovada operacionalmente.
+Aplicar `CO1` ao componente habitual `VD4019` e `CO1e` ao componente efetivo `VD4048`, usando a chave ano, trimestre e UF do arquivo oficial de deflatores. Somar no nível correto de domicílio e dividir por `VD2003`.
 
-Até essa comprovação, não aplicar `CO1`, `CO2`, IPCA ou multiplicação própria. Quando a regra for aprovada, fator e referência deverão constar nos metadados; a aplicação não deverá consultar inflação em cada cálculo.
+Não aplicar um fator único sobre `VD5011` ou `VD5008`. Fatores, componentes e referência devem constar nos metadados; a aplicação não deverá consultar inflação em cada cálculo. O método para alinhar a renda corrente do usuário a preços médios de 2025 continua pendente e não pode ser improvisado.
 
 ---
 
@@ -710,15 +722,24 @@ O pipeline brasileiro deve ser validado contra resultados oficiais publicados pe
 
 Um teste obrigatório é reconstruir, a partir da base e pesos escolhidos, estatísticas oficiais conhecidas do mesmo universo.
 
-Benchmark direto preliminar:
+Benchmark direto validado:
 
 ```text
 BRAZIL_VALIDATION_MEAN_2025 = 2264
 BRAZIL_VALIDATION_MEAN_TYPE = real, preços médios de 2025
-BRAZIL_VALIDATION_STATUS = direto preliminar
+BRAZIL_VALIDATION_STATUS = direto validado na Fase 1C
+BRAZIL_VALIDATION_RECONSTRUCTED_MEAN = 2264.0378279
 ```
 
-Também deverão ser validados população ponderada, Gini, limites de percentis e agregados compatíveis publicados no SIDRA.
+A Fase 1C também obteve:
+
+- Gini calculado de aproximadamente `0,511224`, compatível com `0,511` publicado;
+- 27 de 27 médias de UF reproduzidas após arredondamento;
+- 10 de 12 cortes nacionais reproduzidos exatamente após arredondamento;
+- diferença de R$ 1 em P90 e P99;
+- população ponderada de `212.624.284,8006`, compatível com `212.624 mil` publicados.
+
+Os resíduos de R$ 1 nos cortes e de até R$ 2 em algumas médias acumuladas não autorizam ajuste artificial da fórmula. O procedimento exato de partição e arredondamento deverá ser documentado antes dos golden cases de cortes.
 
 Diferenças relevantes indicam problema em:
 
@@ -733,13 +754,13 @@ Diferenças relevantes indicam problema em:
 
 # 32. R$ 2.316 É Validação Auxiliar
 
-R$ 2.316 pertence ao indicador nominal de rendimento domiciliar per capita divulgado para finalidades relacionadas à LC 143/2013/FPE. Ele usa renda efetivamente recebida e população distinta da distribuição principal baseada em `VD5011`.
+R$ 2.316 pertence ao indicador nominal de rendimento domiciliar per capita divulgado para finalidades relacionadas à LC 143/2013/FPE. Ele usa renda efetivamente recebida e população distinta da distribuição principal validada para o projeto.
 
 Classificação:
 
 > **VALIDAÇÃO AUXILIAR / CONTEXTO OFICIAL**
 
-O futuro pipeline de `VD5011` não deve ser obrigado a reproduzir R$ 2.316, e a diferença para R$ 2.264 não constitui erro.
+O futuro pipeline brasileiro não deve ser obrigado a reproduzir R$ 2.316, e a diferença para R$ 2.264 não constitui erro.
 
 Nenhuma média deve ser usada para calcular percentis.
 
@@ -1216,7 +1237,11 @@ Exemplo:
   "price_reference": "preços médios de 2025",
   "methodology_version": "1.0.0",
   "weight_variable": "V1032",
-  "income_variable": "VD5011",
+  "work_income_variable": "VD4019",
+  "work_deflator": "CO1",
+  "other_income_variable": "VD4048",
+  "other_income_deflator": "CO1e",
+  "household_eligible_components": "VD2003",
   "checksum": "…"
 }
 ```
@@ -1411,6 +1436,8 @@ O percentil esperado será preenchido somente após a construção validada da d
 
 RDPC igual a zero é estatisticamente válido e, quando pertencente à população elegível, deve permanecer na distribuição.
 
+Na edição `20260508`, a construção validada encontrou 4.682 registros de RDPC zero, representando 2.365.090,64 pessoas ponderadas ou 1,112333% da população elegível.
+
 Não excluir renda zero para melhorar a aparência da CDF.
 
 Isso não decide se o formulário aceitará renda zero. Essa decisão permanece em UX/produto.
@@ -1424,10 +1451,10 @@ A interface não deve aceitar renda domiciliar negativa.
 Para os microdados:
 
 ```text
-IBGE_RDPC_NEGATIVE_VALUES = [PENDENTE DE INSPEÇÃO]
+IBGE_RDPC_NEGATIVE_VALUES_OBSERVED_2025 = 0
 ```
 
-Se houver valores negativos ou códigos especiais:
+Esse resultado vale para a edição `20260508` e deve ser testado novamente em toda atualização. Se uma edição futura contiver valores negativos ou códigos especiais:
 
 > quantificar, verificar o significado e voltar à decisão metodológica antes da CDF definitiva.
 
@@ -1446,14 +1473,14 @@ Valores:
 
 não devem ser convertidos automaticamente em zero.
 
-Configuração atual:
+Configuração validada para a edição `20260508`:
 
 ```text
-IBGE_RDPC_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
-IBGE_WEIGHT_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
+IBGE_COMPONENT_BLANK_RULE = ausência estrutural do componente; zero somente na soma
+IBGE_WEIGHT_MISSING_CODES = nenhum observado
 ```
 
-Seguir o dicionário oficial e a inspeção do arquivo real. Missing de peso, zero, negativos, infinitos, valores não numéricos ou extremos anômalos não autorizam correções ad hoc.
+Blanks de `VD4019` e `VD4048` representam ausência daquele componente e não missing do RDPC final. Seguir o dicionário oficial e repetir a inspeção a cada edição. Missing de peso, zero, negativos, infinitos, valores não numéricos ou extremos anômalos não autorizam correções ad hoc.
 
 ---
 
@@ -1480,13 +1507,15 @@ Para rendas muito altas:
 - considerar limitar a apresentação;
 - indicar quando o usuário está acima da faixa em que o dataset oferece boa resolução.
 
-A regra operacional será definida após análise dos microdados.
+A Fase 1C registrou, para a construção validada:
 
 ```text
-IBGE_RDPC_MAX_OBSERVED = [PENDENTE DE FASE 1C]
+IBGE_RDPC_P99_5_OBSERVED_2025 = 20507.98
+IBGE_RDPC_P99_9_OBSERVED_2025 = 38991.66
+IBGE_RDPC_MAX_OBSERVED_2025 = 200165.79
 ```
 
-Não remover outliers automaticamente.
+Esses valores são diagnósticos, não pisos, tetos ou pontos automáticos de truncamento. A política de exibição da cauda permanece pendente. Não remover outliers automaticamente.
 
 ---
 
@@ -1692,16 +1721,17 @@ Não entram no cálculo da posição de renda.
 
 Antes do deploy definitivo da V1, resolver:
 
-- preservar e verificar `PNADC_2025_visita1_20260508.zip`;
-- registrar checksum da edição `20260508`;
-- validar `VD5011` no arquivo real;
-- validar `V1032` no arquivo real;
-- confirmar tratamento de missing;
-- confirmar domínio de renda zero;
-- confirmar valores negativos e extremos;
-- confirmar regra operacional do deflator;
+- preservar e verificar `PNADC_2025_visita1_20260508.zip` — **feito na Fase 1C**;
+- registrar checksum da edição `20260508` — **feito na Fase 1C**;
+- validar a construção `VD4019 × CO1 + VD4048 × CO1e` no arquivo real — **feito na Fase 1C**;
+- validar `V1032` no arquivo real — **feito na Fase 1C**;
+- confirmar tratamento dos blanks estruturais dos componentes — **feito na Fase 1C**;
+- confirmar domínio de renda zero — **feito na Fase 1C**;
+- confirmar valores negativos e extremos — **feito na Fase 1C; política de exibição da cauda pendente**;
+- confirmar regra operacional do deflator — **feito na Fase 1C e canonizado na Fase 1C-R**;
 - definir alinhamento da renda do usuário com preços médios de 2025;
-- reproduzir indicadores oficiais do IBGE;
+- documentar o procedimento exato de partição/arredondamento antes dos golden cases de cortes;
+- reproduzir indicadores oficiais do IBGE — **feito na Fase 1C, com resíduos documentados**;
 - gerar CDF brasileira;
 - validar percentis;
 - definir casas decimais;
@@ -1717,22 +1747,22 @@ Antes do deploy definitivo da V1, resolver:
 - gerar checksums;
 - executar testes de regressão.
 
-## Validações Formais Para A Fase 1C
+## Validações Formais Executadas Na Fase 1C
 
 ```text
-BR-VAL-001 — confirmar domínio real de VD5011
-BR-VAL-002 — identificar missing de VD5011
-BR-VAL-003 — identificar missing/invalid de V1032
-BR-VAL-004 — verificar RDPC negativos
-BR-VAL-005 — verificar zeros
-BR-VAL-006 — verificar máximo e extremos
-BR-VAL-007 — confirmar regra operacional do deflator
-BR-VAL-008 — reproduzir média R$ 2.264
-BR-VAL-009 — validar população ponderada
-BR-VAL-010 — validar agregados oficiais compatíveis
+BR-VAL-001 — domínio real de VD5011: passou com ressalva; variável inadequada como construção principal
+BR-VAL-002 — missing de VD5011: passou
+BR-VAL-003 — integridade de V1032: passou
+BR-VAL-004 — RDPC negativos: passou; nenhuma ocorrência
+BR-VAL-005 — zeros: passou
+BR-VAL-006 — máximo e extremos: passou com ressalva sobre exibição futura
+BR-VAL-007 — regra operacional do deflator: passou com ressalva e levou à construção por componentes
+BR-VAL-008 — VD5011 reproduzir R$ 2.264: falhou; construção por componentes reproduziu
+BR-VAL-009 — população ponderada: passou
+BR-VAL-010 — agregados com VD5011: falhou; construção por componentes reproduziu os benchmarks
 ```
 
-Esses itens são requisitos de validação. Não autorizam download, pipeline, dataset derivado ou CDF nesta fase.
+As evidências completas permanecem em `docs/research/fase-1c-inspecao-microdados-pnad-2025.md`. Esses resultados não autorizam por si só pipeline, dataset derivado ou CDF.
 
 ---
 
