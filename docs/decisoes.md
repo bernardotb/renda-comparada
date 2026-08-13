@@ -1,7 +1,7 @@
 ---
 title: Registro de Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-13T09:50:34.315-03:00
+modified: 2026-08-13T18:30:00.000-03:00
 ---
 
 # Registro de Decisões — Renda Comparada
@@ -169,7 +169,7 @@ Não pedir antes do resultado:
 # D005 — Todos Os Moradores Entram no Cálculo Brasileiro
 
 **Data:** 12/08/2026  
-**Status:** `ATIVA`
+**Status:** `SUBSTITUÍDA POR D056`
 
 ## Decisão
 
@@ -184,6 +184,10 @@ conforme a metodologia do rendimento domiciliar per capita adotado.
 A interface deve explicitar:
 
 > **Inclua adultos e crianças, mesmo que não tenham renda.**
+
+## Revisão
+
+A regra permanece válida para adultos, crianças e pessoas sem renda que pertençam à população elegível. A formulação absoluta “todos os moradores” foi substituída por D056 após a Fase 1A identificar as exclusões específicas do indicador `VD5011`.
 
 ---
 
@@ -1185,6 +1189,220 @@ Criar futuramente um repositório Git remoto privado como backup e fonte remota 
 ### Limite
 
 Nenhum remoto deve ser configurado sem autorização específica. A Fase 0.5 apenas registra a pendência.
+
+---
+
+# Metodologia Brasileira — Fase 1B
+
+## D053 — Base Brasileira Da V1
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+A distribuição brasileira da V1 terá como referência **PNAD Contínua — Rendimento de Todas as Fontes 2025**, usando:
+
+```text
+IBGE_YEAR = 2025
+IBGE_RELEASE = 20260508
+IBGE_FILE = PNADC_2025_visita1_20260508.zip
+IBGE_VISIT = primeira visita
+```
+
+As primeiras visitas dos quatro trimestres formam a base anual. Versão oficial posterior não deve substituir automaticamente essa edição; exige comparação e nova decisão.
+
+### Consequências
+
+A Fase 1C deverá preservar o arquivo oficial e registrar checksum. Esta decisão não autoriza download nesta fase.
+
+---
+
+## D054 — Variável Brasileira De RDPC
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+```text
+IBGE_RDPC_VARIABLE = VD5011
+IBGE_RDPC_VARIABLE_STATUS = aprovada para validação na Fase 1C
+```
+
+`VD5011` é a melhor candidata encontrada para reproduzir a distribuição oficial: rendimento habitual de todos os trabalhos combinado com outras fontes efetivamente recebidas, inclusive cartão/tíquete de transporte ou alimentação.
+
+### Consequências
+
+A variável ainda deve ser confirmada no arquivo real quanto a existência, tipo, domínio, missing, zeros, negativos e extremos. Evidência incompatível suspende sua adoção e reabre a decisão.
+
+---
+
+## D055 — Peso, Reponderação E UF
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+```text
+IBGE_WEIGHT_VARIABLE = V1032
+IBGE_UF_VARIABLE = UF
+```
+
+Usar o peso calibrado oficial da edição selecionada, que deve incorporar a reponderação vigente associada às projeções populacionais que consideram o Censo 2022. Não recalibrar nem construir peso próprio.
+
+### Consequências
+
+`UF` será usada na V1 nacional para controles e validação, sem autorizar percentis estaduais. A Fase 1C verificará a integridade operacional de `V1032`.
+
+---
+
+## D056 — Pessoa E População Elegível
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+A distribuição final é interpretada por **pessoa elegível**, posicionada segundo o rendimento domiciliar per capita do domicílio em que vive.
+
+O universo deve seguir o indicador `VD5011`. Ficam excluídas as pessoas classificadas como:
+
+- pensionista;
+- empregado doméstico;
+- parente de empregado doméstico.
+
+Adultos, crianças e pessoas sem renda própria entram quando pertencem à população elegível.
+
+### Consequências
+
+Esta decisão substitui a formulação absoluta de D005. A distribuição não é de salários, trabalhadores, responsáveis ou domicílios simples.
+
+---
+
+## D057 — Referência De Preços E Alinhamento Monetário
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+```text
+IBGE_PRICE_REFERENCE = preços médios de 2025
+IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
+USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
+USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
+```
+
+A renda do usuário e a distribuição devem estar na mesma referência monetária antes da comparação.
+
+### Consequências
+
+Não aplicar `CO1`, `CO2`, IPCA ou fórmula própria até comprovar a regra operacional para `VD5011`. A necessidade de alinhamento está decidida; o método não está.
+
+---
+
+## D058 — Zero, Missing E Valores Inválidos
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+RDPC igual a zero é valor estatisticamente válido e deve permanecer na distribuição quando pertencer à população elegível.
+
+Permanecem pendentes de inspeção:
+
+```text
+IBGE_RDPC_MISSING_CODES
+IBGE_WEIGHT_MISSING_CODES
+IBGE_RDPC_NEGATIVE_VALUES
+IBGE_RDPC_MAX_OBSERVED
+```
+
+### Consequências
+
+Missing não pode virar zero. Negativos, pesos inválidos e outliers não podem ser corrigidos ou excluídos automaticamente. A aceitação de renda zero no formulário continua sendo decisão separada de UX/produto.
+
+---
+
+## D059 — Empates E Desigualdade Estrita
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Para a frase “Sua renda por pessoa é maior que a de aproximadamente X%”, usar:
+
+```text
+share_below(x) = peso das pessoas com RDPC < x / peso total
+```
+
+`share_at_or_below` pode ser mantido separadamente para análise.
+
+### Consequências
+
+Pessoas com RDPC idêntico não recebem ordenação individual fictícia. Percentil, TOP e precisão visual devem ser apresentados como aproximados.
+
+---
+
+## D060 — Extremos E Caudas Empíricas
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+A futura CDF brasileira será empírica e validada. Não utilizar extrapolação paramétrica arbitrária fora da distribuição observada.
+
+Ficam proibidos sem nova decisão:
+
+- extrapolação logarítmica ad hoc;
+- fator 8;
+- pisos artificiais;
+- tetos inventados.
+
+### Consequências
+
+Máximo, quantis extremos e forma de exibição das caudas permanecem pendentes da Fase 1C. Outliers não serão removidos automaticamente.
+
+---
+
+## D061 — Benchmarks Brasileiros De 2025
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+```text
+BRAZIL_VALIDATION_MEAN_2025 = 2264
+BRAZIL_VALIDATION_MEAN_TYPE = real, preços médios de 2025
+BRAZIL_VALIDATION_STATUS = direto preliminar
+```
+
+R$ 2.316 é `VALIDAÇÃO AUXILIAR / CONTEXTO OFICIAL`, pois pertence ao indicador nominal relacionado à LC 143/2013/FPE, com conceito e população distintos.
+
+### Consequências
+
+O futuro pipeline de `VD5011` deverá procurar reproduzir R$ 2.264 e outros agregados compatíveis do SIDRA. A tolerância só será definida após inspeção de precisão, filtros, arredondamento e deflator. A diferença para R$ 2.316 não é erro.
+
+---
+
+## D062 — Domicílio E Família
+
+**Data:** 13/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Na documentação metodológica, usar preferencialmente **domicílio** e **moradores**. “Família” pode permanecer na comunicação geral quando não funcionar como definição estatística.
+
+### Consequências
+
+Família e domicílio não são sinônimos técnicos. A futura microcopy deve explicar a população elegível sem complexidade desnecessária; nenhuma alteração de interface está autorizada nesta fase.
 
 ---
 

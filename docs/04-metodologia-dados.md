@@ -1,15 +1,15 @@
 ---
 title: 04-metodologia-dados
 created: 2026-08-12T17:07:15.000-03:00
-modified: 2026-08-13T09:50:34.315-03:00
+modified: 2026-08-13T18:30:00.000-03:00
 ---
 
 # 04-metodologia-dados
 
 **Produto:** Renda Comparada  
-**Versão do documento:** 1.0  
+**Versão do documento:** 1.1
 **Status:** Canônico — sujeito a validação estatística antes da produção  
-**Última revisão:** 12/08/2026
+**Última revisão:** 13/08/2026
 
 **Documentos relacionados:**
 
@@ -130,7 +130,17 @@ A base brasileira inicial da V1 deve utilizar:
 
 Os microdados correspondentes ao tema **Rendimento de Todas as Fontes 2025** foram atualizados pelo IBGE em 08/05/2026.
 
-A versão exata dos arquivos utilizados deverá ser registrada no manifesto do dataset produzido pelo projeto.
+A edição aprovada para validação é:
+
+```text
+IBGE_YEAR = 2025
+IBGE_RELEASE = 20260508
+IBGE_FILE = PNADC_2025_visita1_20260508.zip
+```
+
+A versão exata e seu checksum deverão ser registrados no manifesto do dataset produzido pelo projeto.
+
+Se o IBGE substituir explicitamente essa edição por arquivo posterior, a atualização deve ser interrompida para comparação e nova decisão. Não utilizar automaticamente a versão mais nova.
 
 ---
 
@@ -140,15 +150,21 @@ A média nacional divulgada pelo IBGE não é suficiente para responder:
 
 > **“Minha renda é maior que a de quantos brasileiros?”**
 
-Por exemplo, o IBGE divulgou para 2025 rendimento nominal mensal domiciliar per capita médio de:
+O IBGE publicou em 2025 dois valores médios com conceitos distintos que não podem ser confundidos.
+
+Para a distribuição de **Rendimento de Todas as Fontes 2025**, o benchmark direto preliminar é:
+
+> **R$ 2.264 por pessoa/mês, em valores reais a preços médios de 2025.**
+
+Para o indicador nominal associado à LC 143/2013/FPE, o IBGE divulgou:
 
 > **R$ 2.316**
 
-Esse valor representa uma **média**, não um percentil, mediana ou corte de classe.
+Ambos representam **médias**, não percentis, medianas ou cortes de classe. Além disso, pertencem a universos e conceitos de renda diferentes.
 
 Portanto:
 
-> **R$ 2.316 não pode ser utilizado diretamente para calcular a posição do usuário.**
+> **Nenhuma média pode ser utilizada diretamente para calcular a posição do usuário.**
 
 Precisamos da **distribuição completa** ou de uma representação estatisticamente equivalente dela.
 
@@ -160,17 +176,23 @@ O conceito central adotado é o:
 
 > **rendimento domiciliar per capita**
 
-O IBGE define esse indicador como a razão entre:
+Para a distribuição principal da V1, o conceito aprovado é:
 
-> **total dos rendimentos domiciliares**
+> **pessoas segundo o rendimento domiciliar per capita do domicílio em que vivem, dentro da população elegível do indicador oficial selecionado.**
 
-e
+A variável derivada candidata aprovada para validação, `VD5011`, combina:
 
-> **total dos moradores.**
+- rendimento habitual de todos os trabalhos;
+- rendimentos de outras fontes efetivamente recebidos;
+- rendimentos em cartão/tíquete de transporte ou alimentação.
 
-São considerados rendimentos de trabalho e de outras fontes.
+O indicador exclui da soma e do denominador as pessoas classificadas na condição do domicílio como:
 
-Para a divulgação de 2025, o IBGE informa que utiliza rendimentos brutos de trabalho e outras fontes efetivamente recebidos no mês de referência.
+- pensionista;
+- empregado doméstico;
+- parente de empregado doméstico.
+
+Não descrever `VD5011` como “todos os rendimentos efetivamente recebidos”, porque o componente de trabalho é habitual.
 
 ---
 
@@ -193,13 +215,15 @@ Em princípio, incluir:
 - rendimentos de outras fontes incluídos pela PNAD;
 - demais rendimentos abrangidos pela variável oficial selecionada.
 
-A descrição definitiva deve ser derivada do dicionário e das notas técnicas da PNAD utilizada.
+A descrição operacional definitiva deve permanecer alinhada ao dicionário, às notas técnicas e às validações da Fase 1C.
+
+A renda informada pelo usuário e a distribuição devem estar na mesma referência monetária antes da comparação. O método de alinhamento ainda está pendente.
 
 ---
 
 # 9. Renda Bruta
 
-Para manter compatibilidade com o conceito atualmente adotado pelo IBGE para o rendimento domiciliar per capita divulgado oficialmente, a entrada inicial da V1 deve ser orientada para:
+Para manter compatibilidade com a distribuição aprovada, a entrada inicial da V1 deve ser orientada para:
 
 > **renda bruta mensal do domicílio**
 
@@ -215,6 +239,8 @@ e não renda líquida após:
 
 A interface deve explicar esse conceito de maneira simples.
 
+No componente de trabalho, “renda bruta” deve ser compreendida como rendimento habitualmente recebido; nas outras fontes, como rendimento efetivamente recebido no período de referência.
+
 ---
 
 # 10. Moradores
@@ -223,17 +249,19 @@ A pergunta deve ser:
 
 > **Quantas pessoas moram nesta casa?**
 
-Devem ser consideradas **todas as pessoas que compõem o domicílio segundo a metodologia adotada**, inclusive:
+Devem ser considerados **os moradores que pertencem à população elegível segundo a metodologia oficial adotada**, inclusive:
 
 - adultos;
 - crianças;
 - pessoas sem renda.
 
-O IBGE informa explicitamente que todos os moradores entram no cálculo do rendimento domiciliar per capita.
+Para `VD5011`, pensionistas, empregados domésticos e parentes de empregados domésticos residentes são excluídos da soma e do denominador. Essa é uma qualificação estatística obrigatória da expressão “todos os moradores”.
 
 Portanto:
 
 > **não utilizar somente o número de adultos.**
+
+A interface não será alterada nesta fase. A futura microcopy deve explicar a composição sem tratar “família” e “domicílio” como sinônimos técnicos.
 
 ---
 
@@ -241,20 +269,20 @@ Portanto:
 
 Definir:
 
-`R_familiar`
+`R_domicilio`
 
 como renda mensal total do domicílio.
 
 Definir:
 
-`N_moradores`
+`N_moradores_elegiveis`
 
-como número total de moradores.
+como número de moradores pertencentes à população elegível do indicador.
 
 Então:
 
 ```text
-RDPC_usuario = R_familiar / N_moradores
+RDPC_usuario = R_domicilio / N_moradores_elegiveis
 ```
 
 Onde:
@@ -269,7 +297,7 @@ significa:
 
 # 12. Exemplo
 
-Família:
+Domicílio:
 
 - renda mensal: R$ 6.500;
 - moradores: 3.
@@ -297,6 +325,8 @@ A distribuição deve responder à pergunta:
 
 Isso significa que a unidade final de interpretação é a **pessoa**, posicionada segundo o rendimento domiciliar per capita do domicílio no qual reside.
 
+Mais precisamente, é uma **pessoa elegível** segundo o universo do indicador selecionado.
+
 Não é uma distribuição simples de domicílios.
 
 Não é uma distribuição de salários individuais.
@@ -307,7 +337,7 @@ Não é uma distribuição de responsáveis pelo domicílio.
 
 # 14. Estrutura Da Distribuição
 
-Cada pessoa da amostra recebe o rendimento domiciliar per capita correspondente ao seu domicílio.
+Cada pessoa elegível da amostra recebe o rendimento domiciliar per capita correspondente ao seu domicílio.
 
 Exemplo conceitual:
 
@@ -317,7 +347,7 @@ Domicílio A:
 - quatro moradores;
 - RDPC: R$ 2.500.
 
-Na distribuição por pessoas, os quatro moradores pertencem à faixa de:
+Se os quatro moradores forem elegíveis, todos pertencem à faixa de:
 
 > **R$ 2.500 per capita**
 
@@ -333,27 +363,39 @@ Portanto:
 
 > **os registros não podem receber peso 1.**
 
-Deve ser utilizado o fator de expansão/peso final correspondente à edição anual e visita selecionada.
+Deve ser utilizado:
 
-O código exato da variável de peso deve ser confirmado no:
+```text
+IBGE_WEIGHT_VARIABLE = V1032
+```
 
-> **dicionário oficial dos microdados da PNAD Contínua 2025**
+`V1032` é o peso com calibração da edição selecionada e deve ser registrado no manifesto do dataset.
 
-antes da implementação definitiva.
-
-O identificador da variável deve então ser registrado neste documento e no manifesto do dataset.
+A Fase 1C deverá verificar missing, zero, negativos, valores não numéricos, infinitos, extremos e soma ponderada no arquivo real. Não criar correções ad hoc nem substituir `V1032` por outro peso sem nova decisão.
 
 ### Regra
 
-Enquanto o código oficial do peso não tiver sido confirmado:
+Se a inspeção da edição contradizer a documentação:
 
-> **Codex não deve escolher uma variável por semelhança de nome ou memória.**
+> **suspender o processamento e reabrir a decisão metodológica.**
 
 ---
 
 # 16. Variável De Rendimento
 
-A variável oficial utilizada para representar o rendimento domiciliar per capita também deve ser confirmada no dicionário oficial da versão 2025.
+A variável aprovada para validação na Fase 1C é:
+
+```text
+IBGE_RDPC_VARIABLE = VD5011
+```
+
+`VD5011` representa o rendimento domiciliar per capita habitual de todos os trabalhos e efetivo de outras fontes, inclusive rendimentos em cartão/tíquete de transporte ou alimentação, dentro do universo definido pelo IBGE.
+
+O status é:
+
+> **APROVADA PARA VALIDAÇÃO NA FASE 1C**
+
+A inspeção deverá confirmar existência, tipo, domínio, missing, zeros, negativos, extremos e aderência aos produtos oficiais. Evidência incompatível suspende a adoção.
 
 Preferência metodológica:
 
@@ -365,28 +407,42 @@ Evitar reconstruir manualmente dezenas de componentes de renda caso o IBGE já d
 
 # 17. Registro Obrigatório Das Variáveis
 
-Antes de gerar o primeiro dataset de produção, preencher:
+Configuração canônica aprovada e pendências explícitas:
 
 ```text
 IBGE_YEAR = 2025
-IBGE_VISIT = [CONFIRMAR]
-IBGE_RDPC_VARIABLE = [CONFIRMAR NO DICIONÁRIO]
-IBGE_WEIGHT_VARIABLE = [CONFIRMAR NO DICIONÁRIO]
-IBGE_UF_VARIABLE = [CONFIRMAR]
-IBGE_DEFLATOR_SOURCE = [CONFIRMAR]
+IBGE_RELEASE = 20260508
+IBGE_FILE = PNADC_2025_visita1_20260508.zip
+IBGE_VISIT = primeira visita
+IBGE_RDPC_VARIABLE = VD5011
+IBGE_RDPC_VARIABLE_STATUS = aprovada para validação na Fase 1C
+IBGE_WEIGHT_VARIABLE = V1032
+IBGE_UF_VARIABLE = UF
+IBGE_PRICE_REFERENCE = preços médios de 2025
+IBGE_RDPC_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
+IBGE_WEIGHT_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
+IBGE_RDPC_NEGATIVE_VALUES = [PENDENTE DE INSPEÇÃO]
+IBGE_RDPC_MAX_OBSERVED = [PENDENTE DE FASE 1C]
+IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
+USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
+USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
 ```
 
-Nenhum `[CONFIRMAR]` pode permanecer antes do deploy de produção.
+Nenhuma pendência acima pode ser preenchida por conveniência. Ela deve ser resolvida pela inspeção e validação autorizadas nas fases seguintes.
 
 ---
 
 # 18. Visita Da PNAD
 
-Para o rendimento domiciliar per capita oficial de 2025, o IBGE voltou a utilizar informações das **primeiras visitas** realizadas ao longo dos quatro trimestres do ano.
+Para o rendimento domiciliar per capita oficial de 2025, utilizar as **primeiras visitas** realizadas ao longo dos quatro trimestres do ano.
 
 A base utilizada pelo Renda Comparada deverá ser compatível com essa escolha.
 
-A visita efetivamente usada no pipeline deve constar no manifesto.
+A visita efetivamente usada no pipeline deve constar no manifesto como:
+
+```text
+IBGE_VISIT = primeira visita
+```
 
 ---
 
@@ -399,6 +455,8 @@ O IBGE publicou em 2025 nota técnica específica sobre atualização das estima
 Consequência:
 
 > **não reutilizar pesos antigos ou datasets baixados anteriormente sem verificar se continuam sendo a versão oficial vigente.**
+
+Utilizar o peso oficial da edição selecionada. Não recalibrar, reconstruir ou combinar pesos por conta própria.
 
 ---
 
@@ -587,33 +645,36 @@ com
 
 como se possuíssem o mesmo poder de compra.
 
+Princípio canônico:
+
+> **a renda digitada pelo usuário e a distribuição precisam estar na mesma referência monetária antes da comparação.**
+
 ---
 
 # 28. Referência De Preços
 
-O pipeline deverá escolher uma referência monetária explícita.
+A referência canônica da distribuição escolhida é:
 
-Abordagem preferencial:
+```text
+IBGE_PRICE_REFERENCE = preços médios de 2025
+```
 
-1. construir a distribuição da PNAD em preços comparáveis;
-2. utilizar os deflatores oficiais correspondentes;
-3. converter a renda atual do usuário para a mesma referência de preços;
+O método operacional de alinhamento da renda atual do usuário permanece pendente. As alternativas legítimas são:
 
-ou, matematicamente equivalente:
+1. trazer a renda do usuário para preços médios de 2025; ou
+2. atualizar a distribuição para uma referência posterior.
 
-1. atualizar os cortes da distribuição para preços atuais.
-
-A opção escolhida deve ser documentada e produzir resultados reproduzíveis.
+Nenhuma das duas fórmulas está autorizada nesta fase.
 
 ---
 
 # 29. Fonte De Inflação
 
-Para atualizações monetárias brasileiras, utilizar preferencialmente:
+Para atualizações monetárias brasileiras, a fonte canônica é:
 
 > **IPCA — IBGE**
 
-quando metodologicamente compatível.
+quando metodologicamente compatível e após aprovação da regra operacional.
 
 Não utilizar:
 
@@ -629,18 +690,17 @@ como substitutos de inflação.
 
 # 30. Regra Operacional Recomendada
 
-A aplicação não precisa baixar IPCA em cada cálculo.
-
-O pipeline periódico deverá manter:
+A regra do deflator para `VD5011` ainda não está canonizada:
 
 ```text
-PRICE_REFERENCE_DATE
-INFLATION_FACTOR
+IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
+USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
+USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
 ```
 
-dentro do dataset/metadados de produção.
+Embora a documentação oficial identifique `CO1/CO2` para rendimentos habituais, a aplicação exata à composição mista de `VD5011` precisa ser comprovada operacionalmente.
 
-O cálculo do usuário utiliza o fator já validado.
+Até essa comprovação, não aplicar `CO1`, `CO2`, IPCA ou multiplicação própria. Quando a regra for aprovada, fator e referência deverão constar nos metadados; a aplicação não deverá consultar inflação em cada cálculo.
 
 ---
 
@@ -648,11 +708,17 @@ O cálculo do usuário utiliza o fator já validado.
 
 O pipeline brasileiro deve ser validado contra resultados oficiais publicados pelo IBGE.
 
-Um teste obrigatório é reconstruir, a partir da base e pesos escolhidos, estatísticas oficiais conhecidas.
+Um teste obrigatório é reconstruir, a partir da base e pesos escolhidos, estatísticas oficiais conhecidas do mesmo universo.
 
-Por exemplo:
+Benchmark direto preliminar:
 
-> rendimento domiciliar per capita médio nacional de 2025 divulgado oficialmente como R$ 2.316 no indicador nominal correspondente.
+```text
+BRAZIL_VALIDATION_MEAN_2025 = 2264
+BRAZIL_VALIDATION_MEAN_TYPE = real, preços médios de 2025
+BRAZIL_VALIDATION_STATUS = direto preliminar
+```
+
+Também deverão ser validados população ponderada, Gini, limites de percentis e agregados compatíveis publicados no SIDRA.
 
 Diferenças relevantes indicam problema em:
 
@@ -665,11 +731,17 @@ Diferenças relevantes indicam problema em:
 
 ---
 
-# 32. Não Usar O Valor De R$ 2.316 Como Distribuição
+# 32. R$ 2.316 É Validação Auxiliar
 
-A validação contra a média oficial serve para verificar o pipeline.
+R$ 2.316 pertence ao indicador nominal de rendimento domiciliar per capita divulgado para finalidades relacionadas à LC 143/2013/FPE. Ele usa renda efetivamente recebida e população distinta da distribuição principal baseada em `VD5011`.
 
-Ela **não significa** que a média será usada para calcular percentis.
+Classificação:
+
+> **VALIDAÇÃO AUXILIAR / CONTEXTO OFICIAL**
+
+O futuro pipeline de `VD5011` não deve ser obrigado a reproduzir R$ 2.316, e a diferença para R$ 2.264 não constitui erro.
+
+Nenhuma média deve ser usada para calcular percentis.
 
 A sequência correta é:
 
@@ -1136,12 +1208,15 @@ Exemplo:
   "source": "IBGE PNAD Contínua",
   "source_year": 2025,
   "source_release": "Rendimento de Todas as Fontes",
+  "source_release_id": "20260508",
+  "source_file": "PNADC_2025_visita1_20260508.zip",
+  "visit": "primeira visita",
   "downloaded_at": "YYYY-MM-DD",
   "processed_at": "YYYY-MM-DD",
-  "price_reference": "YYYY-MM",
+  "price_reference": "preços médios de 2025",
   "methodology_version": "1.0.0",
-  "weight_variable": "…",
-  "income_variable": "…",
+  "weight_variable": "V1032",
+  "income_variable": "VD5011",
   "checksum": "…"
 }
 ```
@@ -1334,21 +1409,29 @@ O percentil esperado será preenchido somente após a construção validada da d
 
 # 65. Renda Zero
 
-Renda zero é conceitualmente possível.
+RDPC igual a zero é estatisticamente válido e, quando pertencente à população elegível, deve permanecer na distribuição.
 
-Não rejeitar automaticamente sem avaliar a distribuição oficial.
+Não excluir renda zero para melhorar a aparência da CDF.
 
-O tratamento final deve constar nos testes.
+Isso não decide se o formulário aceitará renda zero. Essa decisão permanece em UX/produto.
 
 ---
 
 # 66. Renda Negativa
 
-A interface não deve aceitar renda familiar negativa.
+A interface não deve aceitar renda domiciliar negativa.
 
-Se houver valores negativos ou códigos especiais nos microdados:
+Para os microdados:
 
-> tratá-los conforme documentação oficial, não como renda econômica real.
+```text
+IBGE_RDPC_NEGATIVE_VALUES = [PENDENTE DE INSPEÇÃO]
+```
+
+Se houver valores negativos ou códigos especiais:
+
+> quantificar, verificar o significado e voltar à decisão metodológica antes da CDF definitiva.
+
+Não excluir automaticamente.
 
 ---
 
@@ -1363,7 +1446,14 @@ Valores:
 
 não devem ser convertidos automaticamente em zero.
 
-Seguir o dicionário oficial.
+Configuração atual:
+
+```text
+IBGE_RDPC_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
+IBGE_WEIGHT_MISSING_CODES = [PENDENTE DE INSPEÇÃO]
+```
+
+Seguir o dicionário oficial e a inspeção do arquivo real. Missing de peso, zero, negativos, infinitos, valores não numéricos ou extremos anômalos não autorizam correções ad hoc.
 
 ---
 
@@ -1373,13 +1463,30 @@ A PNAD pode sub-representar rendas extremamente elevadas.
 
 Esse é um limite conhecido de pesquisas domiciliares.
 
-Portanto, para rendas muito altas:
+Regra canônica:
+
+> **não utilizar extrapolação paramétrica arbitrária fora da distribuição observada.**
+
+Ficam proibidos sem nova decisão:
+
+- extrapolação logarítmica ad hoc;
+- fator 8;
+- pisos artificiais;
+- tetos inventados.
+
+Para rendas muito altas:
 
 - evitar falsa precisão;
 - considerar limitar a apresentação;
 - indicar quando o usuário está acima da faixa em que o dataset oferece boa resolução.
 
 A regra operacional será definida após análise dos microdados.
+
+```text
+IBGE_RDPC_MAX_OBSERVED = [PENDENTE DE FASE 1C]
+```
+
+Não remover outliers automaticamente.
 
 ---
 
@@ -1585,14 +1692,15 @@ Não entram no cálculo da posição de renda.
 
 Antes do deploy definitivo da V1, resolver:
 
-- confirmar arquivo exato da PNAD 2025;
-- confirmar primeira visita;
-- confirmar variável oficial de RDPC;
-- confirmar variável oficial de peso;
+- preservar e verificar `PNADC_2025_visita1_20260508.zip`;
+- registrar checksum da edição `20260508`;
+- validar `VD5011` no arquivo real;
+- validar `V1032` no arquivo real;
 - confirmar tratamento de missing;
-- confirmar tratamento de renda zero;
-- confirmar deflator;
-- definir referência de preços;
+- confirmar domínio de renda zero;
+- confirmar valores negativos e extremos;
+- confirmar regra operacional do deflator;
+- definir alinhamento da renda do usuário com preços médios de 2025;
 - reproduzir indicadores oficiais do IBGE;
 - gerar CDF brasileira;
 - validar percentis;
@@ -1608,6 +1716,23 @@ Antes do deploy definitivo da V1, resolver:
 - gerar manifestos;
 - gerar checksums;
 - executar testes de regressão.
+
+## Validações Formais Para A Fase 1C
+
+```text
+BR-VAL-001 — confirmar domínio real de VD5011
+BR-VAL-002 — identificar missing de VD5011
+BR-VAL-003 — identificar missing/invalid de V1032
+BR-VAL-004 — verificar RDPC negativos
+BR-VAL-005 — verificar zeros
+BR-VAL-006 — verificar máximo e extremos
+BR-VAL-007 — confirmar regra operacional do deflator
+BR-VAL-008 — reproduzir média R$ 2.264
+BR-VAL-009 — validar população ponderada
+BR-VAL-010 — validar agregados oficiais compatíveis
+```
+
+Esses itens são requisitos de validação. Não autorizam download, pipeline, dataset derivado ou CDF nesta fase.
 
 ---
 
@@ -1737,7 +1862,9 @@ A página pública de metodologia deve explicar em linguagem comum:
 
 ### Brasil
 
-> Utilizamos dados da PNAD Contínua do IBGE e consideramos a renda total da casa dividida pelo número de moradores.
+> Utilizamos dados da PNAD Contínua do IBGE e comparamos pessoas segundo a renda por morador do domicílio, dentro da população considerada pela metodologia oficial.
+
+A explicação completa deve esclarecer que adultos, crianças e pessoas sem renda própria entram quando elegíveis, enquanto condições domiciliares específicas são excluídas pelo indicador adotado.
 
 ### Mundo
 

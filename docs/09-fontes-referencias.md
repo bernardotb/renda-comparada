@@ -1,7 +1,7 @@
 ---
 title: 09-fontes-referencias
 created: 2026-08-12T17:40:00.000-03:00
-modified: 2026-08-13T09:50:34.315-03:00
+modified: 2026-08-13T18:30:00.000-03:00
 ---
 
 # 09-fontes-referencias
@@ -11,8 +11,8 @@ modified: 2026-08-13T09:50:34.315-03:00
 **Produto:** Renda Comparada  
 **Documento:** `09-fontes-referencias.md`  
 **Status:** Canônico para seleção de fontes externas  
-**Versão:** 1.0  
-**Última verificação das fontes:** 12/08/2026
+**Versão:** 1.1
+**Última verificação das fontes:** 13/08/2026
 
 Documentos relacionados:
 
@@ -191,7 +191,21 @@ Na página oficial do IBGE consta a atualização:
 
 > **08/05/2026 — Atualização dos microdados — Rendimento de Todas as Fontes 2025.**
 
-Essa base deve ser auditada conforme:
+Arquivo e versão aprovados para validação:
+
+```text
+IBGE_RELEASE = 20260508
+IBGE_FILE = PNADC_2025_visita1_20260508.zip
+IBGE_VISIT = primeira visita
+```
+
+Fontes específicas:
+
+- [microdados anuais da primeira visita](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Dados/);
+- [layout da edição 2025](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Documentacao/input_PNADC_2025_visita1_20260508.txt);
+- [definições das variáveis derivadas de rendimento](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Documentacao_Geral/Definicao_variaveis_derivadas_PNADC/06_Definicao_variaveis_derivadas_parte05_Rendimento_de_outras_fontes.pdf).
+
+Essa base deve ser validada conforme:
 
 `04-metodologia-dados.md`
 
@@ -199,13 +213,29 @@ antes de gerar o dataset definitivo.
 
 ---
 
-# 8. Rendimento Domiciliar per Capita 2025
+# 8. Benchmarks Brasileiros De 2025
+
+## Distribuição De Rendimento De Todas As Fontes
+
+**Classificação:** `CANÔNICA PARA VALIDAÇÃO DIRETA PRELIMINAR`
+
+Fonte:
+
+[IBGE — Rendimento de todas as fontes 2025](https://biblioteca.ibge.gov.br/visualizacao/livros/liv102275_informativo.pdf)
+
+Benchmark médio:
+
+> **R$ 2.264 por pessoa/mês, em valores reais a preços médios de 2025.**
+
+Esse valor é o benchmark direto preliminar para o futuro pipeline de `VD5011`. Somente se tornará operacional definitivo após reprodução nos microdados.
+
+## RDPC Nominal Para LC 143/2013/FPE
 
 **Classificação:** `OFICIAL-AUXILIAR`
 
 Utilizar para:
 
-- validação;
+- validação auxiliar;
 - explicação pública;
 - contextualização;
 - sanity checks.
@@ -218,7 +248,9 @@ Valor nacional divulgado:
 
 > **R$ 2.316 por pessoa/mês em 2025.**
 
-Esse valor é:
+O valor de R$ 2.316 é uma média nominal baseada em rendimentos efetivamente recebidos e considera população distinta da distribuição principal.
+
+Ele é:
 
 > **média**
 
@@ -230,13 +262,13 @@ e não:
 
 > corte de classe.
 
-Não utilizar diretamente para calcular a posição do usuário.
+Não utilizar diretamente para calcular a posição do usuário e não exigir que o pipeline de `VD5011` o reproduza. A diferença entre R$ 2.264 e R$ 2.316 não é erro.
 
 ---
 
 # 9. SIDRA
 
-**Classificação:** `OFICIAL-AUXILIAR`
+**Classificação:** `CANÔNICA PARA VALIDAÇÃO` quando a tabela representar o mesmo universo; caso contrário, `OFICIAL-AUXILIAR`.
 
 O SIDRA poderá ser utilizado para:
 
@@ -251,6 +283,17 @@ Fonte:
 [IBGE — SIDRA](https://sidra.ibge.gov.br/)
 
 Uma tabela SIDRA não substitui automaticamente os microdados quando a pergunta exigir a distribuição completa.
+
+Tabelas candidatas aprovadas para validação da distribuição de 2025:
+
+| Tabela | Finalidade | Classificação |
+| --- | --- | --- |
+| [7526](https://sidra.ibge.gov.br/tabela/7526) | limites superiores P5–P99 | direta |
+| [7529](https://sidra.ibge.gov.br/tabela/7529) | população e proporções em classes simples | direta |
+| [7534](https://sidra.ibge.gov.br/tabela/7534) | médias acumuladas e média total de R$ 2.264 | direta |
+| [7564](https://sidra.ibge.gov.br/tabela/7564) | população e proporções em classes acumuladas | direta |
+
+Médias por UF e outros agregados só serão diretos quando conceito, visita, população e referência de preços coincidirem. Caso contrário, serão auxiliares ou contextuais.
 
 ---
 
@@ -1711,12 +1754,17 @@ Antes de adicionar:
 
 Antes do lançamento da V1:
 
-- PNAD 2025 confirmada;
+- PNAD Rendimento de Todas as Fontes 2025 confirmada;
+- arquivo `PNADC_2025_visita1_20260508.zip` aprovado e preservado;
+- checksum do arquivo registrado;
 - microdados corretos baixados;
-- dicionário confirmado;
-- variável de renda confirmada;
-- peso confirmado;
-- IPCA definido;
+- dicionário inspecionado;
+- `VD5011` validada no arquivo real;
+- `V1032` validado no arquivo real;
+- missing, zeros, negativos e extremos inspecionados;
+- regra operacional do deflator comprovada;
+- alinhamento da renda do usuário com preços médios de 2025 definido;
+- média de R$ 2.264 e agregados compatíveis reproduzidos;
 - PIP versionado;
 - ano global definido;
 - PPP definida;
