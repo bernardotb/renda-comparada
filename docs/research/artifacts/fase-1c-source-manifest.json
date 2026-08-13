@@ -1,0 +1,27 @@
+{
+  "institution": "IBGE",
+  "dataset": "PNAD Contínua",
+  "release": "Rendimento de Todas as Fontes 2025",
+  "year": 2025,
+  "release_id": "20260508",
+  "visit": "primeira visita",
+  "source_file": "PNADC_2025_visita1_20260508.zip",
+  "source_url": "https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Nacional_por_Amostra_de_Domicilios_continua/Anual/Microdados/Visita/Visita_1/Dados/PNADC_2025_visita1_20260508.zip",
+  "downloaded_at": "2026-08-13T13:31:20.0678690-03:00",
+  "server_last_modified": "2026-05-08T13:00:02Z",
+  "size_bytes": 188972248,
+  "sha256": "556C68467941FCF8FB1251CDBAD3E42F6912C7938D73FD75F900BEE1C79548A5",
+  "zip_members": [
+    {
+      "name": "PNADC_2025_visita1.txt",
+      "uncompressed_size_bytes": 1508496616,
+      "compressed_size_bytes": 188972106,
+      "last_modified": "2026-05-04T10:50:08-03:00"
+    }
+  ],
+  "storage": {
+    "local_path": "data/raw/ibge/pnadc/2025/20260508/PNADC_2025_visita1_20260508.zip",
+    "git_ignored": true,
+    "tracked_by_git": false
+  }
+}

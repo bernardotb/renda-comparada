@@ -1,0 +1,2004 @@
+{
+  "phase": "1C",
+  "generated_at": "2026-08-13T13:52:20.965358-03:00",
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.13",
+    "pandas": "3.0.1",
+    "numpy": "2.3.5",
+    "xlrd": "2.0.2",
+    "zip_strategy": "streaming seletivo; TXT integral não extraído",
+    "text_encoding": "ASCII para campos selecionados; layout latin-1"
+  },
+  "layout": {
+    "Ano": {
+      "start_1_based": 1,
+      "width": 4,
+      "type": "character",
+      "description": "Ano de referência"
+    },
+    "Trimestre": {
+      "start_1_based": 5,
+      "width": 1,
+      "type": "character",
+      "description": "Trimestre de referência"
+    },
+    "UF": {
+      "start_1_based": 6,
+      "width": 2,
+      "type": "character",
+      "description": "Unidade da Federação"
+    },
+    "UPA": {
+      "start_1_based": 12,
+      "width": 9,
+      "type": "character",
+      "description": "Unidade Primária de Amostragem"
+    },
+    "Estrato": {
+      "start_1_based": 21,
+      "width": 7,
+      "type": "character",
+      "description": "Estrato"
+    },
+    "V1008": {
+      "start_1_based": 28,
+      "width": 2,
+      "type": "character",
+      "description": "Número de seleção do domicílio"
+    },
+    "V1014": {
+      "start_1_based": 30,
+      "width": 2,
+      "type": "character",
+      "description": "Painel"
+    },
+    "V1032": {
+      "start_1_based": 58,
+      "width": 15,
+      "type": "numeric",
+      "description": "Peso COM calibração"
+    },
+    "V2003": {
+      "start_1_based": 90,
+      "width": 2,
+      "type": "character",
+      "description": "Número de ordem"
+    },
+    "V2005": {
+      "start_1_based": 92,
+      "width": 2,
+      "type": "character",
+      "description": "Condição no domicílio"
+    },
+    "V2009": {
+      "start_1_based": 103,
+      "width": 3,
+      "type": "numeric",
+      "description": "Idade na data de referência"
+    },
+    "VD2003": {
+      "start_1_based": 517,
+      "width": 2,
+      "type": "numeric",
+      "description": "Número de componentes do domic."
+    },
+    "VD4019": {
+      "start_1_based": 560,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rendim. habitual qq trabalho"
+    },
+    "VD4048": {
+      "start_1_based": 609,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend efetivo recebido de outras fontes"
+    },
+    "VD4052": {
+      "start_1_based": 617,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rendim. habitual tds fontes com ticket"
+    },
+    "VD5002": {
+      "start_1_based": 633,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend efetivo domiciliar per capita"
+    },
+    "VD5005": {
+      "start_1_based": 650,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend efetivo domiciliar per capita"
+    },
+    "VD5007": {
+      "start_1_based": 659,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend habitual domiciliar"
+    },
+    "VD5008": {
+      "start_1_based": 667,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend habitual domiciliar per capita"
+    },
+    "VD5010": {
+      "start_1_based": 676,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend habitual domiciliar"
+    },
+    "VD5011": {
+      "start_1_based": 684,
+      "width": 8,
+      "type": "numeric",
+      "description": "Rend habitual domiciliar per capita"
+    }
+  },
+  "dictionary": {
+    "sheet": "dicionário pnad contínua ",
+    "selected_variables": {
+      "Ano": {
+        "row": 5,
+        "position": 1.0,
+        "width": 4.0,
+        "description": "Ano de referência",
+        "domain": "",
+        "label": "",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "Trimestre": {
+        "row": 6,
+        "position": 5.0,
+        "width": 1.0,
+        "description": "Trimestre de referência",
+        "domain": "1 a 4",
+        "label": "Número do trimestre (1 a 4)",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "UF": {
+        "row": 7,
+        "position": 6.0,
+        "width": 2.0,
+        "description": "Unidade da Federação",
+        "domain": 11.0,
+        "label": "Rondônia",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "UPA": {
+        "row": 82,
+        "position": 12.0,
+        "width": 9.0,
+        "description": "Unidade Primária de Amostragem (UPA)",
+        "domain": "",
+        "label": "UF (2) + Número Sequencial (6) + DV (1)",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "Estrato": {
+        "row": 83,
+        "position": 21.0,
+        "width": 7.0,
+        "description": "",
+        "domain": "",
+        "label": "As 2 primeiras posições representam o código da Unidade da Federação",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V1008": {
+        "row": 84,
+        "position": 28.0,
+        "width": 2.0,
+        "description": "Número de seleção do domicílio",
+        "domain": "01 a 14",
+        "label": "Número do domicílio",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V1014": {
+        "row": 85,
+        "position": 30.0,
+        "width": 2.0,
+        "description": "Painel",
+        "domain": "01 a 99",
+        "label": "Grupo de amostra",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V1032": {
+        "row": 94,
+        "position": 58.0,
+        "width": 15.0,
+        "description": "Peso do domicílio e das pessoas",
+        "domain": "6 dígitos e 8 casas decimais",
+        "label": "Peso  anual de 1ª visita com correção de não entrevista com calibração pela projeção de população",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V2003": {
+        "row": 100,
+        "position": 90.0,
+        "width": 2.0,
+        "description": "Número de ordem",
+        "domain": "01 a 30",
+        "label": "",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V2005": {
+        "row": 101,
+        "position": 92.0,
+        "width": 2.0,
+        "description": "Condição no domicílio",
+        "domain": "01",
+        "label": "Pessoa responsável pelo domicílio ",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "V2009": {
+        "row": 128,
+        "position": 103.0,
+        "width": 3.0,
+        "description": "Idade do morador na data de referência",
+        "domain": "0 a 130",
+        "label": "Idade (em anos)",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD2003": {
+        "row": 876,
+        "position": 517.0,
+        "width": 2.0,
+        "description": "Número de componentes do domicílio (exclusive as pessoas cuja condição no domicílio era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "01 a 30",
+        "label": "Pessoa(s)",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD4019": {
+        "row": 1017,
+        "position": 560.0,
+        "width": 8.0,
+        "description": "Rendimento mensal habitual de todos os trabalhos para pessoas de 14 anos ou mais de idade (apenas para pessoas que receberam em dinheiro, produtos ou mercadorias em qualquer trabalho)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD4048": {
+        "row": 1050,
+        "position": 609.0,
+        "width": 8.0,
+        "description": "Rendimento efetivo recebido de outras fontes",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD4052": {
+        "row": 1052,
+        "position": 617.0,
+        "width": 8.0,
+        "description": "Rendimento recebido em todas as fontes\n(habitual de todos os trabalhos e efetivo de outras fontes)  (apenas para pessoas que receberam em dinheiro, produtos, mercadorias, cartão/tíquete transporte ou alimentação em qualquer trabalho ou que receberam rendimentos em dinheiro de outras fontes)\n",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5002": {
+        "row": 1056,
+        "position": 633.0,
+        "width": 8.0,
+        "description": "Rendimento (efetivo) domiciliar per capita (exclusive rendimentos em cartão/tíquete transporte ou alimentação)   (exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5005": {
+        "row": 1068,
+        "position": 650.0,
+        "width": 8.0,
+        "description": "Rendimento (efetivo) domiciliar per capita (inclusive rendimentos em cartão/tíquete transporte ou alimentação) (exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5007": {
+        "row": 1078,
+        "position": 659.0,
+        "width": 8.0,
+        "description": "Rendimento domiciliar \n(habitual de todos os trabalhos e efetivo de outras fontes) \n(exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5008": {
+        "row": 1080,
+        "position": 667.0,
+        "width": 8.0,
+        "description": "Rendimento domiciliar per capita\n(habitual de todos os trabalhos e efetivo de outras fontes) \n  (exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5010": {
+        "row": 1090,
+        "position": 676.0,
+        "width": 8.0,
+        "description": "Rendimento domiciliar \n(habitual de todos os trabalhos e efetivo de outras fontes) \n(inclusive rendimentos em cartão/tíquete transporte ou alimentação)\n(exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      },
+      "VD5011": {
+        "row": 1092,
+        "position": 684.0,
+        "width": 8.0,
+        "description": "Rendimento domiciliar per capita\n(habitual de todos os trabalhos e efetivo de outras fontes) \n(inclusive rendimentos em cartão/tíquete transporte ou alimentação)\n  (exclusive o rendimento das pessoas cuja condição na unidade domiciliar era pensionista, empregado doméstico ou parente do empregado doméstico)",
+        "domain": "Valor",
+        "label": "R$",
+        "period": "1º tri/2025 - 4º tri/2025"
+      }
+    },
+    "v2005_categories": {
+      "01": "Pessoa responsável pelo domicílio",
+      "02": "Cônjuge ou companheiro(a) de sexo diferente",
+      "03": "Cônjuge ou companheiro(a) do mesmo sexo",
+      "04": "Filho(a) do responsável e do cônjuge",
+      "05": "Filho(a) somente do responsável",
+      "06": "Enteado(a)",
+      "07": "Genro ou nora",
+      "08": "Pai, mãe, padrasto ou madrasta",
+      "09": "Sogro(a)",
+      "10": "Neto(a)",
+      "11": "Bisneto(a)",
+      "12": "Irmão ou irmã",
+      "13": "Avô ou avó",
+      "14": "Outro parente",
+      "15": "Agregado(a) - Não parente que não compartilha despesas",
+      "16": "Convivente - Não parente que compartilha despesas",
+      "17": "Pensionista",
+      "18": "Empregado(a) doméstico(a)",
+      "19": "Parente do(a) empregado(a) doméstico(a)"
+    },
+    "vd5011_missing_representation": "campo vazio/blank; dicionário rotula como Não aplicável sem código numérico",
+    "v1032_missing_representation": "campo vazio/blank; nenhum código numérico especial documentado"
+  },
+  "deflator": {
+    "sheet": "deflator",
+    "rows_total": 1620,
+    "rows_2025": 108,
+    "columns": [
+      "ano",
+      "trim",
+      "uf",
+      "CO1",
+      "CO1e",
+      "CO2",
+      "CO2e",
+      "CO3"
+    ],
+    "co1_equals_co2_in_2025": true,
+    "co1e_equals_co2e_in_2025": true,
+    "ranges_2025": {
+      "CO1": {
+        "min": 0.9842591261556102,
+        "max": 1.0188724164986973
+      },
+      "CO1e": {
+        "min": 0.9872816970490879,
+        "max": 1.0257473430401696
+      },
+      "CO2": {
+        "min": 0.9842591261556102,
+        "max": 1.0188724164986973
+      },
+      "CO2e": {
+        "min": 0.9872816970490879,
+        "max": 1.0257473430401696
+      },
+      "CO3": {
+        "min": 1.0,
+        "max": 1.0
+      }
+    }
+  },
+  "structural": {
+    "rows": 408364,
+    "line_lengths": {
+      "3692": 408364
+    },
+    "unique_households": 152488,
+    "unique_person_keys": 408364,
+    "duplicate_person_keys": 0
+  },
+  "rdpc_profile_all_records": {
+    "records": 408364,
+    "valid": 408243,
+    "missing_or_non_finite": 121,
+    "zero": 4682,
+    "negative": 0,
+    "minimum": 0.0,
+    "maximum": 201518.0,
+    "mean": 2124.2431321541335,
+    "sum": 867207389.0,
+    "distinct": 7361
+  },
+  "weight_profile_all_records": {
+    "records": 408364,
+    "valid": 408364,
+    "missing_or_non_finite": 0,
+    "zero": 0,
+    "negative": 0,
+    "minimum": 2.7467906,
+    "maximum": 23894.31976887,
+    "mean": 520.8171068110175,
+    "sum": 212682957.00577435,
+    "distinct": 149275
+  },
+  "weight_profile_eligible": {
+    "records": 408243,
+    "valid": 408243,
+    "missing_or_non_finite": 0,
+    "zero": 0,
+    "negative": 0,
+    "minimum": 2.7467906,
+    "maximum": 23894.31976887,
+    "mean": 520.8277540598231,
+    "sum": 212624284.80064434,
+    "distinct": 149275
+  },
+  "eligibility": {
+    "documented_eligible_records": 408243,
+    "rdpc_present_records": 408243,
+    "analysis_records": 408243,
+    "eligible_without_rdpc": 0,
+    "excluded_with_rdpc": 0,
+    "condition_profile": [
+      {
+        "code": "01",
+        "label": "Pessoa responsável pelo domicílio",
+        "records": 152488,
+        "weight": 79304518.80635402,
+        "rdpc_present": 152488,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "02",
+        "label": "Cônjuge ou companheiro(a) de sexo diferente",
+        "records": 86327,
+        "weight": 44015460.04837796,
+        "rdpc_present": 86327,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "03",
+        "label": "Cônjuge ou companheiro(a) do mesmo sexo",
+        "records": 795,
+        "weight": 524899.71137938,
+        "rdpc_present": 795,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "04",
+        "label": "Filho(a) do responsável e do cônjuge",
+        "records": 75082,
+        "weight": 39245023.30864308,
+        "rdpc_present": 75082,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "05",
+        "label": "Filho(a) somente do responsável",
+        "records": 46585,
+        "weight": 25374932.26189046,
+        "rdpc_present": 46585,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "06",
+        "label": "Enteado(a)",
+        "records": 4743,
+        "weight": 2513302.12372257,
+        "rdpc_present": 4743,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "07",
+        "label": "Genro ou nora",
+        "records": 2848,
+        "weight": 1407734.3475859,
+        "rdpc_present": 2848,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "08",
+        "label": "Pai, mãe, padrasto ou madrasta",
+        "records": 9131,
+        "weight": 4940334.43694398,
+        "rdpc_present": 9131,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "09",
+        "label": "Sogro(a)",
+        "records": 1166,
+        "weight": 581953.5255182399,
+        "rdpc_present": 1166,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "10",
+        "label": "Neto(a)",
+        "records": 14457,
+        "weight": 6858377.136871019,
+        "rdpc_present": 14457,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "11",
+        "label": "Bisneto(a)",
+        "records": 515,
+        "weight": 249210.92412786,
+        "rdpc_present": 515,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "12",
+        "label": "Irmão ou irmã",
+        "records": 6534,
+        "weight": 3567075.39157927,
+        "rdpc_present": 6534,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "13",
+        "label": "Avô ou avó",
+        "records": 555,
+        "weight": 300722.78380388,
+        "rdpc_present": 555,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "14",
+        "label": "Outro parente",
+        "records": 5121,
+        "weight": 2684242.4433637,
+        "rdpc_present": 5121,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "15",
+        "label": "Agregado(a) - Não parente que não compartilha despesas",
+        "records": 792,
+        "weight": 403538.72702204,
+        "rdpc_present": 792,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "16",
+        "label": "Convivente - Não parente que compartilha despesas",
+        "records": 1104,
+        "weight": 652958.82346099,
+        "rdpc_present": 1104,
+        "rdpc_missing": 0
+      },
+      {
+        "code": "17",
+        "label": "Pensionista",
+        "records": 15,
+        "weight": 5978.758101810001,
+        "rdpc_present": 0,
+        "rdpc_missing": 15
+      },
+      {
+        "code": "18",
+        "label": "Empregado(a) doméstico(a)",
+        "records": 100,
+        "weight": 48873.44898868,
+        "rdpc_present": 0,
+        "rdpc_missing": 100
+      },
+      {
+        "code": "19",
+        "label": "Parente do(a) empregado(a) doméstico(a)",
+        "records": 6,
+        "weight": 3819.9980395300004,
+        "rdpc_present": 0,
+        "rdpc_missing": 6
+      }
+    ]
+  },
+  "sanity_checks": {
+    "eligible_children_records": 73846,
+    "eligible_children_weight": 38555087.35859224,
+    "eligible_children_with_positive_rdpc_records": 73259,
+    "no_personal_income_with_positive_rdpc_records": 131066,
+    "no_personal_income_with_positive_rdpc_weight": 67278374.74774835
+  },
+  "mean_variants": {
+    "nominal": 2328.3789771621778,
+    "CO1": 2331.668828338224,
+    "CO1e": 2340.347371225454,
+    "CO2": 2331.668828338224,
+    "CO2e": 2340.347371225454
+  },
+  "candidate_diagnostics": [
+    {
+      "candidate": "VD5002_CO1e",
+      "variable": "VD5002",
+      "deflator": "CO1e",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2315.894828526778,
+      "real_mean_unrounded": 2328.36957280716,
+      "real_mean_rounded": 2328,
+      "difference_from_2264_unrounded": 64.36957280715978,
+      "gini": 0.5228047531532354,
+      "quantiles": {
+        "P5": 266.6509740854049,
+        "P10": 424.73052157233775,
+        "P20": 670.8646767116467,
+        "P30": 900.2564753672647,
+        "P40": 1154.9109863456079,
+        "P50": 1495.562439693423,
+        "P60": 1718.8234163865247,
+        "P70": 2220.9872640299986,
+        "P80": 3004.9382996216123,
+        "P90": 4762.3450539815385,
+        "P95": 7165.921994259136,
+        "P99": 15972.253396519538
+      },
+      "quantile_rounded_differences": {
+        "P5": -32.0,
+        "P10": -26.0,
+        "P20": -23.0,
+        "P30": -6.0,
+        "P40": 1.0,
+        "P50": 6.0,
+        "P60": 22.0,
+        "P70": 63.0,
+        "P80": 47.0,
+        "P90": 153.0,
+        "P95": 266.0,
+        "P99": 758.0
+      },
+      "quantile_exact_rounded_matches": 0
+    },
+    {
+      "candidate": "VD5005_CO1e",
+      "variable": "VD5005",
+      "deflator": "CO1e",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2385.5061256229187,
+      "real_mean_unrounded": 2398.299793934094,
+      "real_mean_rounded": 2398,
+      "difference_from_2264_unrounded": 134.29979393409394,
+      "gini": 0.5208513960220357,
+      "quantiles": {
+        "P5": 267.66145426807,
+        "P10": 431.2069179579929,
+        "P20": 696.3596235955929,
+        "P30": 929.2547750754737,
+        "P40": 1203.5606765421512,
+        "P50": 1510.2744309585548,
+        "P60": 1802.6177517680799,
+        "P70": 2306.285912593412,
+        "P80": 3084.7540323525423,
+        "P90": 4950.2384638462645,
+        "P95": 7362.339123249872,
+        "P99": 16226.6976383649
+      },
+      "quantile_rounded_differences": {
+        "P5": -31.0,
+        "P10": -20.0,
+        "P20": 2.0,
+        "P30": 23.0,
+        "P40": 50.0,
+        "P50": 20.0,
+        "P60": 106.0,
+        "P70": 148.0,
+        "P80": 127.0,
+        "P90": 341.0,
+        "P95": 462.0,
+        "P99": 1013.0
+      },
+      "quantile_exact_rounded_matches": 0
+    },
+    {
+      "candidate": "VD5008_CO1",
+      "variable": "VD5008",
+      "deflator": "CO1",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2258.7675133106063,
+      "real_mean_unrounded": 2261.9947235140603,
+      "real_mean_rounded": 2262,
+      "difference_from_2264_unrounded": -2.005276485939703,
+      "gini": 0.5112826654183571,
+      "quantiles": {
+        "P5": 297.9980384254226,
+        "P10": 450.10336406095803,
+        "P20": 693.4464691032593,
+        "P30": 905.3138876860517,
+        "P40": 1153.1062410844415,
+        "P50": 1489.0966165127486,
+        "P60": 1696.142875867032,
+        "P70": 2155.807320288304,
+        "P80": 2956.2280701964787,
+        "P90": 4602.266745157813,
+        "P95": 6896.435702108171,
+        "P99": 15197.834533010371
+      },
+      "quantile_rounded_differences": {
+        "P5": -1.0,
+        "P10": -1.0,
+        "P20": -1.0,
+        "P30": -1.0,
+        "P40": -1.0,
+        "P50": -1.0,
+        "P60": -1.0,
+        "P70": -2.0,
+        "P80": -2.0,
+        "P90": -7.0,
+        "P95": -4.0,
+        "P99": -16.0
+      },
+      "quantile_exact_rounded_matches": 0
+    },
+    {
+      "candidate": "VD5011_CO1",
+      "variable": "VD5011",
+      "deflator": "CO1",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2328.3789771621778,
+      "real_mean_unrounded": 2331.668828338224,
+      "real_mean_rounded": 2332,
+      "difference_from_2264_unrounded": 67.6688283382241,
+      "gini": 0.5093120542447438,
+      "quantiles": {
+        "P5": 298.29729648452764,
+        "P10": 457.97616664948856,
+        "P20": 709.2333720092739,
+        "P30": 941.7537479377997,
+        "P40": 1201.9305852931852,
+        "P50": 1506.665615789529,
+        "P60": 1780.6048186603525,
+        "P70": 2259.9984236842934,
+        "P80": 3008.4778349845847,
+        "P90": 4761.015327243501,
+        "P95": 7014.00334726586,
+        "P99": 15314.592361752912
+      },
+      "quantile_rounded_differences": {
+        "P5": -1.0,
+        "P10": 7.0,
+        "P20": 15.0,
+        "P30": 36.0,
+        "P40": 48.0,
+        "P50": 17.0,
+        "P60": 84.0,
+        "P70": 102.0,
+        "P80": 50.0,
+        "P90": 152.0,
+        "P95": 114.0,
+        "P99": 101.0
+      },
+      "quantile_exact_rounded_matches": 0
+    },
+    {
+      "candidate": "VD5007_div_VD2003_CO1",
+      "variable": "VD5007",
+      "deflator": "CO1",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2258.722926573469,
+      "real_mean_unrounded": 2261.950100707713,
+      "real_mean_rounded": 2262,
+      "difference_from_2264_unrounded": -2.0498992922871366,
+      "gini": 0.5112975790396488,
+      "quantiles": {
+        "P5": 297.9980384254226,
+        "P10": 450.03594219917125,
+        "P20": 693.5017805499212,
+        "P30": 905.086237150901,
+        "P40": 1153.2046158627863,
+        "P50": 1489.0966165127486,
+        "P60": 1695.948701184481,
+        "P70": 2155.807320288304,
+        "P80": 2956.2280701964787,
+        "P90": 4601.938035298149,
+        "P95": 6896.435702108171,
+        "P99": 15197.834533010371
+      },
+      "quantile_rounded_differences": {
+        "P5": -1.0,
+        "P10": -1.0,
+        "P20": 0.0,
+        "P30": -1.0,
+        "P40": -1.0,
+        "P50": -1.0,
+        "P60": -1.0,
+        "P70": -2.0,
+        "P80": -2.0,
+        "P90": -7.0,
+        "P95": -4.0,
+        "P99": -16.0
+      },
+      "quantile_exact_rounded_matches": 1
+    },
+    {
+      "candidate": "VD5010_div_VD2003_CO1",
+      "variable": "VD5010",
+      "deflator": "CO1",
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": 2328.3311995459176,
+      "real_mean_unrounded": 2331.621003943276,
+      "real_mean_rounded": 2332,
+      "difference_from_2264_unrounded": 67.62100394327581,
+      "gini": 0.5093264068826877,
+      "quantiles": {
+        "P5": 298.29729648452764,
+        "P10": 457.81047113786747,
+        "P20": 709.2361131910613,
+        "P30": 941.6621983914841,
+        "P40": 1201.7391593777584,
+        "P50": 1506.665615789529,
+        "P60": 1780.5247592154988,
+        "P70": 2259.9984236842934,
+        "P80": 3008.4451396153036,
+        "P90": 4761.127601772051,
+        "P95": 7014.00334726586,
+        "P99": 15314.592361752912
+      },
+      "quantile_rounded_differences": {
+        "P5": -1.0,
+        "P10": 7.0,
+        "P20": 15.0,
+        "P30": 36.0,
+        "P40": 48.0,
+        "P50": 17.0,
+        "P60": 84.0,
+        "P70": 102.0,
+        "P80": 50.0,
+        "P90": 152.0,
+        "P95": 114.0,
+        "P99": 101.0
+      },
+      "quantile_exact_rounded_matches": 0
+    },
+    {
+      "candidate": "VD4019_CO1_plus_VD4048_CO1e_by_household",
+      "variable": "VD4019",
+      "deflator": null,
+      "records": 408243,
+      "population_weight": 212624284.80064434,
+      "nominal_mean": null,
+      "real_mean_unrounded": 2264.0378278979997,
+      "real_mean_rounded": 2264,
+      "difference_from_2264_unrounded": 0.037827897999704874,
+      "gini": 0.5112237274249051,
+      "quantiles": {
+        "P5": 298.66001880328764,
+        "P10": 450.74676766225076,
+        "P20": 693.9428296997226,
+        "P30": 905.8353909868985,
+        "P40": 1154.193935794649,
+        "P50": 1489.9901921271128,
+        "P60": 1697.1185281974201,
+        "P70": 2158.1105828585064,
+        "P80": 2958.388736977381,
+        "P90": 4610.155781789753,
+        "P95": 6899.676952803436,
+        "P99": 15214.509142570898
+      },
+      "quantile_rounded_differences": {
+        "P5": 0.0,
+        "P10": 0.0,
+        "P20": 0.0,
+        "P30": 0.0,
+        "P40": 0.0,
+        "P50": 0.0,
+        "P60": 0.0,
+        "P70": 0.0,
+        "P80": 0.0,
+        "P90": 1.0,
+        "P95": 0.0,
+        "P99": 1.0
+      },
+      "quantile_exact_rounded_matches": 10
+    }
+  ],
+  "mixed_component_reconstruction": {
+    "formula": "sum(VD4019 * CO1 + VD4048 * CO1e) por domicílio / VD2003",
+    "work_component": "VD4019",
+    "other_sources_component": "VD4048",
+    "work_deflator": "CO1",
+    "other_sources_deflator": "CO1e",
+    "households": 152488,
+    "nominal_recomposition_nonzero_differences": 0,
+    "nominal_recomposition_max_absolute_difference": 0.0,
+    "component_blank_treatment": "blank estrutural tratado como ausência do componente; validado contra VD5007 nominal"
+  },
+  "official_compatible_diagnostic": {
+    "formula": "sum(VD4019 * CO1 + VD4048 * CO1e) por domicílio / VD2003",
+    "mean": 2264.0378278979997,
+    "gini": 0.5112237274249051,
+    "zeros_records": 4682,
+    "zeros_weight": 2365090.6397351297,
+    "minimum": 0.0,
+    "maximum": 200165.7922757916,
+    "quantiles": {
+      "P5": 298.66001880328764,
+      "P10": 450.74676766225076,
+      "P20": 693.9428296997226,
+      "P30": 905.8353909868985,
+      "P40": 1154.193935794649,
+      "P50": 1489.9901921271128,
+      "P60": 1697.1185281974201,
+      "P70": 2158.1105828585064,
+      "P80": 2958.388736977381,
+      "P90": 4610.155781789753,
+      "P95": 6899.676952803436,
+      "P99": 15214.509142570898,
+      "P99.5": 20507.97920459046,
+      "P99.9": 38991.661358396166
+    },
+    "top_values": [
+      {
+        "value": 200165.7922757916,
+        "records": 2,
+        "weight": 409.3302134
+      },
+      {
+        "value": 158254.5517770182,
+        "records": 2,
+        "weight": 846.76905448
+      },
+      {
+        "value": 154190.980695783,
+        "records": 1,
+        "weight": 100.61467225
+      },
+      {
+        "value": 142384.30353419014,
+        "records": 1,
+        "weight": 227.11066798
+      },
+      {
+        "value": 135702.70511228847,
+        "records": 2,
+        "weight": 274.58806192
+      },
+      {
+        "value": 127341.96766642993,
+        "records": 2,
+        "weight": 1177.43375298
+      },
+      {
+        "value": 102186.68316244308,
+        "records": 1,
+        "weight": 416.45422651
+      },
+      {
+        "value": 102064.41142571966,
+        "records": 4,
+        "weight": 317.67446976
+      },
+      {
+        "value": 100579.41180084657,
+        "records": 2,
+        "weight": 2708.91667315
+      },
+      {
+        "value": 98851.24878798064,
+        "records": 1,
+        "weight": 1171.26667393
+      },
+      {
+        "value": 98152.21080843793,
+        "records": 2,
+        "weight": 800.61963664
+      },
+      {
+        "value": 97848.4182587628,
+        "records": 3,
+        "weight": 537.78003024
+      },
+      {
+        "value": 96106.2248080542,
+        "records": 2,
+        "weight": 4709.52491832
+      },
+      {
+        "value": 94366.04550138381,
+        "records": 2,
+        "weight": 2464.5152858
+      },
+      {
+        "value": 89585.15311317044,
+        "records": 1,
+        "weight": 3072.68818352
+      }
+    ],
+    "quantile_comparison": [
+      {
+        "quantile": "P5",
+        "calculated_unrounded": 298.66001880328764,
+        "calculated_rounded": 299,
+        "official": 299.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P10",
+        "calculated_unrounded": 450.74676766225076,
+        "calculated_rounded": 451,
+        "official": 451.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P20",
+        "calculated_unrounded": 693.9428296997226,
+        "calculated_rounded": 694,
+        "official": 694.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P30",
+        "calculated_unrounded": 905.8353909868985,
+        "calculated_rounded": 906,
+        "official": 906.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P40",
+        "calculated_unrounded": 1154.193935794649,
+        "calculated_rounded": 1154,
+        "official": 1154.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P50",
+        "calculated_unrounded": 1489.9901921271128,
+        "calculated_rounded": 1490,
+        "official": 1490.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P60",
+        "calculated_unrounded": 1697.1185281974201,
+        "calculated_rounded": 1697,
+        "official": 1697.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P70",
+        "calculated_unrounded": 2158.1105828585064,
+        "calculated_rounded": 2158,
+        "official": 2158.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P80",
+        "calculated_unrounded": 2958.388736977381,
+        "calculated_rounded": 2958,
+        "official": 2958.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P90",
+        "calculated_unrounded": 4610.155781789753,
+        "calculated_rounded": 4610,
+        "official": 4609.0,
+        "difference_rounded": 1.0
+      },
+      {
+        "quantile": "P95",
+        "calculated_unrounded": 6899.676952803436,
+        "calculated_rounded": 6900,
+        "official": 6900.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "quantile": "P99",
+        "calculated_unrounded": 15214.509142570898,
+        "calculated_rounded": 15215,
+        "official": 15214.0,
+        "difference_rounded": 1.0
+      }
+    ],
+    "accumulated_mean_comparison": [
+      {
+        "class": "até o P5",
+        "calculated_unrounded": 163.56220980470619,
+        "calculated_rounded": 164,
+        "official": 166.0,
+        "difference_rounded": -2.0
+      },
+      {
+        "class": "até o P10",
+        "calculated_unrounded": 267.99887118393286,
+        "calculated_rounded": 268,
+        "official": 268.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P20",
+        "calculated_unrounded": 417.68924264109296,
+        "calculated_rounded": 418,
+        "official": 418.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P30",
+        "calculated_unrounded": 542.114896282239,
+        "calculated_rounded": 542,
+        "official": 542.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P40",
+        "calculated_unrounded": 663.3020785124567,
+        "calculated_rounded": 663,
+        "official": 663.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P50",
+        "calculated_unrounded": 793.4869434491981,
+        "calculated_rounded": 793,
+        "official": 793.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P60",
+        "calculated_unrounded": 920.5723621775446,
+        "calculated_rounded": 921,
+        "official": 921.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P70",
+        "calculated_unrounded": 1062.4248754766802,
+        "calculated_rounded": 1062,
+        "official": 1062.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P80",
+        "calculated_unrounded": 1241.9103817977186,
+        "calculated_rounded": 1242,
+        "official": 1241.0,
+        "difference_rounded": 1.0
+      },
+      {
+        "class": "até o P90",
+        "calculated_unrounded": 1502.5696233512315,
+        "calculated_rounded": 1503,
+        "official": 1502.0,
+        "difference_rounded": 1.0
+      },
+      {
+        "class": "até o P95",
+        "calculated_unrounded": 1713.927151952526,
+        "calculated_rounded": 1714,
+        "official": 1714.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "class": "até o P99",
+        "calculated_unrounded": 2034.834969408502,
+        "calculated_rounded": 2035,
+        "official": 2034.0,
+        "difference_rounded": 1.0
+      }
+    ],
+    "uf_mean_comparison": [
+      {
+        "uf": 11,
+        "calculated_unrounded": 1970.340981014984,
+        "calculated_rounded": 1970,
+        "official": 1970.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 12,
+        "calculated_unrounded": 1372.3019639755016,
+        "calculated_rounded": 1372,
+        "official": 1372.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 13,
+        "calculated_unrounded": 1449.79118288098,
+        "calculated_rounded": 1450,
+        "official": 1450.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 14,
+        "calculated_unrounded": 1870.4263729888492,
+        "calculated_rounded": 1870,
+        "official": 1870.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 15,
+        "calculated_unrounded": 1434.5647511114853,
+        "calculated_rounded": 1435,
+        "official": 1435.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 16,
+        "calculated_unrounded": 1674.9554719269559,
+        "calculated_rounded": 1675,
+        "official": 1675.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 17,
+        "calculated_unrounded": 1978.8685964955862,
+        "calculated_rounded": 1979,
+        "official": 1979.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 21,
+        "calculated_unrounded": 1230.7000615588388,
+        "calculated_rounded": 1231,
+        "official": 1231.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 22,
+        "calculated_unrounded": 1533.725076415978,
+        "calculated_rounded": 1534,
+        "official": 1534.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 23,
+        "calculated_unrounded": 1378.6643170437287,
+        "calculated_rounded": 1379,
+        "official": 1379.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 24,
+        "calculated_unrounded": 1778.5411685723195,
+        "calculated_rounded": 1779,
+        "official": 1779.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 25,
+        "calculated_unrounded": 1542.467514321867,
+        "calculated_rounded": 1542,
+        "official": 1542.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 26,
+        "calculated_unrounded": 1568.2745812815053,
+        "calculated_rounded": 1568,
+        "official": 1568.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 27,
+        "calculated_unrounded": 1401.4321171006634,
+        "calculated_rounded": 1401,
+        "official": 1401.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 28,
+        "calculated_unrounded": 1688.473571761521,
+        "calculated_rounded": 1688,
+        "official": 1688.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 29,
+        "calculated_unrounded": 1451.7926075640605,
+        "calculated_rounded": 1452,
+        "official": 1452.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 31,
+        "calculated_unrounded": 2289.2244659531834,
+        "calculated_rounded": 2289,
+        "official": 2289.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 32,
+        "calculated_unrounded": 2209.4898998667722,
+        "calculated_rounded": 2209,
+        "official": 2209.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 33,
+        "calculated_unrounded": 2732.2402961462553,
+        "calculated_rounded": 2732,
+        "official": 2732.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 35,
+        "calculated_unrounded": 2862.0606672472704,
+        "calculated_rounded": 2862,
+        "official": 2862.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 41,
+        "calculated_unrounded": 2687.3299475443314,
+        "calculated_rounded": 2687,
+        "official": 2687.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 42,
+        "calculated_unrounded": 2751.698331150668,
+        "calculated_rounded": 2752,
+        "official": 2752.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 43,
+        "calculated_unrounded": 2771.8036128147446,
+        "calculated_rounded": 2772,
+        "official": 2772.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 50,
+        "calculated_unrounded": 2369.1471178899815,
+        "calculated_rounded": 2369,
+        "official": 2369.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 51,
+        "calculated_unrounded": 2297.459079331349,
+        "calculated_rounded": 2297,
+        "official": 2297.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 52,
+        "calculated_unrounded": 2377.6763732735885,
+        "calculated_rounded": 2378,
+        "official": 2378.0,
+        "difference_rounded": 0.0
+      },
+      {
+        "uf": 53,
+        "calculated_unrounded": 4400.753412659514,
+        "calculated_rounded": 4401,
+        "official": 4401.0,
+        "difference_rounded": 0.0
+      }
+    ]
+  },
+  "benchmark_2264": {
+    "calculated_unrounded": 2331.668828338224,
+    "calculated_rounded": 2332,
+    "official": 2264,
+    "absolute_difference_unrounded": 67.6688283382241,
+    "relative_difference": 0.0298890584532792
+  },
+  "population": {
+    "calculated": 212624284.80064434,
+    "official": 212624000.0,
+    "absolute_difference": 284.80064433813095,
+    "relative_difference": 1.3394567139087353e-06,
+    "calculated_thousand_rounded": 212624,
+    "official_thousand": 212624,
+    "all_records_weight": 212682957.00577435
+  },
+  "zeros": {
+    "records": 4682,
+    "weight": 2365090.6397351297,
+    "share_weight": 0.01112333260498738
+  },
+  "negatives": {
+    "records": 0,
+    "weight": 0.0
+  },
+  "extremes": {
+    "nominal_min": 0.0,
+    "nominal_max": 201518.0,
+    "real_min": 0.0,
+    "real_max": 200013.33436276304,
+    "quantiles": {
+      "P5": 298.29729648452764,
+      "P10": 457.97616664948856,
+      "P20": 709.2333720092739,
+      "P30": 941.7537479377997,
+      "P40": 1201.9305852931852,
+      "P50": 1506.665615789529,
+      "P60": 1780.6048186603525,
+      "P70": 2259.9984236842934,
+      "P80": 3008.4778349845847,
+      "P90": 4761.015327243501,
+      "P95": 7014.00334726586,
+      "P99": 15314.592361752912,
+      "P99.5": 20828.235303801765,
+      "P99.9": 39312.965806267006
+    },
+    "top_values": [
+      {
+        "value": 200013.33436276304,
+        "records": 2,
+        "weight": 409.3302134
+      },
+      {
+        "value": 157525.5549346525,
+        "records": 2,
+        "weight": 846.76905448
+      },
+      {
+        "value": 154180.0531836421,
+        "records": 1,
+        "weight": 100.61467225
+      },
+      {
+        "value": 142384.30353419014,
+        "records": 1,
+        "weight": 227.11066798
+      },
+      {
+        "value": 135521.51936970724,
+        "records": 2,
+        "weight": 274.58806192
+      },
+      {
+        "value": 126798.355499887,
+        "records": 2,
+        "weight": 1177.43375298
+      },
+      {
+        "value": 102064.41142571966,
+        "records": 4,
+        "weight": 317.67446976
+      },
+      {
+        "value": 101439.0244892965,
+        "records": 1,
+        "weight": 416.45422651
+      },
+      {
+        "value": 100270.10792038622,
+        "records": 2,
+        "weight": 2708.91667315
+      },
+      {
+        "value": 98425.91261556101,
+        "records": 1,
+        "weight": 1171.26667393
+      },
+      {
+        "value": 97859.74899941878,
+        "records": 2,
+        "weight": 800.61963664
+      },
+      {
+        "value": 97811.75198387494,
+        "records": 3,
+        "weight": 537.78003024
+      },
+      {
+        "value": 96203.70007167391,
+        "records": 2,
+        "weight": 4709.52491832
+      },
+      {
+        "value": 94366.04550138381,
+        "records": 2,
+        "weight": 2464.5152858
+      },
+      {
+        "value": 89399.41152762677,
+        "records": 1,
+        "weight": 3072.68818352
+      }
+    ]
+  },
+  "gini": {
+    "calculated": 0.5093120542447438,
+    "calculated_rounded_3": 0.509,
+    "official": 0.511,
+    "difference_rounded_3": -0.0020000000000000018
+  },
+  "sidra": {
+    "urls": {
+      "quantile_limits": "https://apisidra.ibge.gov.br/values/t/7526/n1/all/v/10838/p/2025/c1019/all",
+      "accumulated_means": "https://apisidra.ibge.gov.br/values/t/7534/n1/all/v/10816/p/2025/c1042/all",
+      "accumulated_population": "https://apisidra.ibge.gov.br/values/t/7564/n1/all/v/606/p/2025/c1042/all",
+      "simple_population": "https://apisidra.ibge.gov.br/values/t/7529/n1/all/v/606/p/2025/c1019/all",
+      "uf_mean": "https://apisidra.ibge.gov.br/values/t/7534/n3/all/v/10816/p/2025/c1042/49283"
+    },
+    "quantile_comparison": [
+      {
+        "quantile": "P5",
+        "calculated_unrounded": 298.29729648452764,
+        "calculated_rounded": 298,
+        "official": 299.0,
+        "difference_rounded": -1.0
+      },
+      {
+        "quantile": "P10",
+        "calculated_unrounded": 457.97616664948856,
+        "calculated_rounded": 458,
+        "official": 451.0,
+        "difference_rounded": 7.0
+      },
+      {
+        "quantile": "P20",
+        "calculated_unrounded": 709.2333720092739,
+        "calculated_rounded": 709,
+        "official": 694.0,
+        "difference_rounded": 15.0
+      },
+      {
+        "quantile": "P30",
+        "calculated_unrounded": 941.7537479377997,
+        "calculated_rounded": 942,
+        "official": 906.0,
+        "difference_rounded": 36.0
+      },
+      {
+        "quantile": "P40",
+        "calculated_unrounded": 1201.9305852931852,
+        "calculated_rounded": 1202,
+        "official": 1154.0,
+        "difference_rounded": 48.0
+      },
+      {
+        "quantile": "P50",
+        "calculated_unrounded": 1506.665615789529,
+        "calculated_rounded": 1507,
+        "official": 1490.0,
+        "difference_rounded": 17.0
+      },
+      {
+        "quantile": "P60",
+        "calculated_unrounded": 1780.6048186603525,
+        "calculated_rounded": 1781,
+        "official": 1697.0,
+        "difference_rounded": 84.0
+      },
+      {
+        "quantile": "P70",
+        "calculated_unrounded": 2259.9984236842934,
+        "calculated_rounded": 2260,
+        "official": 2158.0,
+        "difference_rounded": 102.0
+      },
+      {
+        "quantile": "P80",
+        "calculated_unrounded": 3008.4778349845847,
+        "calculated_rounded": 3008,
+        "official": 2958.0,
+        "difference_rounded": 50.0
+      },
+      {
+        "quantile": "P90",
+        "calculated_unrounded": 4761.015327243501,
+        "calculated_rounded": 4761,
+        "official": 4609.0,
+        "difference_rounded": 152.0
+      },
+      {
+        "quantile": "P95",
+        "calculated_unrounded": 7014.00334726586,
+        "calculated_rounded": 7014,
+        "official": 6900.0,
+        "difference_rounded": 114.0
+      },
+      {
+        "quantile": "P99",
+        "calculated_unrounded": 15314.592361752912,
+        "calculated_rounded": 15315,
+        "official": 15214.0,
+        "difference_rounded": 101.0
+      }
+    ],
+    "accumulated_mean_comparison": [
+      {
+        "class": "até o P5",
+        "calculated_unrounded": 163.62976617521267,
+        "calculated_rounded": 164,
+        "official": 166.0,
+        "difference_rounded": -2.0
+      },
+      {
+        "class": "até o P10",
+        "calculated_unrounded": 269.37008241542634,
+        "calculated_rounded": 269,
+        "official": 268.0,
+        "difference_rounded": 1.0
+      },
+      {
+        "class": "até o P20",
+        "calculated_unrounded": 424.72403250174426,
+        "calculated_rounded": 425,
+        "official": 418.0,
+        "difference_rounded": 7.0
+      },
+      {
+        "class": "até o P30",
+        "calculated_unrounded": 554.4306872837813,
+        "calculated_rounded": 554,
+        "official": 542.0,
+        "difference_rounded": 12.0
+      },
+      {
+        "class": "até o P40",
+        "calculated_unrounded": 681.4214364717451,
+        "calculated_rounded": 681,
+        "official": 663.0,
+        "difference_rounded": 18.0
+      },
+      {
+        "class": "até o P50",
+        "calculated_unrounded": 818.0052382091707,
+        "calculated_rounded": 818,
+        "official": 793.0,
+        "difference_rounded": 25.0
+      },
+      {
+        "class": "até o P60",
+        "calculated_unrounded": 949.1924748821342,
+        "calculated_rounded": 949,
+        "official": 921.0,
+        "difference_rounded": 28.0
+      },
+      {
+        "class": "até o P70",
+        "calculated_unrounded": 1100.1750833923347,
+        "calculated_rounded": 1100,
+        "official": 1062.0,
+        "difference_rounded": 38.0
+      },
+      {
+        "class": "até o P80",
+        "calculated_unrounded": 1288.3982386633463,
+        "calculated_rounded": 1288,
+        "official": 1241.0,
+        "difference_rounded": 47.0
+      },
+      {
+        "class": "até o P90",
+        "calculated_unrounded": 1558.6366324048633,
+        "calculated_rounded": 1559,
+        "official": 1502.0,
+        "difference_rounded": 57.0
+      },
+      {
+        "class": "até o P95",
+        "calculated_unrounded": 1775.512241831374,
+        "calculated_rounded": 1776,
+        "official": 1714.0,
+        "difference_rounded": 62.0
+      },
+      {
+        "class": "até o P99",
+        "calculated_unrounded": 2101.078660259534,
+        "calculated_rounded": 2101,
+        "official": 2034.0,
+        "difference_rounded": 67.0
+      }
+    ],
+    "uf_mean_comparison": [
+      {
+        "uf": 11,
+        "calculated_unrounded": 1988.0277905515713,
+        "calculated_rounded": 1988,
+        "official": 1970.0,
+        "difference_rounded": 18.0
+      },
+      {
+        "uf": 12,
+        "calculated_unrounded": 1384.0438750032763,
+        "calculated_rounded": 1384,
+        "official": 1372.0,
+        "difference_rounded": 12.0
+      },
+      {
+        "uf": 13,
+        "calculated_unrounded": 1473.2435055269834,
+        "calculated_rounded": 1473,
+        "official": 1450.0,
+        "difference_rounded": 23.0
+      },
+      {
+        "uf": 14,
+        "calculated_unrounded": 1894.2865444303186,
+        "calculated_rounded": 1894,
+        "official": 1870.0,
+        "difference_rounded": 24.0
+      },
+      {
+        "uf": 15,
+        "calculated_unrounded": 1463.0751816417294,
+        "calculated_rounded": 1463,
+        "official": 1435.0,
+        "difference_rounded": 28.0
+      },
+      {
+        "uf": 16,
+        "calculated_unrounded": 1677.841512691202,
+        "calculated_rounded": 1678,
+        "official": 1675.0,
+        "difference_rounded": 3.0
+      },
+      {
+        "uf": 17,
+        "calculated_unrounded": 2014.6017947783228,
+        "calculated_rounded": 2015,
+        "official": 1979.0,
+        "difference_rounded": 36.0
+      },
+      {
+        "uf": 21,
+        "calculated_unrounded": 1242.8126489581189,
+        "calculated_rounded": 1243,
+        "official": 1231.0,
+        "difference_rounded": 12.0
+      },
+      {
+        "uf": 22,
+        "calculated_unrounded": 1546.3366386384566,
+        "calculated_rounded": 1546,
+        "official": 1534.0,
+        "difference_rounded": 12.0
+      },
+      {
+        "uf": 23,
+        "calculated_unrounded": 1401.4373587895104,
+        "calculated_rounded": 1401,
+        "official": 1379.0,
+        "difference_rounded": 22.0
+      },
+      {
+        "uf": 24,
+        "calculated_unrounded": 1807.3881038334707,
+        "calculated_rounded": 1807,
+        "official": 1779.0,
+        "difference_rounded": 28.0
+      },
+      {
+        "uf": 25,
+        "calculated_unrounded": 1561.987079601685,
+        "calculated_rounded": 1562,
+        "official": 1542.0,
+        "difference_rounded": 20.0
+      },
+      {
+        "uf": 26,
+        "calculated_unrounded": 1601.5145284202938,
+        "calculated_rounded": 1602,
+        "official": 1568.0,
+        "difference_rounded": 34.0
+      },
+      {
+        "uf": 27,
+        "calculated_unrounded": 1416.9901919426713,
+        "calculated_rounded": 1417,
+        "official": 1401.0,
+        "difference_rounded": 16.0
+      },
+      {
+        "uf": 28,
+        "calculated_unrounded": 1713.59671223122,
+        "calculated_rounded": 1714,
+        "official": 1688.0,
+        "difference_rounded": 26.0
+      },
+      {
+        "uf": 29,
+        "calculated_unrounded": 1488.3703031472637,
+        "calculated_rounded": 1488,
+        "official": 1452.0,
+        "difference_rounded": 36.0
+      },
+      {
+        "uf": 31,
+        "calculated_unrounded": 2354.5649235666774,
+        "calculated_rounded": 2355,
+        "official": 2289.0,
+        "difference_rounded": 66.0
+      },
+      {
+        "uf": 32,
+        "calculated_unrounded": 2307.0998612585186,
+        "calculated_rounded": 2307,
+        "official": 2209.0,
+        "difference_rounded": 98.0
+      },
+      {
+        "uf": 33,
+        "calculated_unrounded": 2824.562096869011,
+        "calculated_rounded": 2825,
+        "official": 2732.0,
+        "difference_rounded": 93.0
+      },
+      {
+        "uf": 35,
+        "calculated_unrounded": 2981.1666380487754,
+        "calculated_rounded": 2981,
+        "official": 2862.0,
+        "difference_rounded": 119.0
+      },
+      {
+        "uf": 41,
+        "calculated_unrounded": 2781.0086434498517,
+        "calculated_rounded": 2781,
+        "official": 2687.0,
+        "difference_rounded": 94.0
+      },
+      {
+        "uf": 42,
+        "calculated_unrounded": 2808.9321474049666,
+        "calculated_rounded": 2809,
+        "official": 2752.0,
+        "difference_rounded": 57.0
+      },
+      {
+        "uf": 43,
+        "calculated_unrounded": 2847.0810919736323,
+        "calculated_rounded": 2847,
+        "official": 2772.0,
+        "difference_rounded": 75.0
+      },
+      {
+        "uf": 50,
+        "calculated_unrounded": 2421.1961546531493,
+        "calculated_rounded": 2421,
+        "official": 2369.0,
+        "difference_rounded": 52.0
+      },
+      {
+        "uf": 51,
+        "calculated_unrounded": 2348.255688420221,
+        "calculated_rounded": 2348,
+        "official": 2297.0,
+        "difference_rounded": 51.0
+      },
+      {
+        "uf": 52,
+        "calculated_unrounded": 2431.052320622366,
+        "calculated_rounded": 2431,
+        "official": 2378.0,
+        "difference_rounded": 53.0
+      },
+      {
+        "uf": 53,
+        "calculated_unrounded": 4533.404716640625,
+        "calculated_rounded": 4533,
+        "official": 4401.0,
+        "difference_rounded": 132.0
+      }
+    ],
+    "official_simple_population": [
+      {
+        "class": "Total",
+        "value_thousand": 212624.0
+      },
+      {
+        "class": "Até o P5",
+        "value_thousand": 10789.0
+      },
+      {
+        "class": "Maior que o P5 até o P10",
+        "value_thousand": 10513.0
+      },
+      {
+        "class": "Até o P10",
+        "value_thousand": 21302.0
+      },
+      {
+        "class": "Maior que o P10 até o P20",
+        "value_thousand": 21227.0
+      },
+      {
+        "class": "Maior que o P20 até o P30",
+        "value_thousand": 21276.0
+      },
+      {
+        "class": "Maior que o P30 até o P40",
+        "value_thousand": 21223.0
+      },
+      {
+        "class": "Maior que o P40 até o P50",
+        "value_thousand": 21397.0
+      },
+      {
+        "class": "Maior que o P50 até o P60",
+        "value_thousand": 21139.0
+      },
+      {
+        "class": "Maior que o P60 até o P70",
+        "value_thousand": 21271.0
+      },
+      {
+        "class": "Maior que o P70 até o P80",
+        "value_thousand": 21242.0
+      },
+      {
+        "class": "Maior que o P80 até o P90",
+        "value_thousand": 21280.0
+      },
+      {
+        "class": "Maior que o P90",
+        "value_thousand": 21265.0
+      },
+      {
+        "class": "Maior que o P90 até o P95",
+        "value_thousand": 10634.0
+      },
+      {
+        "class": "Maior que o P95 até o P99",
+        "value_thousand": 8503.0
+      },
+      {
+        "class": "Maior que o P99",
+        "value_thousand": 2128.0
+      }
+    ],
+    "official_accumulated_population": [
+      {
+        "class": "até o P5",
+        "value_thousand": 10789.0
+      },
+      {
+        "class": "até o P10",
+        "value_thousand": 21302.0
+      },
+      {
+        "class": "até o P20",
+        "value_thousand": 42530.0
+      },
+      {
+        "class": "até o P30",
+        "value_thousand": 63806.0
+      },
+      {
+        "class": "até o P40",
+        "value_thousand": 85029.0
+      },
+      {
+        "class": "até o P50",
+        "value_thousand": 106426.0
+      },
+      {
+        "class": "até o P60",
+        "value_thousand": 127565.0
+      },
+      {
+        "class": "até o P70",
+        "value_thousand": 148836.0
+      },
+      {
+        "class": "até o P80",
+        "value_thousand": 170078.0
+      },
+      {
+        "class": "até o P90",
+        "value_thousand": 191359.0
+      },
+      {
+        "class": "até o P95",
+        "value_thousand": 201993.0
+      },
+      {
+        "class": "até o P99",
+        "value_thousand": 210496.0
+      },
+      {
+        "class": "Total",
+        "value_thousand": 212624.0
+      }
+    ]
+  }
+}
