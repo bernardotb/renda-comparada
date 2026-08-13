@@ -13,7 +13,7 @@ modified: 2026-08-13T18:31:00.000-03:00
 **Documento:** `10-testes-validacao.md`  
 **Status:** Canônico para qualidade, testes e validação  
 **Versão:** 1.0  
-**Última revisão:** 12/08/2026
+**Última revisão:** 13/08/2026
 
 Documentos relacionados:
 
