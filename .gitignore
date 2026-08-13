@@ -11,7 +11,11 @@ data/raw/
 
 # Artefatos locais gerados pelo pipeline de dados
 data/processed/
-data/production/
+data/production/*
+!data/production/brazil/
+data/production/brazil/*
+!data/production/brazil/README.md
+!data/production/brazil/brazil-income-cdf-2025.json
 
 # Caches locais do pipeline Python
 __pycache__/

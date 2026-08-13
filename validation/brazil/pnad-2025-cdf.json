@@ -1,0 +1,381 @@
+{
+  "brazilDatasetVersion": "2025-20260508-v1",
+  "cdf": {
+    "byteReductionPercent": 69.39093862393437,
+    "containsIndividualData": false,
+    "path": "data/production/brazil/brazil-income-cdf-2025.json",
+    "recordReductionPercent": 79.58127879718697,
+    "sha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+    "sizeBytes": 3955036,
+    "sourceRecords": 408243,
+    "uniqueIncomeValues": 83358
+  },
+  "distribution": {
+    "gini": 0.5112237274249096,
+    "maxRdpc": 200165.7922757916,
+    "mean": 2264.0378278979993,
+    "minRdpc": 0.0,
+    "totalWeight": 212624284.80064434,
+    "uniqueIncomeValues": 83358,
+    "zeroWeight": 2365090.63973513,
+    "zeroWeightShare": 0.011123332604987381
+  },
+  "goldenCases": {
+    "brazilDatasetVersion": "2025-20260508-v1",
+    "cases": [
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "zero",
+        "rdpc": 0.0,
+        "rdpcExact": "0",
+        "shareAtOrBelow": 0.011123332604987381,
+        "shareBelow": 0.0,
+        "topShare": 1.0
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P10",
+        "rdpc": 450.7467676623,
+        "rdpcExact": "450.7467676623",
+        "shareAtOrBelow": 0.10002921509710624,
+        "shareBelow": 0.09999945404530619,
+        "topShare": 0.9000005459546938
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P25",
+        "rdpc": 773.4762192254,
+        "rdpcExact": "773.4762192254",
+        "shareAtOrBelow": 0.2501738881157211,
+        "shareBelow": 0.24999282047517632,
+        "topShare": 0.7500071795248237
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "median",
+        "rdpc": 1489.9901921271,
+        "rdpcExact": "1489.9901921271",
+        "shareAtOrBelow": 0.5005345976000194,
+        "shareBelow": 0.49991707375376493,
+        "topShare": 0.5000829262462351
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "mean",
+        "rdpc": 2264.0378278979997,
+        "rdpcExact": "2264.0378278979997",
+        "shareAtOrBelow": 0.7180280208834203,
+        "shareBelow": 0.7180280208834203,
+        "topShare": 0.2819719791165797
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P75",
+        "rdpc": 2483.5727017972,
+        "rdpcExact": "2483.5727017972",
+        "shareAtOrBelow": 0.7500133569486416,
+        "shareBelow": 0.749993411634714,
+        "topShare": 0.250006588365286
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P90",
+        "rdpc": 4610.1557817898,
+        "rdpcExact": "4610.1557817898",
+        "shareAtOrBelow": 0.9000198983063901,
+        "shareBelow": 0.8999939462558862,
+        "topShare": 0.10000605374411375
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P95",
+        "rdpc": 6899.6769528034,
+        "rdpcExact": "6899.6769528034",
+        "shareAtOrBelow": 0.9500003495067332,
+        "shareBelow": 0.949998491039486,
+        "topShare": 0.05000150896051403
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P99",
+        "rdpc": 15214.5091425709,
+        "rdpcExact": "15214.5091425709",
+        "shareAtOrBelow": 0.9900205349303594,
+        "shareBelow": 0.9899909595222172,
+        "topShare": 0.010009040477782838
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "P99.9",
+        "rdpc": 38991.6613583962,
+        "rdpcExact": "38991.6613583962",
+        "shareAtOrBelow": 0.9990018380528809,
+        "shareBelow": 0.9989991560969994,
+        "topShare": 0.0010008439030005922
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "maximum",
+        "rdpc": 200165.7922757916,
+        "rdpcExact": "200165.7922757916",
+        "shareAtOrBelow": 1.0,
+        "shareBelow": 0.9999980748661246,
+        "topShare": 1.9251338754244784e-06
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "methodologyVersion": "1.0.0",
+        "name": "aboveMaximum",
+        "rdpc": 200166.7922757916,
+        "rdpcExact": "200166.7922757916",
+        "shareAtOrBelow": 1.0,
+        "shareBelow": 1.0,
+        "topShare": 0.0
+      },
+      {
+        "brazilDatasetVersion": "2025-20260508-v1",
+        "category": "mathematical-and-statistical",
+        "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+        "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+        "householdIncome": 6500,
+        "householdSize": 3,
+        "methodologyVersion": "1.0.0",
+        "name": "householdIncome6500Residents3",
+        "rdpc": 2166.6666666666665,
+        "rdpcExact": "2166.666666666666666666666667",
+        "shareAtOrBelow": 0.701561259093934,
+        "shareBelow": 0.701561259093934,
+        "topShare": 0.29843874090606604
+      }
+    ],
+    "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+    "dataset": "brazil-income-golden-cases",
+    "datasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+    "frontendIntegrationBlocked": true,
+    "methodologyVersion": "1.0.0",
+    "priceReference": "preços médios de 2025",
+    "userIncomePriceAlignmentMethod": null
+  },
+  "methodologyVersion": "1.0.0",
+  "p90P99Investigation": {
+    "conclusion": "Preservar a CDF empírica e não ajustar artificialmente os cortes.",
+    "exactOneRealResidualExplained": false,
+    "officialSources": [
+      "https://biblioteca.ibge.gov.br/visualizacao/livros/liv101708_notas_tecnicas.pdf",
+      "https://biblioteca.ibge.gov.br/visualizacao/livros/liv102174_informativo.pdf",
+      "https://sidra.ibge.gov.br/tabela/7526"
+    ],
+    "officialTieRuleConfirmed": true,
+    "status": "PENDENTE",
+    "testedConventions": {
+      "P90": {
+        "centeredWeightInterpolation": 4609.75769636908,
+        "centeredWeightInterpolationRounded": 4610,
+        "empiricalInverse": 4610.1557817898,
+        "empiricalInverseRounded": 4610,
+        "midrankClassUpper": 4609.1808406858,
+        "midrankClassUpperRounded": 4609,
+        "previousObserved": 4609.1808406858,
+        "previousObservedRounded": 4609,
+        "published": 4609
+      },
+      "P99": {
+        "centeredWeightInterpolation": 15214.173079494845,
+        "centeredWeightInterpolationRounded": 15214,
+        "empiricalInverse": 15214.5091425709,
+        "empiricalInverseRounded": 15215,
+        "midrankClassUpper": 15213.4054752104,
+        "midrankClassUpperRounded": 15213,
+        "previousObserved": 15213.4054752104,
+        "previousObservedRounded": 15213,
+        "published": 15214
+      }
+    }
+  },
+  "performance": {
+    "algorithm": "binary search (bisect) over sorted unique RDPC values",
+    "elapsedMilliseconds": 4183.720599998196,
+    "microsecondsPerLookup": 41.83720599998196,
+    "queries": 100000,
+    "resultChecksum": 98868.42706141605
+  },
+  "priceReference": "preços médios de 2025",
+  "quantiles": {
+    "P10": 450.7467676623,
+    "P20": 693.9428296997,
+    "P25": 773.4762192254,
+    "P30": 905.8353909869,
+    "P40": 1154.1939357946,
+    "P5": 298.6600188033,
+    "P50": 1489.9901921271,
+    "P60": 1697.1185281974,
+    "P70": 2158.1105828585,
+    "P75": 2483.5727017972,
+    "P80": 2958.3887369774,
+    "P90": 4610.1557817898,
+    "P95": 6899.6769528034,
+    "P99": 15214.5091425709,
+    "P99.5": 20507.9792045905,
+    "P99.9": 38991.6613583962
+  },
+  "runs": {
+    "run1": {
+      "cdfPath": "data\\processed\\brazil\\cdf-validation-runs\\run-1\\brazil-income-cdf-2025.json",
+      "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "cdfSizeBytes": 3955036,
+      "diagnostics": {
+        "maxRdpc": 200165.7922757916,
+        "minRdpc": 0.0,
+        "sourceRecords": 408243,
+        "uniqueIncomeValues": 83358,
+        "zeroRecords": 4682,
+        "zeroWeight": 2365090.63973513
+      },
+      "manifestPath": "data\\processed\\brazil\\cdf-validation-runs\\run-1\\brazil-income-cdf-manifest.json",
+      "manifestSha256": "BA5AF29CE719E32CD4089DCC2A545F7DC750DFD2475B114BF7B2C919A3171A60",
+      "metrics": {
+        "gini": 0.5112237274249096,
+        "maxRdpc": 200165.7922757916,
+        "mean": 2264.0378278979993,
+        "minRdpc": 0.0,
+        "totalWeight": 212624284.80064434,
+        "uniqueIncomeValues": 83358,
+        "zeroWeight": 2365090.63973513,
+        "zeroWeightShare": 0.011123332604987381
+      },
+      "quantiles": {
+        "P10": 450.7467676623,
+        "P20": 693.9428296997,
+        "P25": 773.4762192254,
+        "P30": 905.8353909869,
+        "P40": 1154.1939357946,
+        "P5": 298.6600188033,
+        "P50": 1489.9901921271,
+        "P60": 1697.1185281974,
+        "P70": 2158.1105828585,
+        "P75": 2483.5727017972,
+        "P80": 2958.3887369774,
+        "P90": 4610.1557817898,
+        "P95": 6899.6769528034,
+        "P99": 15214.5091425709,
+        "P99.5": 20507.9792045905,
+        "P99.9": 38991.6613583962
+      }
+    },
+    "run2": {
+      "cdfPath": "data\\processed\\brazil\\cdf-validation-runs\\run-2\\brazil-income-cdf-2025.json",
+      "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "cdfSizeBytes": 3955036,
+      "diagnostics": {
+        "maxRdpc": 200165.7922757916,
+        "minRdpc": 0.0,
+        "sourceRecords": 408243,
+        "uniqueIncomeValues": 83358,
+        "zeroRecords": 4682,
+        "zeroWeight": 2365090.63973513
+      },
+      "manifestPath": "data\\processed\\brazil\\cdf-validation-runs\\run-2\\brazil-income-cdf-manifest.json",
+      "manifestSha256": "BA5AF29CE719E32CD4089DCC2A545F7DC750DFD2475B114BF7B2C919A3171A60",
+      "metrics": {
+        "gini": 0.5112237274249096,
+        "maxRdpc": 200165.7922757916,
+        "mean": 2264.0378278979993,
+        "minRdpc": 0.0,
+        "totalWeight": 212624284.80064434,
+        "uniqueIncomeValues": 83358,
+        "zeroWeight": 2365090.63973513,
+        "zeroWeightShare": 0.011123332604987381
+      },
+      "quantiles": {
+        "P10": 450.7467676623,
+        "P20": 693.9428296997,
+        "P25": 773.4762192254,
+        "P30": 905.8353909869,
+        "P40": 1154.1939357946,
+        "P5": 298.6600188033,
+        "P50": 1489.9901921271,
+        "P60": 1697.1185281974,
+        "P70": 2158.1105828585,
+        "P75": 2483.5727017972,
+        "P80": 2958.3887369774,
+        "P90": 4610.1557817898,
+        "P95": 6899.6769528034,
+        "P99": 15214.5091425709,
+        "P99.5": 20507.9792045905,
+        "P99.9": 38991.6613583962
+      }
+    }
+  },
+  "scope": {
+    "currentIncomeTransformed": false,
+    "deployed": false,
+    "frontendChanged": false,
+    "globalMethodologyStarted": false,
+    "individualDataIncluded": false,
+    "userIncomePriceAlignmentMethod": null
+  },
+  "sourceDatasetSha256": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+  "status": "PASS",
+  "tests": {
+    "command": [
+      "python",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/data/brazil",
+      "-p",
+      "test_*.py",
+      "-v"
+    ],
+    "status": "PASS",
+    "transcript": "test_aggregate_mean_and_gini_from_unique_values (test_cdf.CdfUnitTests.test_aggregate_mean_and_gini_from_unique_values) ... ok\ntest_artifact_is_deterministic_and_round_trips (test_cdf.CdfUnitTests.test_artifact_is_deterministic_and_round_trips) ... ok\ntest_between_observed_values_is_step_function (test_cdf.CdfUnitTests.test_between_observed_values_is_step_function) ... ok\ntest_golden_cases_carry_versions_hashes_and_exact_math_case (test_cdf.CdfUnitTests.test_golden_cases_carry_versions_hashes_and_exact_math_case) ... ok\ntest_grouping_collapses_equal_income_without_losing_weight (test_cdf.CdfUnitTests.test_grouping_collapses_equal_income_without_losing_weight) ... ok\ntest_invalid_cdf_and_non_finite_lookup_fail (test_cdf.CdfUnitTests.test_invalid_cdf_and_non_finite_lookup_fail) ... ok\ntest_lower_and_upper_boundaries (test_cdf.CdfUnitTests.test_lower_and_upper_boundaries) ... ok\ntest_monotonicity_and_binary_search_match_direct_reference (test_cdf.CdfUnitTests.test_monotonicity_and_binary_search_match_direct_reference) ... ok\ntest_ties_preserve_strict_and_inclusive_semantics (test_cdf.CdfUnitTests.test_ties_preserve_strict_and_inclusive_semantics) ... ok\ntest_weighted_quantile_uses_empirical_inverse (test_cdf.CdfUnitTests.test_weighted_quantile_uses_empirical_inverse) ... ok\ntest_zero_is_preserved (test_cdf.CdfUnitTests.test_zero_is_preserved) ... ok\ntest_components_use_distinct_deflators_and_return_to_people (test_pipeline.PipelineUnitTests.test_components_use_distinct_deflators_and_return_to_people) ... ok\ntest_deterministic_csv_has_identical_checksum (test_pipeline.PipelineUnitTests.test_deterministic_csv_has_identical_checksum) ... ok\ntest_excluded_condition_does_not_enter_household_or_distribution (test_pipeline.PipelineUnitTests.test_excluded_condition_does_not_enter_household_or_distribution) ... ok\ntest_inconsistent_declared_household_size_fails (test_pipeline.PipelineUnitTests.test_inconsistent_declared_household_size_fails) ... ok\ntest_invalid_weight_fails (test_pipeline.PipelineUnitTests.test_invalid_weight_fails) ... ok\ntest_layout_parser_requires_configured_variables (test_pipeline.PipelineUnitTests.test_layout_parser_requires_configured_variables) ... ok\ntest_missing_deflator_fails_safely (test_pipeline.PipelineUnitTests.test_missing_deflator_fails_safely) ... ok\ntest_structural_blank_is_zero_but_invalid_text_fails (test_pipeline.PipelineUnitTests.test_structural_blank_is_zero_but_invalid_text_fails) ... ok\ntest_weighted_gini_properties (test_pipeline.PipelineUnitTests.test_weighted_gini_properties) ... ok\ntest_zero_income_is_preserved (test_pipeline.PipelineUnitTests.test_zero_income_is_preserved) ... ok\n\n----------------------------------------------------------------------\nRan 21 tests in 0.467s\n\nOK"
+  }
+}

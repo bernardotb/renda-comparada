@@ -36,6 +36,18 @@ Para executar testes, dois runs limpos, comparação de checksums e relatórios:
 python scripts/data/brazil/validate_brazil_dataset.py
 ```
 
+Para gerar uma CDF isolada a partir do dataset intermediário já validado:
+
+```powershell
+python scripts/data/brazil/build_brazil_cdf.py
+```
+
+Para executar dois runs da CDF, comparar os hashes, validar o lookup e gerar os golden cases brasileiros:
+
+```powershell
+python scripts/data/brazil/validate_brazil_cdf.py
+```
+
 As saídas intermediárias ficam sob `data/processed/`, ignorado pelo Git. Os relatórios sem dados individuais são gravados em `validation/brazil/`.
 
 ## Fórmula protegida
@@ -52,4 +64,4 @@ O pipeline usa a chave domiciliar integral documentada, volta o RDPC agregado pa
 
 Nenhum artefato é promovido se falhar a fonte, o layout, o join de deflatores, a integridade da chave domiciliar, a reconstrução nominal contra `VD5007`, os pesos, o RDPC, os benchmarks ou a igualdade entre os dois runs.
 
-Este pipeline não cria CDF, lookup, golden cases, alinhamento temporal da entrada ou arquivos para `src/`.
+O pipeline intermediário não cria CDF. A etapa separada da Fase 1E gera CDF, lookup e golden cases somente a partir do CSV validado, sem reler o ZIP. Nenhuma etapa implementa alinhamento temporal da entrada, altera `src/` ou integra o artefato ao site.
