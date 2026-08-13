@@ -202,13 +202,15 @@ Para o Brasil, utilizar:
 
 > **rendimento domiciliar per capita**
 
-Estrutura:
+Estrutura conceitual, conforme o universo metodológico vigente:
 
 ```text
-renda total da casa
+renda do domicílio compatível com o indicador
 ÷
-número de moradores
+número de moradores elegíveis
 ```
+
+A definição de população elegível é regida por D056.
 
 ---
 
