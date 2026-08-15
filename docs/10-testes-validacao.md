@@ -1,7 +1,7 @@
 ---
 title: 10-testes-validacao
 created: 2026-08-12T17:52:04.000-03:00
-modified: 2026-08-13T18:31:00.000-03:00
+modified: 2026-08-14T16:12:00.000-03:00
 ---
 
 # 10-testes-validacao
@@ -12,8 +12,8 @@ modified: 2026-08-13T18:31:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `10-testes-validacao.md`  
 **Status:** Canônico para qualidade, testes e validação  
-**Versão:** 1.0  
-**Última revisão:** 13/08/2026
+**Versão:** 1.2
+**Última revisão:** 14/08/2026
 
 Documentos relacionados:
 
@@ -173,16 +173,16 @@ percentil esperado = X
 
 ---
 
-# 5. Caso conhecido que já pode ser testado
+# 5. Caso matemático básico
 
 Entrada:
 
 ```text
-Renda familiar = R$ 6.500
+Renda do domicílio = R$ 6.500
 Moradores = 3
 ```
 
-Resultado matemático obrigatório:
+Resultado matemático obrigatório antes de qualquer alinhamento temporal:
 
 ```text
 6500 / 3 = 2166,666666…
@@ -194,24 +194,311 @@ Apresentação monetária:
 R$ 2.166,67
 ```
 
-Esse teste é independente do percentil.
+Esse teste valida apenas a divisão por moradores. Ele não define sozinho o valor comparável com a CDF quando a renda digitada está em preços correntes.
 
 ---
 
-# 6. Percentil deste exemplo
+# 6. Golden cases brasileiros já validados
 
-Não registrar ainda como verdade:
+A CDF brasileira 2025 e o alinhamento temporal canonizado por D065 permitem registrar fixtures brasileiras.
+
+## Caso A — valor já expresso em preços médios de 2025
 
 ```text
-Brasil = 67,9%
-Mundo = 76,6%
+renda_domiciliar_2025 = 6500
+moradores = 3
+RDPC_2025 = 2166.6666666667
+shareBelow = 0.701561259093934
+shareAtOrBelow = 0.701561259093934
+topShare = 0.298438740906066
 ```
 
-ou qualquer outro valor.
+Esse caso testa diretamente a CDF e corresponde a aproximadamente **70,1561% abaixo** e **29,8439% no topo**.
 
-Esses números só podem virar fixture canônica depois da auditoria definida em:
+## Caso B — renda nominal corrente com manifesto de julho/2026
 
-`04-metodologia-dados.md`
+Usando o manifesto canônico `brazil-price-alignment.json`, com:
+
+```text
+baseIndex = 7300.8416666666666667
+currentIndex = 7657.73
+priceIndexReferenceMonth = 2026-07
+```
+
+para renda corrente de R$ 6.500 e 3 moradores:
+
+```text
+renda_domiciliar_2025 = 6197.0676471139
+RDPC_2025 = 2065.6892157046
+shareBelow = 0.6866910622833815
+shareAtOrBelow = 0.6866910622833815
+topShare = 0.3133089377166185
+```
+
+Esse caso testa **alinhamento temporal + CDF**.
+
+O resultado mundial para a mesma entrada continua pendente até a metodologia global ser validada e canonizada.
+
+---
+
+
+# 6A. Apresentação Brasileira — D071
+
+Os testes de interface devem separar precisão interna de precisão visual.
+
+## Caso A — golden case em preços médios de 2025
+
+Entrada interna:
+
+```text
+shareBelow = 0.701561259093934
+topShare = 0.298438740906066
+```
+
+Apresentação esperada:
+
+```text
+Percentil 70
+TOP 30%
+```
+
+## Caso B — renda corrente R$ 6.500 / 3 com manifesto 2026-07
+
+Entrada interna:
+
+```text
+shareBelow = 0.6866910622833815
+topShare = 0.3133089377166185
+```
+
+Apresentação esperada:
+
+```text
+Percentil 69
+TOP 31%
+```
+
+## Complementaridade visual
+
+Para a faixa principal:
+
+```text
+percentil_exibido + top_exibido = 100
+```
+
+O código não deve arredondar ambos independentemente se isso puder produzir `99` ou `101` na soma visual.
+
+## Cauda de 0,1% a 1%
+
+Testar fixture sintética com:
+
+```text
+topShare = 0.006
+```
+
+Esperado:
+
+```text
+TOP 0,6%
+Percentil 99,4
+```
+
+## Cauda abaixo de 0,1%
+
+Testar fixture sintética com:
+
+```text
+topShare = 0.0005
+```
+
+Esperado conceitualmente:
+
+```text
+TOP < 0,1%
+```
+
+e nunca:
+
+```text
+TOP 0%
+```
+
+## Máximo observado
+
+No RDPC máximo da CDF:
+
+- `shareBelow < 1`;
+- `shareAtOrBelow = 1`;
+- a interface pode usar `TOP < 0,1%` conforme D071.
+
+## Acima do máximo
+
+Para RDPC estritamente acima do máximo:
+
+- o lookup matemático pode retornar `shareBelow = 1`;
+- a interface não mostra `TOP 0%`;
+- deve informar que a renda supera o maior valor observado e que não há resolução para posição mais fina.
+
+## Renda zero
+
+Para `RDPC = 0`:
+
+- `shareBelow = 0`;
+- `shareAtOrBelow > 0`;
+- não mostrar `TOP 100%` como headline;
+- informar de forma neutra que zero é o menor nível observado e possui empates.
+
+## Moeda
+
+Quando exibida:
+
+```text
+2166.6666... → R$ 2.166,67
+```
+
+O arredondamento monetário de UI não pode voltar para as funções de domínio como input intermediário.
+
+---
+
+# 6B. Contrato De Produção Brasil
+
+A integração brasileira deve ler os três artefatos explicitamente aprovados:
+
+```text
+data/production/brazil/brazil-income-cdf-2025.json
+data/production/brazil/brazil-price-alignment.json
+data/production/brazil/brazil-income-engine-manifest.json
+```
+
+O teste deve falhar se qualquer referência do manifesto de motor divergir.
+
+Valores congelados:
+
+```text
+CDF_SHA256 = 5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5
+CDF_SIZE_BYTES = 3955036
+SOURCE_DATASET_SHA256 = 8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469
+PRICE_ALIGNMENT_SHA256 = 78A7F6E61C7327124743741F59F0F27715200AD1A17E9F712D34C6A5294F3948
+```
+
+Validar também:
+
+```text
+engine.status = CANONICAL_APPROVED_FOR_INTEGRATION
+engine.decisionIds contém D063, D065, D071 e D072
+engine.integration.brazilFrontendIntegrationAllowed = true
+engine.integration.worldFrontendIntegrationAllowed = false
+```
+
+### Metadado histórico da CDF
+
+A CDF imutável foi gerada antes de D065 e contém originalmente:
+
+```text
+frontendIntegrationAllowed = false
+userIncomePriceAlignmentMethod = null
+```
+
+Isso não é erro do arquivo e **não deve ser corrigido modificando a CDF**, pois quebraria o SHA canônico.
+
+O teste deve confirmar que o `brazil-income-engine-manifest.json` registra explicitamente esse estado histórico e o resolve por referência a D065, sem alterar a CDF.
+
+### Regressões proibidas
+
+Falhar se:
+
+- a aplicação consumir a CDF sem o manifesto de alinhamento vigente;
+- o código alterar o JSON da CDF para trocar o flag histórico;
+- o SHA da CDF não corresponder ao valor congelado;
+- o SHA do manifesto de preços não corresponder ao valor referenciado;
+- houver fallback para `BRAZIL_THRESHOLDS`.
+
+### Suíte Reproduzível Do Gate G0
+
+O Gate G0 não conseguiu reconstruir de forma inequívoca a suíte histórica alegada como `21/21 PASS`: os 21 checks individuais e os relatórios originais não estavam no checkout nem nos objetos Git recuperáveis. A validação canônica atual é uma suíte nova e explícita de 44 checks, reproduzida por:
+
+```powershell
+python scripts/data/brazil/production_package.py --validate-only
+```
+
+Relatórios atuais:
+
+```text
+validation/brazil/brazil-production-package-validation.json
+validation/brazil/brazil-production-package-validation.md
+```
+
+---
+
+
+# 6C. Entrega Da CDF Brasil — D072
+
+Validar que a CDF canônica:
+
+```text
+brazil-income-cdf-2025.json
+```
+
+não esteja embutida no bundle JavaScript inicial.
+
+### Primeiro cálculo
+
+Quando a CDF ainda não estiver carregada:
+
+- o CTA pode entrar em estado de processamento real;
+- o arquivo estático deve ser requisitado sem qualquer renda/moradores na URL ou parâmetros;
+- o resultado só aparece depois da disponibilidade dos artefatos válidos.
+
+### Cálculos seguintes
+
+Depois da primeira carga na mesma sessão:
+
+- reutilizar a CDF em memória;
+- não refazer download desnecessariamente por cálculo;
+- não criar delay visual artificial.
+
+### Falha de rede/artefato
+
+Simular:
+
+- 404 da CDF;
+- JSON inválido;
+- manifesto ausente;
+- SHA/referência incompatível em testes de build/integração.
+
+Esperado:
+
+> **estado de indisponibilidade; nenhum resultado numérico.**
+
+Falhar o teste se o código recorrer a:
+
+```text
+BRAZIL_THRESHOLDS
+PIP brasileiro antigo
+média nacional
+resultado anterior silenciosamente preservado
+```
+
+### Performance
+
+O diagnóstico local de 14/08/2026 registrou:
+
+```text
+raw = 3955036 bytes
+gzip -9 local = 1788882 bytes
+JSON.parse local Node ≈ 18,25 ms
+100k lookups ≈ 7,50 ms
+```
+
+Esses números servem como baseline diagnóstico e **não como SLA de mobile**.
+
+Na aplicação publicada, medir separadamente:
+
+- transferência real da CDF;
+- compressão efetiva;
+- parse em dispositivos representativos;
+- tempo CTA → resultado;
+- efeito em LCP/INP e demais métricas pertinentes.
 
 ---
 
@@ -955,13 +1242,21 @@ Validar:
 
 # 48. Atualização do IPCA
 
-Nova observação de IPCA não deve alterar retrospectivamente cálculos de uma release publicada sem:
+A regra canônica é definida por D065. Nova observação oficial do IPCA deve gerar atualização controlada do manifesto de preços, nunca consulta dinâmica silenciosa por cálculo.
 
-- nova versão de dados;
-    
-- regressão;
-    
-- aprovação.
+Validar a cada atualização:
+
+- continuidade mensal da série SIDRA 1737 / variável 2266;
+- valor positivo e finito;
+- mês efetivamente oficial;
+- `baseIndex` de 2025 imutável;
+- recomputação de `factorBaseToCurrent` e `multiplierCurrentToBase`;
+- ida e volta da transformação;
+- invariância de ranking entre deflacionar a entrada e inflacionar thresholds para teste;
+- regressão dos golden cases dependentes do mês;
+- aprovação antes de publicação.
+
+Uma nova observação não altera retrospectivamente a CDF 2025 nem deve ser projetada para mês ainda não publicado.
 
 ---
 
@@ -1030,43 +1325,77 @@ quando o cálculo exigido for PPP.
 
 # 52. Versão PIP
 
-O build deve conhecer explicitamente:
+A V1 deve conhecer explicitamente os valores canonizados por D066:
 
 ```text
-PIP_VERSION
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+PPP_BASE = 2021
+GLOBAL_REFERENCE_YEAR = 2024
 ```
 
-Ausência:
+Ausência ou divergência:
 
 > falha de validação.
 
+Não permitir fallback silencioso para versão mais nova.
+
 ---
 
-# 53. Ano global
+# 53. Ano global e nowcast
 
-Também exigir:
+Exigir:
 
 ```text
-GLOBAL_REFERENCE_YEAR
+GLOBAL_REFERENCE_YEAR = 2024
 ```
 
-Não permitir fallback silencioso para:
+e testar que a V1 não troca silenciosamente para:
 
 ```text
 current_year
-```
-
-ou:
-
-```text
 latest
+2025
+2026
 ```
+
+enquanto D066 estiver ativa.
+
+O manifesto deve distinguir explicitamente ano de referência de `nowcast`.
 
 ---
 
-# 54. CDF global
+# 54. CDF global — fonte candidata e trava de `popshare`
 
-Mesmas propriedades:
+A candidata operacional principal para D068 é:
+
+> **1000 Binned Global Distribution — March 2026 PIP vintage**
+
+O teste deve falhar se uma implementação tentar obter quantis globais canônicos por:
+
+```text
+pip wb + popshare
+/pip-grp + popshare
+```
+
+O wrapper oficial restringe `popshare` ao nível de país (`pip cl`) e rejeita sua combinação com `wb`.
+
+Antes de promover a CDF por bins:
+
+1. filtrar `year = 2024`;
+2. validar chaves e cobertura;
+3. usar `welf` como valor monetário da faixa;
+4. usar `pop` como peso;
+5. ordenar globalmente por `welf`;
+6. construir a CDF experimental em degraus;
+7. validar contra o agregado oficial `pip wb` por `povline`;
+8. medir o erro antes de escolher a tolerância ou a precisão visual.
+
+---
+
+# 55. CDF global — propriedades e proibições
+
+Qualquer representação derivada para produção deve cumprir:
 
 ```text
 0 <= CDF_GLOBAL(x) <= 1
@@ -1074,31 +1403,111 @@ Mesmas propriedades:
 
 e monotonicidade obrigatória.
 
+Também deve haver teste de regressão que falhe se o frontend reintroduzir:
+
+```text
+WORLD_CURVE
+vetor manual antigo
+interpolação logarítmica antiga
+teto arbitrário 99,99%
+```
+
+Nenhum desses mecanismos pode funcionar como fallback.
+
 ---
 
-# 55. Linhas monetárias conhecidas
+# 56. Validação contra linhas monetárias PIP
 
-Após construção da CDF, selecionar linhas oficiais do PIP e verificar se:
+Para a **mesma versão congelada**, obter do PIP os headcounts globais de 2024 em linhas oficiais e adicionais.
+
+No mínimo:
+
+```text
+US$ 3,00 / pessoa / dia
+US$ 4,20 / pessoa / dia
+US$ 8,30 / pessoa / dia
+```
+
+e pelo menos três linhas adicionais não usadas na construção.
+
+Então verificar:
 
 ```text
 CDF_GLOBAL(poverty_line)
+≈
+PIP_HEADCOUNT_SAME_VERSION(poverty_line)
 ```
 
-reproduz aproximadamente o headcount correspondente à mesma:
+A comparação deve preservar:
 
-- versão;
-    
-- PPP;
-    
-- região;
-    
-- referência temporal.
+- release `20260324`;
+- PPP 2021;
+- agregado mundial;
+- ano 2024;
+- convenção de `<` versus `<=`.
+
+Não usar valor de outra vintage do WDI/PIP como golden case canônico.
+
+O WDI pode funcionar apenas como sanity check auxiliar.
 
 ---
 
-# 56. Tolerância
+# 56A. Candidata principal — 1.000 faixas
 
-A tolerância deve ser registrada após auditoria.
+Validar a candidata operacional oficial:
+
+> **1000 Binned Global Distribution — March 2026 PIP vintage**
+
+Antes de qualquer promoção:
+
+1. filtrar 2024;
+2. ponderar por `pop`;
+3. ordenar por `welf`;
+4. construir CDF experimental;
+5. comparar com os headcounts oficiais da mesma vintage;
+6. medir erro absoluto e relativo em múltiplas linhas;
+7. medir erro nos quantis;
+8. documentar o efeito da perda de desigualdade dentro das faixas.
+
+O disclaimer oficial da base impede tratá-la automaticamente como equivalente às estatísticas PIP.
+
+---
+
+# 56B. PPP/CPI exatos da versão PIP
+
+D069 só pode passar após obter as tabelas auxiliares da mesma versão:
+
+```text
+/aux?table=ppp
+/aux?table=cpi
+```
+
+e identificar os registros brasileiros necessários.
+
+Testar:
+
+- país = Brasil;
+- versão/release corretas;
+- PPP base 2021;
+- CPI/período correto;
+- positividade e finitude;
+- fórmula de ida e volta;
+- comparação com `PA.NUS.PRVT.PP` apenas como cross-check oficial.
+
+Se a tabela PIP e a série WDI divergirem:
+
+> bloquear e investigar; não escolher o valor mais conveniente.
+
+---
+
+# 56C. Tolerância
+
+A tolerância mundial deve ser definida **depois** de medir empiricamente:
+
+- erro da rota escolhida;
+- arredondamento da API;
+- eventual discretização;
+- erro do plano B, se usado.
 
 Nunca usar:
 
@@ -1219,18 +1628,16 @@ moradores.
 
 ---
 
-# 64. Fixture sugerida
+# 64. Fixtures canônicas e pendentes
 
-Depois de validada a metodologia, criar tabela:
+A parte brasileira já possui golden cases derivados da CDF validada. A parte global permanece pendente.
 
-|Renda|Moradores|RDPC|Percentil BR|Percentil Global|Versão|
-|--:|--:|--:|--:|--:|---|
-|R$ X|1|X|X|X|X|
-|R$ X|2|X|X|X|X|
-|R$ 6.500|3|R$ 2.166,67|**A DEFINIR**|**A DEFINIR**|X|
-|R$ X|4|X|X|X|X|
+|Entrada|Referência da entrada|Moradores|RDPC comparável 2025|shareBelow BR|topShare BR|Global|
+|---:|---|--:|--:|--:|--:|---|
+|R$ 6.500|preços médios de 2025|3|R$ 2.166,6667|0,7015612591|0,2984387409|PENDENTE|
+|R$ 6.500|nominal corrente; manifesto 2026-07|3|R$ 2.065,6892|0,6866910623|0,3133089377|PENDENTE|
 
-Nunca preencher percentis por estimativa manual.
+Nunca preencher a coluna global por estimativa manual. Quando a metodologia Mundo for validada, os valores deverão vir do artefato global versionado e de seus golden cases.
 
 ---
 
@@ -1393,11 +1800,11 @@ com:
 
 Validar que:
 
-```text
-percentile_br
-```
-
-corresponde à frase exibida.
+- `shareBelow` corresponde à frase “acima de aproximadamente X em cada 100”;
+- `topShare = 1 - shareBelow`;
+- `TOP X%` é a leitura visual principal;
+- o percentil/leitura estatística secundária é matematicamente coerente;
+- nenhuma frase troca pessoas por famílias, salários ou patrimônio.
 
 ---
 
@@ -1465,11 +1872,24 @@ A regra de arredondamento deve ser única.
 
 # 80. Fonte exibida
 
-O ano mostrado na interface deve vir do dataset/metadado correto.
+Metadados exibidos devem vir dos artefatos versionados.
+
+Brasil deve permitir verificar:
+
+- PNAD Contínua 2025;
+- referência de preços médios de 2025;
+- mês do IPCA usado por D065.
+
+Mundo, quando integrado, deve permitir verificar:
+
+- PIP `20260324_2021`;
+- ano global 2024;
+- PPP 2021;
+- indicação de posição global estimada.
 
 Teste:
 
-> trocar fixture do dataset e confirmar que a UI atualiza a fonte.
+> trocar fixture de metadados e confirmar que a UI atualiza a fonte sem texto hardcoded.
 
 ---
 
@@ -1525,11 +1945,17 @@ Verificar ausência de:
 
 # 84. Share com posição
 
-Quando habilitado, verificar:
+A posição só pode aparecer após ação explícita do usuário.
 
-> somente a posição explicitamente escolhida.
+Testar que:
 
-Não incluir renda.
+- a opção começa desativada;
+- ativá-la altera apenas o texto/card visível;
+- `share_mode = position` pode ser registrado sem o valor da posição;
+- renda, moradores e renda per capita permanecem ausentes;
+- a URL compartilhada continua genérica e não codifica o resultado.
+
+Não considerar a simples visualização do resultado como consentimento para divulgar a posição.
 
 ---
 
@@ -1714,6 +2140,14 @@ Esperado:
 calculation_completed
 ```
 
+Parâmetros categóricos permitidos quando necessários:
+
+```text
+share_channel
+share_mode
+app_version
+```
+
 Sem:
 
 ```text
@@ -1721,9 +2155,13 @@ Sem:
 3
 2166.67
 67.9
+income_band
+top_percent
 ```
 
-ou faixas equivalentes.
+ou faixas/equivalentes que revelem informação financeira.
+
+Se Vercel Web Analytics for adotado, testar também `beforeSend` e confirmar que URL/query não carregam dados financeiros.
 
 ---
 
@@ -2957,42 +3395,41 @@ sem precisar identificar o usuário.
 
 # PARTE XXVIII — GOLDEN DATASET
 
-# 184. Criar dataset de referência
+# 184. Dataset brasileiro de referência
 
-Depois da primeira auditoria concluída:
-
-> criar um pequeno conjunto de dados canônicos exclusivamente para testes.
-
-Nome possível:
+A primeira CDF brasileira validada já possui conjunto de golden cases versionado em:
 
 ```text
-tests/fixtures/golden-cases.json
+validation/brazil/brazil-income-golden-cases.json
 ```
+
+Ele deve permanecer pequeno, determinístico e derivado da mesma CDF cujo SHA-256 é registrado no manifesto.
+
+Um conjunto global separado deverá ser criado somente depois da validação da metodologia Mundo.
 
 ---
 
-# 185. Estrutura
+# 185. Estrutura mínima dos casos
 
-Exemplo:
+Para Brasil, os casos devem preservar ao menos:
 
 ```json
 {
   "methodologyVersion": "1.0.0",
-  "brazilDatasetVersion": "…",
-  "globalDatasetVersion": "…",
+  "brazilDatasetVersion": "2025-20260508-v1",
   "cases": [
     {
-      "income": 6500,
-      "householdSize": 3,
-      "perCapita": 2166.6666667,
-      "brazilPercentile": null,
-      "globalPercentile": null
+      "name": "householdIncome6500Residents3",
+      "rdpc": 2166.6666666667,
+      "shareBelow": 0.701561259093934,
+      "shareAtOrBelow": 0.701561259093934,
+      "topShare": 0.298438740906066
     }
   ]
 }
 ```
 
-Os campos `null` só devem ser preenchidos após validação oficial.
+Casos que dependem de renda **corrente** devem registrar também a versão/mês do manifesto de preços utilizado. Resultados globais permanecem ausentes até validação oficial da metodologia Mundo.
 
 ---
 

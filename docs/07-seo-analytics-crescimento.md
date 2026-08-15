@@ -1,7 +1,7 @@
 ---
 title: 07-seo-analytics-crescimento
 created: 2026-08-12T17:39:01.000-03:00
-modified: 2026-08-12T17:42:48.900-03:00
+modified: 2026-08-14T16:31:00.000-03:00
 ---
 
 # 07-seo-analytics-crescimento
@@ -11,8 +11,8 @@ modified: 2026-08-12T17:42:48.900-03:00
 **Produto:** Renda Comparada  
 **Documento:** `07-seo-analytics-crescimento.md`  
 **Status:** Canônico para aquisição, mensuração e crescimento  
-**Versão:** 1.0  
-**Última revisão:** 12/08/2026
+**Versão:** 1.1
+**Última revisão:** 14/08/2026
 
 Documentos relacionados:
 
@@ -309,11 +309,54 @@ Primeiro:
 
 # 11. Analytics Da V1
 
-A recomendação inicial é utilizar uma ferramenta de analytics de baixo atrito e compatível com os princípios de privacidade do projeto.
+A V1 deve utilizar somente uma ferramenta de analytics que passe pela auditoria definida em `06-privacidade-seguranca.md`.
 
-Como o site está hospedado na Vercel, **Vercel Web Analytics** é uma candidata natural para a V1, sujeita à auditoria definida em `06-privacidade-seguranca.md`.
+O fornecedor permanece uma decisão separada:
 
-A documentação atual da Vercel informa que o Web Analytics trabalha sem cookies, utiliza dados anonimizados e permite eventos personalizados.
+```text
+ANALYTICS_PROVIDER = [DEFINIR]
+```
+
+A escolha deve considerar, no mínimo:
+
+- cookies e identificadores;
+- coleta automática;
+- tratamento de IP;
+- retenção;
+- transferência internacional;
+- eventos personalizados;
+- impacto de performance.
+
+A ausência de fornecedor aprovado não autoriza o código a adicionar tracking por iniciativa própria.
+
+## Avaliação atual — Vercel Web Analytics
+
+A pesquisa oficial realizada em 14/08/2026 registra:
+
+```text
+Hobby........... Web Analytics disponível; 50.000 eventos incluídos/mês; janela de 1 mês
+Hobby........... custom events NÃO disponíveis
+Pro............. custom events disponíveis; 2 propriedades por evento na configuração padrão
+Enterprise...... custom events disponíveis
+```
+
+Fontes oficiais:
+
+- https://vercel.com/docs/analytics/custom-events
+- https://vercel.com/docs/analytics/limits-and-pricing
+- https://vercel.com/docs/plans/hobby
+
+Consequências:
+
+1. Vercel Web Analytics continua **candidato**, não fornecedor canonizado;
+2. a taxonomia completa definida abaixo exige custom events e, portanto, não pode ser prometida em Hobby;
+3. se o projeto estiver em Hobby, pode lançar com mensuração reduzida a pageviews/tráfego em vez de ampliar coleta;
+4. é proibido transformar rotas, query strings ou fragmentos em eventos artificiais para contornar a limitação de plano;
+5. antes da implementação deve ser verificado:
+
+```text
+VERCEL_PLAN = [VERIFICAR]
+```
 
 ---
 
@@ -456,6 +499,7 @@ Exemplos possíveis:
 page
 device_context
 share_channel
+share_mode
 app_version
 ```
 
@@ -639,32 +683,34 @@ Evitar múltiplos títulos gigantes visualmente concorrentes.
 
 ---
 
-# 25. Title Inicial
+# 25. Title Da Home — D073
 
-Sugestão inicial:
+Canônico para a V1:
 
 ```html
 <title>Você é mais rico do que quantos brasileiros? | Renda Comparada</title>
 ```
 
-O Google recomenda títulos descritivos e concisos e considera, além do `<title>`, elementos como o título visual principal, headings e `og:title` na geração do título mostrado nos resultados.
+O texto preserva a chamada principal do produto e não deve ser trocado silenciosamente pelo Codex.
 
 ---
 
-# 26. Meta Description Inicial
+# 26. Meta Description Da Home — D073
 
-Sugestão:
+Canônica para a V1:
 
 ```html
 <meta
   name="description"
-  content="Compare a renda da sua família com a distribuição de renda do Brasil e do mundo e descubra sua posição aproximada."
+  content="Descubra onde a renda da sua casa está na distribuição do Brasil e, de forma estimada, no mundo. Comparação de renda, não de patrimônio."
 />
 ```
 
-A meta description deve descrever a página de forma verdadeira.
+A redação:
 
-O Google pode utilizar a meta description ou trechos do próprio conteúdo da página na composição do snippet de busca.
+- distingue renda de patrimônio;
+- preserva o caráter estimado do Mundo exigido por D067;
+- não promete precisão individual inexistente.
 
 ---
 
@@ -1011,24 +1057,32 @@ A imagem padrão deve comunicar a proposta da ferramenta.
 
 ---
 
-# 44. Open Graph Da home
+# 44. Open Graph Da Home — D073
 
-Conceito:
+Texto canônico:
+
+```text
+og:title = Você é mais rico do que quantos brasileiros?
+og:description = Descubra onde a renda da sua casa está no Brasil e, de forma estimada, no mundo.
+```
+
+Conceito visual da imagem padrão:
 
 ```text
 RENDA COMPARADA
 
 Você é mais rico do que
 quantos brasileiros?
-
-Descubra onde sua renda está.
 ```
 
 Sem:
 
 - renda de exemplo que pareça real;
 - percentil fictício;
-- excesso de texto.
+- excesso de texto;
+- qualquer resultado individual.
+
+`DEFAULT_OG_IMAGE` continua pendente de criação; o texto não está pendente.
 
 ---
 
@@ -2158,9 +2212,15 @@ ANALYTICS_PROVIDER = [DEFINIR]
 SEARCH_CONSOLE_PROPERTY = [CONFIGURAR]
 ```
 
+O texto padrão de compartilhamento já está fechado por D073:
+
 ```text
-DEFAULT_SHARE_TEXT = [VALIDAR]
+DEFAULT_SHARE_TEXT = "Descobri onde minha renda está na distribuição brasileira. E você?"
 ```
+
+A posição só pode ser acrescentada por escolha explícita do usuário, conforme D017.
+
+Continua aberto:
 
 ```text
 DEFAULT_OG_IMAGE = [CRIAR]

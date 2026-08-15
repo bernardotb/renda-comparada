@@ -1,7 +1,7 @@
 ---
 title: Registro de Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-13T18:30:00.000-03:00
+modified: 2026-08-14T17:40:00.000-03:00
 ---
 
 # Registro de Decisões — Renda Comparada
@@ -9,8 +9,8 @@ modified: 2026-08-13T18:30:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
-**Versão:** 1.0  
-**Última revisão:** 13/08/2026
+**Versão:** 1.5
+**Última revisão:** 14/08/2026
 
 Documentos relacionados:
 
@@ -1290,15 +1290,15 @@ Esta decisão substitui a formulação absoluta de D005. A distribuição não �
 ## D057 — Referência De Preços E Alinhamento Monetário
 
 **Data:** 13/08/2026
-**Status:** `PARCIALMENTE SUBSTITUÍDA POR D063`
+**Status:** `SUBSTITUÍDA POR D063 E D065`
 
 ### Decisão Original
 
 ```text
 IBGE_PRICE_REFERENCE = preços médios de 2025
-IBGE_DEFLATOR_RULE_FOR_VD5011 = [PENDENTE]
-USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
-USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
+IBGE_DEFLATOR_RULE_FOR_VD5011 = pendência histórica da hipótese original; VD5011 foi rejeitada por D063
+USER_INCOME_PRICE_ALIGNMENT = necessário; posteriormente confirmado
+USER_INCOME_PRICE_ALIGNMENT_METHOD = resolvido posteriormente por D065
 ```
 
 A renda do usuário e a distribuição devem estar na mesma referência monetária antes da comparação.
@@ -1309,7 +1309,7 @@ Não aplicar `CO1`, `CO2`, IPCA ou fórmula própria até comprovar a regra oper
 
 ### Revisão Após A Fase 1C
 
-A pendência do deflator foi resolvida por D063: trabalho habitual usa `CO1` e outras fontes efetivas usam `CO1e`. Permanece ativa somente a exigência de alinhar a renda do usuário e a distribuição na mesma referência monetária; `USER_INCOME_PRICE_ALIGNMENT_METHOD` continua pendente.
+A parte relativa ao deflator da PNAD foi resolvida por D063: trabalho habitual usa `CO1` e outras fontes efetivas usam `CO1e`. A parte relativa ao alinhamento da renda corrente do usuário foi posteriormente resolvida por D065; D057 permanece apenas como registro histórico da pendência original.
 
 ---
 
@@ -1322,7 +1322,7 @@ A pendência do deflator foi resolvida por D063: trabalho habitual usa `CO1` e o
 
 RDPC igual a zero é valor estatisticamente válido e deve permanecer na distribuição quando pertencer à população elegível.
 
-Permanecem pendentes de inspeção:
+Na decisão original, ainda faltava inspecionar:
 
 ```text
 IBGE_RDPC_MISSING_CODES
@@ -1330,6 +1330,8 @@ IBGE_WEIGHT_MISSING_CODES
 IBGE_RDPC_NEGATIVE_VALUES
 IBGE_RDPC_MAX_OBSERVED
 ```
+
+A inspeção da edição `20260508` foi posteriormente concluída na Fase 1C e consolidada por D064. Esses controles deixam de ser lacunas da edição vigente e passam a ser testes obrigatórios a repetir em qualquer atualização.
 
 ### Consequências
 
@@ -1365,7 +1367,7 @@ Pessoas com RDPC idêntico não recebem ordenação individual fictícia. Percen
 ## D060 — Extremos E Caudas Empíricas
 
 **Data:** 13/08/2026
-**Status:** `ATIVA`
+**Status:** `ATIVA — APRESENTAÇÃO COMPLEMENTADA POR D071`
 
 ### Decisão
 
@@ -1380,7 +1382,7 @@ Ficam proibidos sem nova decisão:
 
 ### Consequências
 
-Na construção validada, foram observados P99,5 de aproximadamente R$ 20.507,98, P99,9 de aproximadamente R$ 38.991,66 e máximo de aproximadamente R$ 200.165,79. Esses valores são diagnósticos, não limites artificiais. A política de exibição das caudas permanece pendente e outliers não serão removidos automaticamente.
+Na construção validada, foram observados P99,5 de aproximadamente R$ 20.507,98, P99,9 de aproximadamente R$ 38.991,66 e máximo de aproximadamente R$ 200.165,79. Esses valores são diagnósticos, não limites artificiais. A política de exibição da cauda foi posteriormente canonizada por D071: reduzir precisão visual na cauda, não exibir `TOP 0%` e não extrapolar acima do máximo observado. Outliers não serão removidos automaticamente.
 
 ---
 
@@ -1463,7 +1465,7 @@ A recomposição nominal domiciliar de `VD4019 + VD4048` reproduziu `VD5007` sem
 
 ### Consequências
 
-D063 substitui D054 e resolve a parte do deflator que estava pendente em D057. `VD5011 × CO1` e `VD5008 × CO1` permanecem somente como diagnósticos e não devem ser usados como construção de produção. O método de alinhamento temporal da renda do usuário continua pendente.
+D063 substitui D054 e resolve a parte do deflator que estava pendente em D057. `VD5011 × CO1` e `VD5008 × CO1` permanecem somente como diagnósticos e não devem ser usados como construção de produção. O alinhamento temporal da renda do usuário foi posteriormente canonizado por D065.
 
 ---
 
@@ -1500,7 +1502,400 @@ P90 e P99 diferiram em R$ 1 dos cortes publicados; algumas médias acumuladas di
 
 ### Consequências
 
-A média, o Gini, as 27 UFs e a população constituem validação forte da construção principal. Os resíduos pequenos não reabrem D063, mas o procedimento exato de cortes, a tolerância de golden cases e a política de exibição da cauda permanecem pendentes.
+A média, o Gini, as 27 UFs e a população constituem validação forte da construção principal. Os resíduos pequenos não reabrem D063. O procedimento editorial dos cortes publicados permanece documentado como diferença residual; a política de exibição da cauda brasileira foi posteriormente fechada por D071 sem alterar a CDF.
+
+---
+
+# Alinhamento Temporal Brasileiro — Canonização Da Fase 1F-R
+
+## D065 — Alinhamento Temporal Da Renda Corrente Para Preços Médios De 2025
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Para a V1 nacional, que não coleta UF, canonizar o **IPCA nacional do IBGE**, tabela SIDRA 1737, variável 2266, como índice para alinhar a renda mensal nominal vigente informada pelo usuário à referência monetária da CDF brasileira.
+
+A referência anual é a média aritmética dos 12 números-índice mensais de janeiro a dezembro de 2025:
+
+```text
+IPCA_MEDIO_2025 = 7300.8416666666666667
+```
+
+Sejam:
+
+```text
+B = IPCA_MEDIO_2025
+M = número-índice do último mês oficialmente publicado e aprovado no manifesto de preços
+```
+
+Então:
+
+```text
+renda_domiciliar_2025 = renda_domiciliar_corrente × B / M
+RDPC_usuario_2025 = renda_domiciliar_2025 / moradores_elegíveis
+posição_brasil = lookup_CDF_2025(RDPC_usuario_2025)
+```
+
+A renda digitada é interpretada como **renda mensal nominal vigente na data do cálculo**. Não pedir mês histórico adicional na V1.
+
+A CDF brasileira permanece imutável em preços médios de 2025. Não atualizar todos os thresholds para preços correntes como mecanismo de produção.
+
+O índice `M` deve vir de manifesto versionado, validado e aprovado. A aplicação não consulta o IPCA mais recente silenciosamente a cada cálculo e não projeta mês ainda não publicado.
+
+### Compromisso Nacional versus Regional
+
+A PNAD utiliza tratamento regional de preços na construção dos microdados. Como a V1 não solicita UF, o IPCA nacional é adotado como aproximação oficial e transparente para o alinhamento da entrada.
+
+O diagnóstico da Fase 1F encontrou, para o período analisado, diferenças aproximadas entre fatores regionais e o fator nacional de cerca de `-1,21%` a `+0,64%`. Essa evidência dimensiona a limitação, mas não transforma o IPCA nacional em deflator regional exato.
+
+### Metadados Obrigatórios
+
+O manifesto de preços deve registrar, no mínimo:
+
+```text
+source = IBGE SIDRA
+sidraTable = 1737
+sidraVariable = 2266
+basePriceReference = preços médios de 2025
+baseIndex = 7300.8416666666666667
+priceIndexReferenceMonth = mês oficial efetivamente usado
+currentIndex = número-índice desse mês
+accessedAt = data de atualização do manifesto
+```
+
+### Consequências
+
+- D065 resolve a parte de `USER_INCOME_PRICE_ALIGNMENT_METHOD` que permanecia aberta em D057.
+- D057 fica integralmente substituída por D063, quanto à construção/deflatores da PNAD, e por D065, quanto ao alinhamento da renda corrente.
+- A atualização do IPCA passa a ser um processo controlado de dados, não uma consulta dinâmica por cálculo.
+- O mês de referência do IPCA deve ser acessível ao usuário na metodologia/fonte da versão em produção.
+- A microcopy e a precisão visual não podem alterar a fórmula; para o resultado Brasil, a regra de exibição foi posteriormente canonizada por D071.
+- A integração no frontend permanece uma etapa posterior; esta decisão não autoriza reutilizar as constantes metodológicas antigas do `src/App.tsx`.
+
+---
+
+
+# Metodologia Mundial — Canonização Parcial Da Fase 2A
+
+## D066 — Versão PIP E Ano Mundial De Referência
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Para a comparação mundial da V1, congelar:
+
+```text
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+GLOBAL_REFERENCE_YEAR = 2024
+GLOBAL_ESTIMATION_TYPE = reference-year aggregate; não nowcast
+PPP_REFERENCE = 2021
+```
+
+O PIP vigente informa que estimativas posteriores a 2024 são nowcasts. Portanto, a V1 não utiliza automaticamente 2025 ou 2026 apenas para aproximar o ano da referência brasileira.
+
+O ano 2024 continua sendo um agregado harmonizado do PIP e não deve ser descrito como se todos os países tivessem realizado pesquisa domiciliar naquele ano.
+
+### Consequências
+
+- nenhuma versão `latest` pode entrar automaticamente em produção;
+- atualização de versão PIP exige comparação, validação e nova aprovação;
+- 2025/2026 ficam fora da V1 mundial enquanto forem tratados como nowcasts na versão congelada;
+- a CDF mundial, conversão monetária e golden cases continuam bloqueados e não são resolvidos por esta decisão.
+
+---
+
+## D067 — Conceito E Linguagem Da Comparação Mundial
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+O resultado mundial deve ser interpretado como:
+
+> **posição monetária global estimada**
+
+e não como distribuição homogênea mundial de salários ou renda bruta.
+
+A fonte PIP utiliza agregados domiciliares per capita baseados em:
+
+- consumo, em parte das economias;
+- renda, em outras economias;
+
+expressos em dólares internacionais de PPP/PPC de 2021 por pessoa por dia.
+
+A interface deve explicar que a comparação global combina renda ou consumo e é ajustada por poder de compra.
+
+Não utilizar como formulação principal:
+
+> **“Você ganha mais do que X% do mundo.”**
+
+sem nova decisão metodológica que demonstre que a simplificação é suportada.
+
+### Consequências
+
+- o resultado Mundo deve carregar linguagem de estimativa;
+- a interface deve diferenciar a força metodológica do resultado Brasil e Mundo;
+- `WORLD_CDF`, `WORLD_BRL_TO_2021_PPP` e golden cases permanecem pendentes;
+- D067 não autoriza integração do vetor mundial antigo do `src/App.tsx`.
+
+---
+
+
+# Apresentação Brasileira — Precisão E Caudas
+
+## D071 — Precisão Visual E Tratamento Da Cauda Brasileira
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+A CDF brasileira continua sendo consultada com precisão interna completa. O arredondamento pertence somente à apresentação.
+
+Para a leitura principal da V1, utilizar `TOP` como linguagem intuitiva e percentil como leitura estatística secundária, conforme a hierarquia já definida no design system.
+
+Definir:
+
+```text
+p = 100 × shareBelow
+t = 100 - p
+```
+
+### Faixa Principal
+
+Quando:
+
+```text
+1 <= t
+```
+
+e a renda comparável estiver dentro do suporte observado da CDF, exibir os dois números como inteiros complementares:
+
+```text
+percentil_exibido = arredondar(p)
+top_exibido = 100 - percentil_exibido
+```
+
+Exemplo do golden case brasileiro em preços médios de 2025:
+
+```text
+p = 70.1561...
+percentil exibido = 70
+TOP exibido = 30%
+```
+
+Para a entrada nominal corrente de R$ 6.500 / 3 com manifesto de julho/2026:
+
+```text
+p = 68.6691...
+percentil exibido = 69
+TOP exibido = 31%
+```
+
+Não arredondar percentil e `TOP` separadamente se isso puder produzir soma visual diferente de 100.
+
+### Cauda Superior
+
+Quando:
+
+```text
+0.1 <= t < 1
+```
+
+exibir uma casa decimal e manter complementaridade visual entre as duas leituras.
+
+Quando:
+
+```text
+0 < t < 0.1
+```
+
+não exibir `TOP 0%`. Exibir:
+
+> **Entre menos de 0,1% de maior renda na distribuição observada.**
+
+A leitura secundária pode usar:
+
+> **Acima do percentil 99,9.**
+
+sem criar casas adicionais.
+
+### Acima Do Máximo Observado
+
+Se o RDPC comparável do usuário for estritamente maior que:
+
+```text
+IBGE_RDPC_MAX_OBSERVED_2025 = 200165.7922757916
+```
+
+não extrapolar um percentil mais fino e não exibir `TOP 0%`.
+
+Exibir conceitualmente:
+
+> **Sua renda por pessoa está acima do maior valor observado na distribuição da PNAD 2025 utilizada. A pesquisa não permite estimar com segurança uma posição mais fina nessa cauda.**
+
+A CDF pode retornar `shareBelow = 1` para fins matemáticos internos; isso não autoriza transformar o resultado em uma posição individual exata além do suporte observado.
+
+### Renda Zero
+
+Para RDPC igual a zero, não apresentar `TOP 100%` como resultado principal.
+
+A CDF validada possui massa em zero de aproximadamente:
+
+```text
+1.112333% da população ponderada
+```
+
+A interface deve usar linguagem neutra, por exemplo:
+
+> **R$ 0 é o menor nível de renda por pessoa observado na distribuição utilizada e há outras pessoas empatadas nesse valor.**
+
+O detalhe da participação empatada pode aparecer em “Como calculamos”, não precisa ser headline.
+
+### Valores Monetários
+
+- renda mensal atual por pessoa: moeda brasileira com duas casas decimais quando exibida;
+- renda ajustada para preços médios de 2025: informação metodológica secundária, com duas casas decimais quando mostrada;
+- cálculos internos: sem arredondamento prematuro.
+
+### Proibições
+
+Não utilizar:
+
+- `67,934728%` na interface;
+- arredondamento para múltiplos de 5 ou 10 apenas por estética;
+- `TOP 0%`;
+- extrapolação logarítmica ou paramétrica além do máximo observado;
+- pisos ou tetos artificiais não derivados da CDF.
+
+### Consequências
+
+- a política de exibição da cauda brasileira deixa de estar pendente;
+- a CDF e seus golden cases não são alterados;
+- D071 vale somente para Brasil;
+- a precisão e as caudas do Mundo continuam bloqueadas para D070.
+
+---
+
+
+## D072 — Entrega E Carregamento Da CDF Brasileira
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Evidência
+
+A CDF canônica brasileira possui:
+
+```text
+3955036 bytes em JSON bruto
+1788882 bytes em gzip -9 local
+83358 pontos únicos
+```
+
+Em diagnóstico local com Node v22.16.0:
+
+```text
+JSON.parse ≈ 18,25 ms
+100.000 lookups binários ≈ 7,50 ms
+```
+
+Esses tempos são diagnósticos locais e **não representam performance de celular ou rede de produção**. A evidência serve apenas para separar custos: o lookup é barato; a transferência inicial do arquivo é o custo relevante a evitar na primeira dobra mobile.
+
+### Decisão
+
+A CDF brasileira:
+
+- não deve ser incorporada ao bundle JavaScript inicial;
+- deve permanecer como artefato estático versionado;
+- deve ser carregada sob demanda no primeiro cálculo;
+- pode permanecer em memória para novas simulações na mesma sessão;
+- pode utilizar cache HTTP normal de conteúdo estático;
+- nunca recebe renda, moradores ou qualquer dado individual como parâmetro de requisição.
+
+Os manifestos pequenos do motor e do alinhamento de preços devem ser obtidos/validados conforme o contrato de produção antes do cálculo. Como o manifesto de preços pode mudar após nova publicação mensal aprovada, ele e o manifesto de motor **não devem ser tratados como imutáveis por prazo longo** sem versionamento adicional.
+
+A CDF `2025-20260508-v1`, por outro lado, é imutável enquanto essa versão estiver em produção e não deve ser sobrescrita silenciosamente.
+
+### Falha Segura
+
+Se qualquer artefato necessário estiver ausente, incompatível ou falhar ao carregar:
+
+> **não calcular posição brasileira com constantes antigas ou aproximação.**
+
+A interface deve exibir estado de indisponibilidade e permitir nova tentativa.
+
+Não utilizar como fallback:
+
+- `BRAZIL_THRESHOLDS`;
+- PIP para Brasil;
+- média nacional;
+- CDF parcial criada ad hoc.
+
+### Consequências
+
+- loading após o CTA é legítimo quando corresponde ao primeiro carregamento real da CDF;
+- não criar loading artificial quando a CDF já estiver disponível em memória/cache e o cálculo for imediato;
+- a validação final de rede, cache e Core Web Vitals pertence ao frontend publicado;
+- D072 não autoriza alteração da CDF ou de sua metodologia.
+
+---
+
+
+## D073 — Metadata Pública E Compartilhamento Genérico Da Home
+
+**Data:** 14/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Canonizar para a home da V1:
+
+```text
+HOME_TITLE = "Você é mais rico do que quantos brasileiros? | Renda Comparada"
+HOME_META_DESCRIPTION = "Descubra onde a renda da sua casa está na distribuição do Brasil e, de forma estimada, no mundo. Comparação de renda, não de patrimônio."
+HOME_OG_TITLE = "Você é mais rico do que quantos brasileiros?"
+HOME_OG_DESCRIPTION = "Descubra onde a renda da sua casa está no Brasil e, de forma estimada, no mundo."
+DEFAULT_SHARE_TEXT = "Descobri onde minha renda está na distribuição brasileira. E você?"
+```
+
+O texto padrão de compartilhamento é genérico e não contém:
+
+- renda;
+- moradores;
+- renda por pessoa;
+- percentil;
+- `TOP`.
+
+A posição individual só pode ser acrescentada mediante ação explícita do usuário, conforme D017.
+
+### Limites
+
+D073 **não define**:
+
+```text
+PRODUCTION_DOMAIN
+CANONICAL_URL
+DEFAULT_OG_IMAGE
+SEARCH_CONSOLE_PROPERTY
+```
+
+Esses itens continuam dependentes de domínio/design/configuração.
+
+A metadata não deve descrever o resultado mundial como ranking exato. A expressão **“de forma estimada, no mundo”** preserva D067.
+
+### Consequências
+
+- o Codex não deve improvisar outra promessa comercial na metadata;
+- nenhuma informação individual entra em `og:title`, `og:description`, `og:image` ou `og:url`;
+- a imagem OG padrão pode ser criada depois, mas deve respeitar o texto e a privacidade já aprovados;
+- alterações futuras nesses textos exigem decisão explícita ou revisão documentada de produto/SEO.
 
 ---
 

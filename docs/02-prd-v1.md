@@ -1,14 +1,16 @@
 ---
 title: 02-prd-v1
 created: 2026-08-12T17:05:56.000-03:00
-modified: 2026-08-12T17:11:04.395-03:00
+modified: 2026-08-14T16:34:00.000-03:00
 ---
 
 # 02-prd-v1
 
 **Produto:** Renda Comparada  
 **Versão:** V1  
-**Status:** Especificação inicial  
+**Status:** Canônico para o escopo da V1; integração final bloqueada pelo fechamento da metodologia Mundo
+**Versão do documento:** 1.1
+**Última revisão:** 14/08/2026
 **Documento de visão:** `01-visao-produto.md`  
 **Metodologia:** `04-metodologia-dados.md`  
 **Jornada UX:** `03-jornada-ux-v1.md`
@@ -46,7 +48,7 @@ Ao final da V1, qualquer usuário deve conseguir:
 
 1. acessar o site sem cadastro;
 2. informar a renda mensal total da casa;
-3. informar quantas pessoas moram na casa;
+3. informar quantas pessoas fazem parte do domicílio segundo a orientação da metodologia;
 4. receber sua posição aproximada na distribuição brasileira;
 5. receber sua posição aproximada na distribuição mundial;
 6. compreender o significado do resultado;
@@ -113,8 +115,8 @@ A V1 inclui:
 
 ## Calculadora Principal
 
-- renda mensal familiar;
-- número total de moradores;
+- renda mensal nominal vigente do domicílio;
+- número de moradores considerados conforme a metodologia;
 - cálculo da renda domiciliar por pessoa;
 - posição Brasil;
 - posição Mundo.
@@ -289,9 +291,13 @@ O campo deve aceitar valores em reais.
 
 ### Texto De Apoio
 
-A definição final de quais rendimentos devem ser incluídos depende de `04-metodologia-dados.md`.
+> **Use a renda bruta mensal, antes de impostos e despesas.**
 
-A interface deve possuir acesso fácil à explicação.
+A entrada representa a renda mensal nominal vigente no momento do cálculo.
+
+A interface deve possuir acesso fácil à explicação “O que devo incluir?”, subordinada a `04-metodologia-dados.md`.
+
+Para o resultado brasileiro, a aplicação deve alinhar automaticamente a renda corrente à referência de preços médios de 2025 conforme D065 e o manifesto de preços aprovado.
 
 ---
 
@@ -299,11 +305,13 @@ A interface deve possuir acesso fácil à explicação.
 
 O usuário deve informar:
 
-> **Quantas pessoas moram nesta casa?**
+> **Quantas pessoas fazem parte deste domicílio?**
 
 Texto de apoio:
 
 > **Inclua adultos e crianças, mesmo que não tenham renda.**
+
+A ajuda contextual deve explicar as exclusões técnicas do universo brasileiro — empregado doméstico residente, parente de empregado doméstico e “pensionista” na classificação da condição no domicílio — sem confundir a última categoria automaticamente com beneficiário de pensão.
 
 ### Requisitos
 
@@ -329,9 +337,13 @@ Moradores:
 
 **3**
 
-Renda por pessoa:
+Renda mensal atual por pessoa:
 
 **R$ 2.166,67**
+
+Esse valor é a divisão nominal simples da entrada atual e pode ser exibido como informação secundária.
+
+Para a posição brasileira, o sistema deve primeiro alinhar a renda nominal corrente para preços médios de 2025 conforme D065 e só então consultar a CDF brasileira canônica.
 
 A fórmula exata e sua interpretação estatística devem obedecer ao:
 
@@ -349,7 +361,7 @@ A fonte vigente deve ser definida em:
 
 `04-metodologia-dados.md`
 
-A V1 deve utilizar a base brasileira validada mais recente aprovada para produção.
+A V1 deve utilizar a base brasileira validada e explicitamente aprovada para produção. A distribuição vigente é a CDF PNAD 2025 versionada pelo projeto; uma fonte mais nova não substitui essa versão automaticamente.
 
 ### O Resultado Deve Permitir Duas Leituras
 
@@ -368,6 +380,16 @@ Exemplo:
 > **Entre aproximadamente os 32% de maior renda**
 
 Essas duas representações devem ser matematicamente coerentes.
+
+A apresentação brasileira deve seguir D071:
+
+- na faixa principal, percentil e `TOP` são inteiros complementares;
+- entre `TOP 0,1%` e `TOP 1%`, usar uma casa decimal;
+- abaixo de `TOP 0,1%`, usar linguagem `< 0,1%` em vez de `TOP 0%`;
+- acima do maior RDPC observado, não extrapolar uma posição mais fina;
+- para renda zero, não usar `TOP 100%` como headline.
+
+A regra de D071 altera apenas a exibição, nunca a CDF ou a precisão interna do cálculo.
 
 ---
 
@@ -401,25 +423,27 @@ A linguagem deve ser validada em conjunto com `04-metodologia-dados.md`.
 
 # 13. FR-006 — Calcular Posição Mundial
 
-O sistema deve fornecer uma comparação internacional da renda.
+O sistema deve fornecer uma comparação internacional **somente depois de a metodologia Mundo ser canonizada**.
 
 A metodologia deve considerar as conversões e ajustes definidos em:
 
 `04-metodologia-dados.md`
 
-Fontes previstas:
+Fonte principal aprovada conceitualmente:
 
 - World Bank — Poverty and Inequality Platform;
-- World Bank — PPP/PPC.
+- PPP/PPC de 2021, conforme a metodologia PIP.
 
 O resultado deve possuir:
 
-- percentil global;
-- TOP percentual;
+- posição global estimada;
+- leitura percentual compatível com a CDF mundial aprovada;
 - explicação;
 - fonte;
 - ano/versão;
-- indicação de que a comparação internacional é uma estimativa.
+- indicação explícita de que a comparação internacional é mais aproximada que a brasileira.
+
+Enquanto `WORLD_CDF`, `WORLD_BRL_TO_2021_PPP` e os golden cases mundiais não estiverem aprovados, a integração do resultado Mundo permanece bloqueada.
 
 ---
 
@@ -455,13 +479,15 @@ A diferenciação visual deve obedecer ao:
 
 O resultado pode mostrar:
 
-> **Sua renda familiar por pessoa: R$ X**
+> **Sua renda mensal atual por pessoa: R$ X**
 
-Isso ajuda o usuário a compreender como o cálculo foi feito.
+Isso ajuda o usuário a compreender a entrada.
 
 Deve existir uma explicação acessível:
 
-> renda mensal total da casa ÷ número de moradores.
+> renda mensal atual da casa ÷ número de moradores considerados.
+
+Para o Brasil, a metodologia detalhada deve esclarecer que a posição é calculada após alinhamento do valor corrente para preços médios de 2025.
 
 O valor não deve ser enviado para analytics nem incorporado automaticamente ao compartilhamento.
 
@@ -471,7 +497,9 @@ O valor não deve ser enviado para analytics nem incorporado automaticamente ao 
 
 Após o resultado, deve existir CTA claro:
 
-> **Compartilhar minha posição**
+> **Compartilhar**
+
+O modo padrão não inclui a posição individual. A posição só pode ser acrescentada após escolha explícita do usuário.
 
 ### Canais Mínimos
 
@@ -485,7 +513,7 @@ Outros canais poderão ser adicionados se não aumentarem significativamente a c
 
 # 17. FR-010 — Compartilhamento Privado Por Padrão
 
-O compartilhamento padrão **não deve incluir a renda em reais**.
+O compartilhamento padrão **não deve incluir renda, moradores, renda por pessoa nem posição individual**.
 
 Modelo conceitual:
 
@@ -501,9 +529,9 @@ O usuário não deve expor informações financeiras por acidente.
 
 # 18. FR-011 — Compartilhar Posição
 
-Pode existir uma segunda opção:
+Deve existir forma explícita de optar por:
 
-> **Compartilhar minha posição**
+> **Incluir minha posição — sem mostrar minha renda**
 
 Exemplo:
 
@@ -611,7 +639,9 @@ A interface deve mostrar algo equivalente a:
 
 > **Última atualização: DD/MM/AAAA**
 
-A versão exata da fonte deve vir do dataset em produção.
+Para o Brasil, a metodologia/fonte também deve permitir identificar o mês do IPCA efetivamente utilizado no alinhamento temporal da renda corrente.
+
+A versão exata da fonte e a referência monetária devem vir dos manifestos/datasets em produção.
 
 Não escrever manualmente um ano que possa ficar desatualizado em múltiplos pontos do código.
 
@@ -639,9 +669,13 @@ Depois do resultado e da área de compartilhamento, pode existir:
 
 > Estar acima de grande parte da população não significa necessariamente possuir uma vida financeira saudável.
 
+Pergunta:
+
+> **Quer entender melhor sua vida financeira?**
+
 CTA:
 
-> **Quero entender melhor minha vida financeira**
+> **Quero entender melhor**
 
 Na V1, esse CTA pode:
 
@@ -915,6 +949,26 @@ Arquitetura esperada:
 **aplicação**
 
 O cálculo individual deve ocorrer sobre dados preparados para produção.
+
+Para Brasil, seguir D072:
+
+```text
+home/formulário
+↓
+usuário aciona “Descobrir minha posição”
+↓
+carregar/validar artefatos Brasil se ainda não estiverem disponíveis
+↓
+calcular localmente
+↓
+manter a CDF em memória para novas simulações
+```
+
+A CDF brasileira de aproximadamente 3,95 MB **não deve entrar no bundle JavaScript inicial**. Ela deve ser servida como artefato estático e carregada sob demanda no primeiro cálculo.
+
+A requisição do arquivo é igual para todos os usuários e nunca inclui renda, moradores, percentil ou qualquer outro dado individual.
+
+Se o artefato não estiver disponível, a aplicação deve falhar de forma segura; não usar thresholds ou constantes antigas como fallback.
 
 ---
 

@@ -1,14 +1,16 @@
 ---
 title: 03-jornada-ux-v1
 created: 2026-08-12T17:09:52.000-03:00
-modified: 2026-08-12T17:10:47.574-03:00
+modified: 2026-08-14T16:31:00.000-03:00
 ---
 
 # 03-jornada-ux-v1
 
 **Produto:** Renda Comparada  
 **Versão:** V1  
-**Status:** Especificação inicial da jornada  
+**Status:** Canônico para a jornada da V1, condicionado ao fechamento da metodologia Mundo
+**Versão do documento:** 1.1
+**Última revisão:** 14/08/2026
 **Visão:** `01-visao-produto.md`  
 **PRD:** `02-prd-v1.md`  
 **Metodologia:** `04-metodologia-dados.md`  
@@ -199,7 +201,11 @@ Campo:
 
 `R$ _________`
 
-Texto de apoio deve remeter à definição de renda utilizada pela metodologia.
+Texto de apoio:
+
+> **Use a renda bruta mensal, antes de impostos e despesas.**
+
+A entrada representa a renda mensal nominal vigente no momento do cálculo. O alinhamento para a referência monetária da PNAD 2025 é feito automaticamente conforme D065.
 
 Não tentar explicar toda a metodologia neste momento.
 
@@ -244,9 +250,11 @@ Caso o usuário toque em:
 
 abrir uma explicação curta.
 
-Exemplo conceitual:
+Texto recomendado:
 
-> Informe a renda mensal total considerada pela metodologia do cálculo. Veja os detalhes completos em “Como calculamos”.
+> **Some os rendimentos mensais da casa antes de impostos e despesas, como salários e trabalho por conta própria, aposentadorias, pensões, aluguéis recebidos e outras rendas abrangidas pela metodologia. Não desconte aluguel, financiamento, cartão, plano de saúde ou gastos do mês.**
+
+A definição completa e as limitações ficam em “Como calculamos”.
 
 Não colocar explicação estatística extensa dentro do fluxo principal.
 
@@ -256,11 +264,13 @@ Não colocar explicação estatística extensa dentro do fluxo principal.
 
 Pergunta:
 
-> **Quantas pessoas moram nesta casa?**
+> **Quantas pessoas fazem parte deste domicílio?**
 
 Texto de apoio:
 
 > **Inclua adultos e crianças, mesmo que não tenham renda.**
+
+Ajuda contextual deve informar que, para compatibilidade com o indicador do IBGE, existem exclusões técnicas para empregado doméstico residente, parente de empregado doméstico e “pensionista” na classificação da condição no domicílio. A palavra “pensionista” deve ser apresentada como categoria técnica do IBGE, sem ser confundida automaticamente com beneficiário de pensão.
 
 Controle pode ser:
 
@@ -321,19 +331,26 @@ Depois de entradas válidas:
 
 # 15. Etapa 5 — Processamento
 
-Se o cálculo for praticamente instantâneo, não criar uma tela artificial de carregamento.
+Seguir D072 para Brasil.
 
-Caso haja pequena espera:
+No primeiro cálculo, a aplicação pode precisar carregar a CDF brasileira estática e validar os manifestos aprovados. Nesse caso, existe trabalho real e o feedback de carregamento é necessário.
 
-- usar feedback sutil;
-- manter o usuário na mesma página;
-- não usar barra longa ou animação excessiva.
-
-Mensagem possível:
+Mensagem recomendada:
 
 > **Calculando sua posição…**
 
-Não simular processamento demorado apenas para gerar suspense.
+Regras:
+
+- manter o usuário na mesma página;
+- preservar os campos preenchidos;
+- usar feedback simples e acessível;
+- não enviar renda ou moradores na requisição do dataset;
+- não usar barra longa, suspense ou animação decorativa;
+- depois da CDF estar em memória, novas simulações não devem criar espera artificial.
+
+Se os artefatos já estiverem disponíveis e o cálculo for imediato:
+
+> **não criar loading artificial.**
 
 ---
 
@@ -500,15 +517,17 @@ A informação é econômica e deve manter sobriedade.
 
 Abaixo do resultado, pode aparecer:
 
-> **Sua renda por pessoa: R$ X**
+> **Sua renda mensal atual por pessoa: R$ X**
 
 Com explicação:
 
-> renda mensal da casa ÷ número de moradores.
+> renda mensal atual da casa ÷ número de moradores considerados.
 
 Isso ajuda o usuário a compreender de onde veio a comparação.
 
-Não dar mais destaque a esse número do que ao percentil.
+Para o Brasil, a comparação estatística utiliza uma versão desse valor alinhada automaticamente a preços médios de 2025 conforme D065. O valor ajustado pertence à explicação metodológica e não deve ser apresentado como se fosse uma nova renda nominal do usuário.
+
+Não dar mais destaque a esse número do que à posição.
 
 ---
 
@@ -538,11 +557,13 @@ Perto do resultado:
 
 > **Dados atualizados em: XX/XX/XXXX**
 
+Para o Brasil, a explicação de fonte deve informar que a renda corrente é alinhada a preços médios de 2025 pelo IPCA oficial e mostrar o mês de referência efetivamente usado.
+
 E:
 
 > **Como calculamos isso?**
 
-O ano e versão devem vir da configuração/dataset utilizado.
+Ano, versão, referência monetária e mês do índice de preços devem vir dos manifestos/datasets utilizados, nunca de texto hardcoded.
 
 ---
 
@@ -873,16 +894,16 @@ Não assumir comportamento estatístico sem consultar `04-metodologia-dados.md`.
 
 # 46. Rendas Muito Altas
 
-Se o valor ultrapassar a faixa de observação ou confiança do dataset:
+Se o RDPC comparável ultrapassar o maior valor observado da CDF brasileira, seguir D071:
 
 - não extrapolar silenciosamente;
-- seguir comportamento definido em metodologia.
+- não mostrar `TOP 0%`;
+- informar que o valor está acima do maior RDPC observado na distribuição utilizada;
+- esclarecer que a pesquisa não permite estimar posição mais fina nessa cauda.
 
-Pode ser necessário mostrar:
+Mensagem conceitual:
 
-> **Sua renda está acima do limite de precisão desta distribuição.**
-
-A regra exata não pertence a este documento.
+> **Sua renda por pessoa está acima do maior valor observado na distribuição utilizada. A pesquisa não permite estimar com segurança uma posição mais fina nessa cauda.**
 
 ---
 
@@ -1357,79 +1378,73 @@ A quantidade de precisão visual deve refletir a precisão real da metodologia.
 
 ---
 
-# 73. Questão Em Aberto — Número De Casas Decimais
+# 73. Decisão — Precisão Visual Do Resultado Brasil
 
-Definir posteriormente, após metodologia e testes:
+A precisão visual brasileira é regida por **D071**.
 
-- `68%`
-- `67,9%`
-- `67,93%`
+Na faixa comum, `TOP` e percentil são exibidos como inteiros complementares. Na cauda entre `0,1%` e `1%`, pode-se usar uma casa decimal; abaixo de `0,1%`, usar linguagem de limite (`TOP < 0,1%`) em vez de falsa precisão.
 
-A UX deve preferir legibilidade.
-
-A metodologia deve determinar quanto detalhe é justificável.
+Não exibir mais casas apenas porque o cálculo interno as possui. O Mundo permanece subordinado a D070.
 
 ---
 
-# 74. Questão Em Aberto — Posição Visual Da Renda per Capita
+# 74. Decisão — Posição Visual Da Renda per Capita
 
-Testar se a renda por pessoa deve aparecer:
+A renda por pessoa deve aparecer **dentro do resultado como informação secundária**.
 
-- logo abaixo dos inputs;
-- dentro do resultado;
-- somente em “como calculamos”.
+Mostrar o valor nominal atual derivado da entrada:
 
-A hipótese inicial é mostrar no resultado como informação secundária.
+> **Sua renda mensal atual por pessoa: R$ X**
 
----
+O valor alinhado a preços médios de 2025 pode aparecer em “Como calculamos”, para auditabilidade, sem competir com a posição principal.
 
-# 75. Questão Em Aberto — Brasil E Mundo Lado a Lado
-
-Desktop:
-
-testar cards lado a lado.
-
-Mobile:
-
-usar sequência vertical.
-
-A experiência deve ser validada com protótipo.
+Não mostrar a renda por pessoa antes do cálculo.
 
 ---
 
-# 76. Questão Em Aberto — Texto Do CTA Pós-resultado
+# 75. Regra Responsiva — Brasil E Mundo
 
-Candidatos:
+No mobile, a sequência é obrigatoriamente vertical, com **Brasil antes de Mundo**.
 
-> **Quero entender melhor minha vida financeira**
+No desktop, os cards podem ficar lado a lado quando houver largura suficiente, desde que Brasil permaneça primeiro na ordem semântica e a composição não sugira equivalência de precisão entre as duas metodologias.
 
-> **Fazer meu check-up financeiro**
-
-> **Ver como está minha vida financeira**
-
-Testar clareza antes de congelar.
+A implementação visual final deve ser validada no protótipo/responsividade; essa validação não reabre a ordem conceitual da jornada.
 
 ---
 
-# 77. Questão Em Aberto — Modo De Compartilhar
+# 76. Decisão — CTA Pós-resultado
 
-Testar:
+Conforme D019, a transição deve ser formulada como pergunta de compreensão, não como avaliação emocional do percentil:
 
-### Opção A
+> **Quer entender melhor sua vida financeira?**
 
-Um único botão:
+CTA:
+
+> **Quero entender melhor**
+
+O check-up completo continua fora do escopo obrigatório da V1.
+
+---
+
+# 77. Decisão — Modo De Compartilhar
+
+Conforme D017, o modo padrão deve ser **genérico e sem posição**.
+
+A interface pode usar um único botão:
 
 > **Compartilhar**
 
-### Opção B
+Ao abrir a ação, a inclusão da posição deve exigir escolha explícita, inicialmente desativada:
 
-Dois modos:
+> **Incluir minha posição — sem mostrar minha renda**
 
-> **Compartilhar sem posição**
+Em ambos os modos é proibido compartilhar automaticamente:
 
-> **Compartilhar minha posição**
+- renda;
+- moradores;
+- renda por pessoa.
 
-A proteção de renda permanece obrigatória em ambos.
+A URL compartilhada não deve codificar o resultado individual.
 
 ---
 

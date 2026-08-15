@@ -1,7 +1,7 @@
 ---
 title: 06-privacidade-seguranca
 created: 2026-08-12T17:28:31.000-03:00
-modified: 2026-08-12T17:39:12.028-03:00
+modified: 2026-08-14T16:31:00.000-03:00
 ---
 
 # 06-privacidade-seguranca
@@ -11,8 +11,8 @@ modified: 2026-08-12T17:39:12.028-03:00
 **Produto:** Renda Comparada  
 **Documento:** `06-privacidade-seguranca.md`  
 **Status:** Canônico para privacidade e segurança  
-**Versão:** 1.0  
-**Última revisão:** 12/08/2026
+**Versão:** 1.1
+**Última revisão:** 14/08/2026
 
 Documentos relacionados:
 
@@ -144,17 +144,13 @@ Exemplo:
 
 `R$ 2.166,67`
 
-### Percentil Brasil
+### Posição Brasil
 
-Exemplo:
+Resultado individual derivado da distribuição brasileira.
 
-`68%`
+### Posição Mundo
 
-### Percentil Mundo
-
-Exemplo:
-
-`76%`
+Resultado individual estimado derivado da metodologia mundial vigente, quando esta estiver aprovada.
 
 Esses valores devem ser tratados como **informações financeiras confidenciais do usuário**, ainda que nem todos constituam, isoladamente, dado pessoal identificável.
 
@@ -284,6 +280,30 @@ Ao recarregar ou encerrar a experiência, não há obrigação de preservar o va
 
 ---
 
+
+# 12A. Cache De Datasets Públicos
+
+As proibições de `localStorage` e `sessionStorage` acima se referem a **dados financeiros do usuário**.
+
+Elas não impedem cache HTTP normal de artefatos estatísticos públicos e idênticos para todos, como:
+
+```text
+brazil-income-cdf-2025.json
+```
+
+ou manifestos públicos do motor.
+
+Seguir D072:
+
+- a CDF pode ser mantida em memória após o primeiro cálculo;
+- o navegador/CDN pode usar cache HTTP de conteúdo estático;
+- a requisição do dataset nunca deve carregar renda, moradores, percentil ou resultado em URL, query string, header customizado ou body;
+- o cache do dataset não deve ser confundido com persistência do cálculo individual.
+
+Manifestos que mudam após atualização aprovada, como o alinhamento mensal de preços, devem ser revalidados conforme sua política de atualização e não tratados como imutáveis sem versionamento adequado.
+
+---
+
 # 13. URLs
 
 É proibido colocar renda em:
@@ -367,6 +387,16 @@ methodology_opened
 recalculate_clicked
 financial_checkup_interest
 ```
+
+Parâmetros categóricos estritamente necessários podem incluir:
+
+```text
+share_channel
+share_mode
+app_version
+```
+
+onde `share_mode` admite apenas categorias como `generic` ou `position`, sem carregar o valor da posição.
 
 ---
 
@@ -1104,6 +1134,32 @@ Utilizar mecanismo seguro de variáveis/segredos da infraestrutura.
 
 ---
 
+# 68A. Achado Operacional — Google Drive Público Com Escrita
+
+Verificação realizada em 14/08/2026 identificou na pasta raiz `Calculadora de renda` e no arquivo `.env.local` a permissão:
+
+```text
+type = anyone
+role = writer
+allowFileDiscovery = false
+```
+
+Isto significa que qualquer pessoa com o link pode editar o conteúdo compartilhado. Como `.env.local` está dentro da mesma pasta e herda essa permissão, o cenário deve ser tratado como **P0 operacional de segurança**.
+
+### Ações exigidas antes de produção
+
+1. restringir o compartilhamento público de escrita;
+2. confirmar que os conectores autorizados continuam funcionando sem acesso público;
+3. remover do espaço compartilhado cópias de arquivos de segredos que não precisem estar no Drive;
+4. considerar rotação de tokens, chaves ou credenciais que possam ter ficado acessíveis;
+5. revisar `.git`, `.vercel`, builds e outros artefatos locais que não precisem ser sincronizados publicamente.
+
+### Limite de automação
+
+Um agente não deve alterar permissões de compartilhamento ou rotacionar credenciais sem decisão explícita do responsável, pois isso pode interromper integrações e acesso legítimo.
+
+---
+
 # 69. Client-side Secrets
 
 Qualquer valor enviado ao JavaScript público deve ser considerado:
@@ -1188,7 +1244,8 @@ Ainda assim:
 - verificar integridade;
 - versionar;
 - validar checksum;
-- proteger pipeline contra alteração acidental ou maliciosa.
+- proteger pipeline contra alteração acidental ou maliciosa;
+- não anexar dados do usuário às requisições desses artefatos públicos.
 
 ---
 

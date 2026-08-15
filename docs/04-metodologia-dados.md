@@ -1,15 +1,15 @@
 ---
 title: 04-metodologia-dados
 created: 2026-08-12T17:07:15.000-03:00
-modified: 2026-08-13T18:30:00.000-03:00
+modified: 2026-08-14T16:49:00.000-03:00
 ---
 
 # 04-metodologia-dados
 
 **Produto:** Renda Comparada  
-**Versão do documento:** 1.1
+**Versão do documento:** 1.4
 **Status:** Canônico — sujeito a validação estatística antes da produção  
-**Última revisão:** 13/08/2026
+**Última revisão:** 14/08/2026
 
 **Documentos relacionados:**
 
@@ -218,7 +218,7 @@ Em princípio, incluir:
 
 A descrição operacional definitiva deve permanecer alinhada ao dicionário, às notas técnicas e às validações da Fase 1C.
 
-A renda informada pelo usuário e a distribuição devem estar na mesma referência monetária antes da comparação. O método de alinhamento ainda está pendente.
+A renda informada pelo usuário e a distribuição devem estar na mesma referência monetária antes da comparação. Para a V1, a renda nominal vigente é trazida para preços médios de 2025 pelo IPCA nacional, conforme a regra canônica das seções 27–30 e D065.
 
 ---
 
@@ -413,7 +413,7 @@ Blanks estruturais em `VD4019` ou `VD4048` representam ausência daquele compone
 
 # 17. Registro Obrigatório Das Variáveis
 
-Configuração canônica aprovada e pendências explícitas:
+Configuração canônica aprovada:
 
 ```text
 IBGE_YEAR = 2025
@@ -432,11 +432,14 @@ IBGE_COMPONENT_BLANK_RULE = ausência estrutural do componente; zero somente na 
 IBGE_WEIGHT_MISSING_CODES = nenhum observado na edição 20260508
 IBGE_RDPC_NEGATIVE_VALUES_OBSERVED = 0
 IBGE_RDPC_MAX_OBSERVED_2025 = 200165.7922757916
-USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
-USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
+USER_INCOME_PRICE_ALIGNMENT = aprovado
+USER_INCOME_PRICE_ALIGNMENT_METHOD = deflacionar a renda nominal corrente para preços médios de 2025
+USER_INCOME_PRICE_INDEX = IPCA nacional — SIDRA 1737, variável 2266
+USER_INCOME_BASE_PRICE_INDEX_2025 = 7300.8416666666666667
+USER_INCOME_CURRENT_PRICE_INDEX = último mês oficialmente publicado e aprovado no manifesto de preços
 ```
 
-As constatações de missing, negativos e máximo valem para a edição `20260508` e devem ser testadas novamente em toda atualização. O método de alinhamento temporal da renda do usuário permanece pendente.
+As constatações de missing, negativos e máximo valem para a edição `20260508` e devem ser testadas novamente em toda atualização. O alinhamento temporal da renda do usuário foi canonizado em 14/08/2026: a renda nominal vigente é trazida para preços médios de 2025 pelo IPCA nacional antes do lookup na CDF. O mês corrente do índice não é consultado silenciosamente a cada cálculo; ele vem de manifesto versionado e aprovado.
 
 ---
 
@@ -596,27 +599,67 @@ Por causa de empates, essa representação deve ser tratada como aproximação.
 
 ---
 
-# 25. Casas Decimais
+# 25. Precisão Visual Brasileira
 
-Não mostrar precisão excessiva.
+A CDF deve conservar precisão interna completa. O arredondamento acontece somente na apresentação.
 
-A recomendação inicial é:
+A regra de exibição brasileira é canonizada por D071.
 
-### Resultado Principal
+Definir:
 
-> **68%**
+```text
+p = 100 × share_below
+t = 100 - p
+```
 
-ou
+### Faixa Principal
 
-> **67,9%**
+Quando `t >= 1` e a renda estiver dentro do suporte observado:
 
-A escolha final será validada em UX e testes.
+```text
+percentil_exibido = arredondar(p)
+top_exibido = 100 - percentil_exibido
+```
 
-Evitar:
+Exibir, por exemplo:
+
+> **TOP 30%**
+
+> **Percentil 70**
+
+Não arredondar as duas leituras de forma independente se isso puder quebrar a complementaridade visual.
+
+### Cauda Superior
+
+Para `0,1 <= t < 1`, utilizar uma casa decimal.
+
+Para `0 < t < 0,1`, preferir:
+
+> **Entre menos de 0,1% de maior renda na distribuição observada.**
+
+com leitura secundária equivalente a:
+
+> **Acima do percentil 99,9.**
+
+Não exibir `TOP 0%`.
+
+### Renda Zero
+
+Em `RDPC = 0`, não usar `TOP 100%` como headline. Informar que zero é o menor nível observado e que existem empates nesse valor.
+
+### Acima Do Máximo
+
+Acima do maior RDPC observado, não extrapolar. Informar que o valor supera o máximo observado na distribuição e que não há resolução suficiente para uma posição mais fina.
+
+### Moeda
+
+Valores monetários mostrados ao usuário podem usar duas casas decimais. Cálculos internos não devem sofrer arredondamento prematuro.
+
+Evitar qualquer precisão visual como:
 
 > **67,934728%**
 
-porque os dados não justificam esse nível de precisão perceptiva.
+porque ela não melhora a interpretação e sugere exatidão individual inexistente.
 
 ---
 
@@ -667,22 +710,25 @@ A referência canônica da distribuição escolhida é:
 IBGE_PRICE_REFERENCE = preços médios de 2025
 ```
 
-O método operacional de alinhamento da renda atual do usuário permanece pendente. As alternativas legítimas são:
+“Preços médios de 2025” significam o nível de preços dado pela **média aritmética dos 12 números-índice mensais do IPCA nacional de janeiro a dezembro de 2025**, e não dezembro de 2025.
 
-1. trazer a renda do usuário para preços médios de 2025; ou
-2. atualizar a distribuição para uma referência posterior.
+Para a série SIDRA 1737, variável 2266:
 
-Nenhuma das duas fórmulas está autorizada nesta fase.
+```text
+IPCA_MEDIO_2025 = 7300.8416666666666667
+```
+
+A estratégia canônica da V1 é **preservar a CDF em preços médios de 2025 e trazer a renda nominal corrente do usuário para essa mesma referência monetária**. Não atualizar os thresholds da CDF a cada mês.
 
 ---
 
 # 29. Fonte De Inflação
 
-Para atualizações monetárias brasileiras, a fonte canônica é:
+Para o alinhamento temporal nacional da V1, a fonte canônica é:
 
-> **IPCA — IBGE**
+> **IPCA nacional — IBGE, SIDRA tabela 1737, variável 2266, número-índice.**
 
-quando metodologicamente compatível e após aprovação da regra operacional.
+A V1 não solicita UF. Por isso, o IPCA nacional é adotado como compromisso metodológico transparente entre simplicidade da jornada e precisão regional. Ele não deve ser descrito como equivalente ao deflator regional exato de um usuário cuja UF fosse conhecida.
 
 Não utilizar:
 
@@ -691,12 +737,13 @@ Não utilizar:
 - variação do salário mínimo;
 - CDI;
 - Selic;
+- projeção de IPCA ainda não publicada;
 
-como substitutos de inflação.
+como substitutos do índice oficial.
 
 ---
 
-# 30. Regra Operacional Recomendada
+# 30. Regra Operacional Canônica
 
 A regra operacional canônica para a distribuição brasileira é:
 
@@ -706,13 +753,30 @@ IBGE_WORK_DEFLATOR = CO1
 IBGE_OTHER_INCOME_VARIABLE = VD4048
 IBGE_OTHER_INCOME_DEFLATOR = CO1e
 IBGE_HOUSEHOLD_ELIGIBLE_COMPONENTS = VD2003
-USER_INCOME_PRICE_ALIGNMENT = [DECIDIDO COMO NECESSÁRIO]
-USER_INCOME_PRICE_ALIGNMENT_METHOD = [PENDENTE]
+USER_INCOME_PRICE_ALIGNMENT = aprovado
+USER_INCOME_PRICE_INDEX = IPCA nacional — SIDRA 1737, variável 2266
+USER_INCOME_BASE_INDEX_2025 = 7300.8416666666666667
+USER_INCOME_CURRENT_INDEX = último mês oficial aprovado no manifesto de preços
 ```
 
 Aplicar `CO1` ao componente habitual `VD4019` e `CO1e` ao componente efetivo `VD4048`, usando a chave ano, trimestre e UF do arquivo oficial de deflatores. Somar no nível correto de domicílio e dividir por `VD2003`.
 
-Não aplicar um fator único sobre `VD5011` ou `VD5008`. Fatores, componentes e referência devem constar nos metadados; a aplicação não deverá consultar inflação em cada cálculo. O método para alinhar a renda corrente do usuário a preços médios de 2025 continua pendente e não pode ser improvisado.
+Para a renda informada pelo usuário, definir:
+
+```text
+B = IPCA médio de 2025
+M = número-índice do último mês oficial disponível e aprovado
+
+renda_domiciliar_2025 = renda_domiciliar_corrente × B / M
+RDPC_usuario_2025 = renda_domiciliar_2025 / moradores_elegíveis
+posição_brasil = lookup_CDF_2025(RDPC_usuario_2025)
+```
+
+A entrada da V1 é interpretada como **renda mensal nominal vigente na data do cálculo**. A aplicação deve registrar e tornar acessível o mês do IPCA efetivamente utilizado. Não projetar mês ainda não publicado.
+
+A CDF de 2025 permanece imutável. Atualizações mensais de IPCA geram apenas um manifesto pequeno, versionado, validado e aprovado; a aplicação não consulta “latest” silenciosamente a cada cálculo.
+
+Não aplicar um fator único sobre `VD5011` ou `VD5008`. Fatores, componentes e referência devem constar nos metadados.
 
 ---
 
@@ -800,23 +864,22 @@ O PIP reúne estimativas de pobreza, desigualdade e prosperidade compartilhada p
 
 ---
 
-# 34. Versão Internacional Atualmente Pesquisada
+# 34. Versão Internacional Da V1
 
-Na data desta revisão, o PIP informa como versão disponível baseada em PPPs de 2021:
+Para a V1, congelar a versão PIP baseada em PPPs de 2021 identificada como:
 
 ```text
-20260324_2021
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
 ```
 
-O site de produção do PIP também apresenta identificadores completos de build relacionados a essa versão.
-
-O Renda Comparada deve congelar a versão utilizada.
+Essa escolha é regida por D066.
 
 Nunca consultar simplesmente:
 
 > **latest**
 
-em produção sem registrar qual versão foi recebida.
+em produção sem registrar e aprovar nova versão.
 
 ---
 
@@ -840,15 +903,21 @@ Esse ponto é metodologicamente essencial.
 
 O resultado mundial **não deve ser descrito como uma distribuição mundial perfeitamente homogênea de salários ou renda bruta familiar**.
 
-A formulação deve ser mais cautelosa.
+A formulação canônica deve tratá-lo como:
 
-Exemplo:
+> **posição monetária global estimada**
 
-> **Sua posição aproximada na comparação mundial**
+A explicação deve informar, em linguagem acessível:
 
-e:
+> **A comparação global utiliza dados de renda ou consumo domiciliar por pessoa, conforme a metodologia disponível para cada país, ajustados por poder de compra.**
 
-> **A comparação global utiliza dados de renda ou consumo domiciliar por pessoa, conforme a metodologia disponível para cada país.**
+Não usar como afirmação principal:
+
+> **“Você ganha mais do que X% do mundo.”**
+
+sem nova decisão metodológica que demonstre que essa simplificação é defensável.
+
+Essa regra é regida por D067.
 
 ---
 
@@ -1112,41 +1181,39 @@ Precisamos distinguir:
 - extrapolação;
 - nowcast.
 
-O PIP informa explicitamente quando dados são interpolados e possui nowcasts para anos recentes.
+A versão PIP vigente informa que estimativas posteriores a 2024 são nowcasts.
 
 ---
 
-# 50. Decisão Inicial Recomendada
+# 50. Ano Mundial Canonizado Para A V1
 
-Para a V1, utilizar:
-
-> **o ano global mais recente que tenha sido explicitamente aprovado e congelado pelo projeto.**
-
-O manifesto deve possuir:
+Conforme D066, a V1 congela:
 
 ```text
-GLOBAL_REFERENCE_YEAR = [DEFINIR]
-GLOBAL_ESTIMATION_TYPE = [DEFINIR]
+GLOBAL_REFERENCE_YEAR = 2024
+GLOBAL_ESTIMATION_TYPE = reference-year aggregate; não nowcast
 PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
 ```
+
+A expressão `reference-year aggregate; não nowcast` não significa que todos os países realizaram pesquisa domiciliar em 2024. O agregado mundial continua sendo construído pelo PIP a partir de pesquisas, interpolações e alinhamentos entre países.
 
 Não deixar o ano variar automaticamente.
 
 ---
 
-# 51. Opção 2025
+# 51. Anos Posteriores A 2024
 
-Como Brasil utiliza 2025, existe uma vantagem comunicacional em utilizar uma estimativa mundial referente também a 2025.
+Para a V1, não utilizar 2025 ou 2026 como ano global apenas para aproximar visualmente o ano brasileiro.
 
-Porém:
+Na versão PIP congelada, estimativas posteriores a 2024 são nowcasts.
 
-> dados globais de 2025 podem envolver interpolação/nowcast.
+Uma futura adoção de ano posterior exige:
 
-Se essa opção for adotada, a interface deverá informar:
-
-> **Estimativa mundial 2025 — Banco Mundial PIP**
-
-e não sugerir que todos os países realizaram pesquisas domiciliares em 2025.
+1. nova versão metodológica;
+2. validação;
+3. decisão explícita;
+4. linguagem que identifique corretamente o uso de nowcast.
 
 ---
 
@@ -1209,7 +1276,7 @@ Exemplo:
     metadata.json
 
   /world
-    distribution-2025-pip-20260324_2021.json
+    distribution-2024-pip-20260324_2021.json
     metadata.json
 ```
 
@@ -1257,7 +1324,7 @@ Exemplo:
   "dataset": "global-welfare-distribution",
   "source": "World Bank PIP",
   "pip_version": "20260324_2021",
-  "reference_year": 2025,
+  "reference_year": 2024,
   "ppp_basis": 2021,
   "ppp_indicator": "PA.NUS.PRVT.PP",
   "processed_at": "YYYY-MM-DD",
@@ -1515,7 +1582,7 @@ IBGE_RDPC_P99_9_OBSERVED_2025 = 38991.66
 IBGE_RDPC_MAX_OBSERVED_2025 = 200165.79
 ```
 
-Esses valores são diagnósticos, não pisos, tetos ou pontos automáticos de truncamento. A política de exibição da cauda permanece pendente. Não remover outliers automaticamente.
+Esses valores são diagnósticos, não pisos, tetos ou pontos automáticos de truncamento. A exibição da cauda brasileira é regida por D071: não extrapolar acima do máximo observado, não exibir `TOP 0%` e reduzir a precisão visual na cauda. Não remover outliers automaticamente.
 
 ---
 
@@ -1727,25 +1794,24 @@ Antes do deploy definitivo da V1, resolver:
 - validar `V1032` no arquivo real — **feito na Fase 1C**;
 - confirmar tratamento dos blanks estruturais dos componentes — **feito na Fase 1C**;
 - confirmar domínio de renda zero — **feito na Fase 1C**;
-- confirmar valores negativos e extremos — **feito na Fase 1C; política de exibição da cauda pendente**;
+- confirmar valores negativos e extremos — **feito na Fase 1C; exibição da cauda Brasil canonizada por D071**;
 - confirmar regra operacional do deflator — **feito na Fase 1C e canonizado na Fase 1C-R**;
-- definir alinhamento da renda do usuário com preços médios de 2025;
-- documentar o procedimento exato de partição/arredondamento antes dos golden cases de cortes;
+- definir alinhamento da renda do usuário com preços médios de 2025 — **feito e canonizado por D065**;
+- documentar o procedimento de CDF/empates — **feito; resíduos de R$ 1 em P90/P99 permanecem documentados sem ajuste artificial**;
 - reproduzir indicadores oficiais do IBGE — **feito na Fase 1C, com resíduos documentados**;
-- gerar CDF brasileira;
-- validar percentis;
-- definir casas decimais;
-- congelar versão PIP;
-- definir ano mundial;
-- definir tratamento de nowcast;
-- validar PPP utilizada;
-- validar conversão BRL → PPP;
-- construir CDF mundial;
-- reproduzir headcounts conhecidos do PIP;
-- documentar limites de renda extrema;
-- gerar manifestos;
-- gerar checksums;
-- executar testes de regressão.
+- gerar CDF brasileira — **feito e validado; artefato deve ser recuperado/regenerado com SHA-256 aprovado antes da integração**;
+- validar percentis brasileiros — **feito com golden cases**;
+- definir precisão visual Brasil — **feito por D071**;
+- congelar versão PIP — **feito por D066**;
+- definir ano mundial — **feito por D066: 2024**;
+- definir tratamento de nowcast — **feito por D066: anos posteriores a 2024 não entram automaticamente**;
+- validar PPP utilizada — **pendente D069**;
+- validar conversão BRL → PPP — **pendente D069**;
+- construir CDF/representação mundial — **pendente D068**;
+- reproduzir headcounts/quantis na mesma release PIP — **pendente D068**;
+- definir limites, empates e precisão do Mundo — **pendente D070**;
+- gerar manifestos/checksums de produção — **Brasil parcial; Mundo pendente**;
+- executar testes de regressão finais — **Brasil definido; Mundo pendente D068–D070**.
 
 ## Validações Formais Executadas Na Fase 1C
 

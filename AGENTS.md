@@ -1,7 +1,7 @@
 ---
 title: AGENTS
 created: 2026-08-12T18:05:05.000-03:00
-modified: 2026-08-12T18:16:47.438-03:00
+modified: 2026-08-14T16:58:00.000-03:00
 ---
 
 # AGENTS
@@ -44,7 +44,7 @@ Não implementar automaticamente toda a visão futura.
 
 Antes de alterações relevantes, leia:
 
-1. `README.md`
+1. `docs/README.md`
 2. `docs/01-visao-produto.md`
 3. `docs/02-prd-v1.md`
 4. `docs/03-jornada-ux-v1.md`
@@ -343,6 +343,8 @@ COMPARTILHAMENTO
 EXPERIÊNCIA PRINCIPAL CONCLUÍDA
 ↓
 CONTINUAÇÃO OPCIONAL
+
+```
 
 
 
@@ -1362,6 +1364,117 @@ Tudo que não ajuda diretamente a:
 - compartilhar;
 
 deve ser questionado antes de entrar no escopo atual.
+
+
+---
+
+# 55A. Estado Metodológico Protegido Da V1
+
+Antes de alterar funções de domínio, datasets ou integração, considere como **fechadas**, salvo nova decisão explícita registrada em `docs/decisoes.md`:
+
+## Brasil
+
+```text
+D063 — construção brasileira do RDPC real
+D065 — alinhamento da renda nominal corrente para preços médios de 2025
+D071 — precisão visual e tratamento da cauda brasileira
+D072 — entrega sob demanda da CDF brasileira
+```
+
+Contrato de integração obrigatório:
+
+```text
+data/production/brazil/brazil-income-cdf-2025.json
+data/production/brazil/brazil-price-alignment.json
+data/production/brazil/brazil-income-engine-manifest.json
+```
+
+A CDF é imutável e possui SHA-256:
+
+```text
+5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5
+```
+
+Ela foi gerada antes de D065 e contém metadado histórico `frontendIntegrationAllowed = false`. **Não alterar esse campo dentro da CDF.** A promoção posterior do motor Brasil é registrada por `brazil-income-engine-manifest.json`, que referencia D063, D065 e D071 e os checksums dos artefatos aprovados.
+
+Consequências:
+
+- usar PNAD Contínua 2025, release 20260508;
+- usar `VD4019 × CO1 + VD4048 × CO1e`, agregado no domicílio e dividido por `VD2003`;
+- usar `V1032` como peso das pessoas elegíveis;
+- usar a CDF brasileira validada e seus golden cases, conferindo o manifesto de motor;
+- alinhar renda corrente à referência de preços da CDF via manifesto de IPCA aprovado;
+- aplicar D071 somente na camada de apresentação, sem arredondamento prematuro;
+- seguir D072: não embutir a CDF de 3,95 MB no bundle inicial; carregar como artefato estático no primeiro cálculo e reutilizar em memória;
+- não voltar a `VD5011 × CO1`;
+- não usar PIP como distribuição brasileira;
+- não inferir percentis a partir de média;
+- nenhuma requisição do artefato CDF pode carregar renda, moradores ou resultado do usuário em URL/query/header customizado.
+
+## Mundo
+
+Já estão fechadas:
+
+```text
+D066 — versão PIP / build / PPP 2021 / ano global 2024
+D067 — conceito e linguagem de posição monetária global estimada
+```
+
+Continuam **bloqueadas e não podem ser improvisadas**:
+
+```text
+D068 — fonte operacional e construção dos quantis/CDF mundial
+D069 — conversão da entrada corrente em BRL para PPP 2021 compatível com PIP
+D070 — golden cases, caudas e regras finais de exibição mundial
+```
+
+Enquanto D068–D070 não estiverem ativas:
+
+- não mostrar número mundial provisório ao usuário;
+- não manter `WORLD_CURVE` antiga como fallback;
+- não reutilizar `PPP_2021_BRL`, `BRAZIL_CPI_2024` ou outra constante do protótipo por conveniência;
+- não substituir a metodologia PIP por WDI sem decisão explícita;
+- não usar `popshare` no agregado mundial: o wrapper oficial restringe a opção ao nível de país e `pip_wb.ado` rejeita `popshare()` com `wb`;
+- pode preparar arquitetura e feature flag, mas o resultado Mundo deve permanecer bloqueado.
+
+Direção de pesquisa protegida — ainda **não canônica**:
+
+```text
+CDF candidata:
+World Bank — 1000 Binned Global Distribution
+March 2026 PIP vintage
+resourceId = DR0094423
+year = 2024
+↓
+ordenar globalmente por welf
+pesar por pop
+↓
+validar contra pip wb / pip-grp por povline
+```
+
+A base em bins só pode ser promovida se o erro medido for compatível com a precisão de exibição. Não definir tolerância antes de medir o erro.
+
+Para D069, obter PPP e CPI da mesma release PIP:
+
+```text
+PIP aux / ppp
+PIP aux / cpi
+```
+
+WDI/ICP são fontes de conferência, não substitutos automáticos das tabelas auxiliares congeladas.
+
+Procedimentos de execução:
+
+- `docs/research/fase-2a-api-reproducao.md` ou equivalente no diretório de pesquisa;
+- `fase-2b-protocolo-validacao-cdf-mundo.md`;
+- `fase-2c-protocolo-conversao-brl-ppp2021.md`;
+- `pacote-execucao-mundo.md`.
+
+## Frontend Atual
+
+O `src/App.tsx` existente é referência visual/histórica, **não fonte de verdade metodológica**.
+
+Quando o código conflitar com `docs/04-metodologia-dados.md` ou `docs/decisoes.md`, prevalecem os documentos canônicos e os datasets/manifestos validados.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: 09-fontes-referencias
 created: 2026-08-12T17:40:00.000-03:00
-modified: 2026-08-13T18:30:00.000-03:00
+modified: 2026-08-14T16:12:00.000-03:00
 ---
 
 # 09-fontes-referencias
@@ -11,8 +11,8 @@ modified: 2026-08-13T18:30:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `09-fontes-referencias.md`  
 **Status:** Canônico para seleção de fontes externas  
-**Versão:** 1.1
-**Última verificação das fontes:** 13/08/2026
+**Versão:** 1.2
+**Última verificação das fontes:** 14/08/2026
 
 Documentos relacionados:
 
@@ -317,19 +317,36 @@ Médias por UF e outros agregados só serão diretos quando conceito, visita, po
 
 **Classificação:** `CANÔNICA`
 
-Uso:
+Uso na V1:
 
-> correção temporal de valores brasileiros quando necessária à metodologia.
+> alinhar a renda mensal nominal vigente informada pelo usuário à referência de **preços médios de 2025** da CDF brasileira.
 
-Fonte:
+Fonte geral:
 
 [IBGE — IPCA](https://www.ibge.gov.br/estatisticas/economicas/precos-e-custos/9256-indice-nacional-de-precos-ao-consumidor-amplo.html)
 
-Utilizar para:
+Série operacional canonizada por D065:
 
-- atualização monetária;
-- comparação entre valores de anos diferentes;
-- histórico futuro.
+> **SIDRA tabela 1737, variável 2266 — IPCA, número-índice, Brasil.**
+
+URL da série usada na Fase 1F:
+
+[SIDRA — IPCA nacional 2025 a julho/2026](https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/2266/p/202501-202607?formato=json)
+
+Referência anual:
+
+```text
+IPCA_MEDIO_2025 = média aritmética dos 12 números-índice mensais de 2025
+                = 7300.8416666666666667
+```
+
+Regra:
+
+```text
+renda_domiciliar_2025 = renda_domiciliar_corrente × IPCA_MEDIO_2025 / IPCA_mes_oficial
+```
+
+A V1 usa o índice nacional porque não coleta UF. O mês corrente deve vir de manifesto versionado e aprovado; não consultar `latest` silenciosamente e não projetar IPCA ainda não publicado.
 
 ---
 
@@ -480,35 +497,100 @@ Documentação oficial:
 
 [World Bank PIP API](https://pip.worldbank.org/api)
 
-A API disponibiliza recursos relacionados a:
+Base de produção utilizada pelos clientes oficiais:
 
-- estatísticas;
+```text
+https://api.worldbank.org/pip/v1
+```
+
+O cliente oficial `pipr` do Banco Mundial confirma a construção direta dessa base e dos endpoints. Recursos relevantes para a V1:
+
+```text
+/pip
+/pip-grp
+/aux
+/versions
+/citation
+/valid-params
+/valid-years
+```
+
+A API disponibiliza:
+
+- estatísticas por país;
+- agregações globais e regionais;
+- consulta por `povline`;
+- consulta inversa por `popshare` **no nível de país**;
 - versões;
 - anos válidos;
-- dados agrupados;
-- agregações;
-- curvas de Lorenz;
-- parâmetros auxiliares.
+- tabelas auxiliares;
+- curvas distributivas e parâmetros.
 
-A API deve ser utilizada principalmente pelo:
+### Rota para D068 — revisão após inspeção do cliente oficial
 
-> **pipeline de atualização**
+A hipótese de usar `popshare` diretamente no agregado mundial foi rejeitada.
 
-e não consultada obrigatoriamente a cada cálculo do usuário.
+O wrapper oficial `worldbank/pip` documenta `popshare(#)` somente para `pip cl` e o código de `pip_wb.ado` rejeita explicitamente sua combinação com o subcomando `wb`.
+
+Portanto, a candidata operacional principal para construir a CDF mundial passa a ser:
+
+```text
+1000 Binned Global Distribution
+↓
+vintage PIP março/2026
+↓
+ano 2024
+↓
+ordenar por welf
+↓
+pesar por pop
+↓
+CDF global experimental
+```
+
+A validação deve ser feita contra o endpoint agregado oficial:
+
+```text
+/pip-grp
+group_by = wb
+povline = <linha monetária>
+```
+
+em múltiplos pontos de controle.
+
+A base em faixas não é automaticamente canônica: só poderá ser usada se o erro contra `pip wb` for compatível com a precisão exibida ao usuário.
+
+### Rota preferencial para D069
+
+As tabelas auxiliares oficiais:
+
+```text
+/aux?table=ppp
+/aux?table=cpi
+```
+
+são as fontes preferenciais para os fatores PPP e CPI efetivamente usados nos cálculos do PIP.
+
+Não substituir silenciosamente esses fatores por série WDI semelhante sem validação.
 
 ---
 
 # 18. Versão PIP
 
-Na última verificação deste documento, o PIP apresentava para PPPs de 2021:
+A versão mundial canonizada para a V1 é:
 
 ```text
-20260324_2021
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+PPP_BASE = 2021
+GLOBAL_REFERENCE_YEAR = 2024
 ```
 
-Antes de cada atualização do dataset:
+O PIP informa que estimativas posteriores a 2024 são `nowcasts`. Por isso a V1 congela 2024 enquanto D066 permanecer ativa.
 
-> consultar novamente a versão oficial.
+Antes de qualquer atualização futura:
+
+> consultar novamente a versão oficial, comparar metodologias e exigir aprovação explícita.
 
 Nunca utilizar apenas:
 
@@ -517,6 +599,36 @@ latest
 ```
 
 sem registrar o identificador efetivamente processado.
+
+---
+
+# 18A. Distribuição Global Em 1.000 Faixas
+
+**Classificação:** `OFICIAL-AUXILIAR / PLANO B`
+
+Fonte:
+
+[World Bank Data Catalog — 1000 Binned Global Distribution](https://datacatalog.worldbank.org/search/dataset/0064304/1000-binned-global-distribution)
+
+A edição publicada em março de 2026:
+
+- usa a vintage PIP de março de 2026;
+- cobre 1990–2026;
+- contém 1.000 faixas por economia/ano;
+- registra `welf` em dólares internacionais PPP 2021 por pessoa/dia;
+- registra `pop` como peso populacional.
+
+O próprio Banco Mundial alerta que essa base:
+
+- não substitui os microdados;
+- não substitui as estatísticas estimadas diretamente pelo PIP;
+- perde desigualdade dentro de cada faixa.
+
+Consequência:
+
+> usar como candidata operacional principal para a CDF mundial, sempre com validação contra `pip wb` / `pip-grp` por `povline`; rejeitar se o erro medido for material para a precisão da V1.
+
+Não canonizar automaticamente como CDF de produção.
 
 ---
 
@@ -603,7 +715,7 @@ Utilizar para entender:
 
 # 23. PPP — Consumo Privado
 
-Para comparação de renda/consumo familiar, investigar e validar preferencialmente a série:
+Indicador WDI relevante para conferência:
 
 ```text
 PA.NUS.PRVT.PP
@@ -611,15 +723,29 @@ PA.NUS.PRVT.PP
 
 Descrição:
 
-> **PPP conversion factor, private consumption**
+> **PPP conversion factor, households and NPISHs final consumption expenditure — LCU per international dollar**
 
 Referência oficial:
 
-[World Bank DataBank — PA.NUS.PRVT.PP](https://databank.worldbank.org/metadataglossary/africa-development-indicators/series/PA.NUS.PRVT.PP)
+[World Bank Data — PA.NUS.PRVT.PP](https://data.worldbank.org/indicator/PA.NUS.PRVT.PP?locations=BR)
 
-A seleção definitiva deve permanecer registrada em:
+### Regra da V1
 
-`04-metodologia-dados.md`
+Para D069, a prioridade é obter o PPP diretamente da tabela auxiliar da **mesma versão PIP congelada**:
+
+```text
+PIP /aux → table=ppp
+```
+
+A série WDI `PA.NUS.PRVT.PP` deve ser utilizada como:
+
+```text
+CROSS-CHECK OFICIAL
+```
+
+e não como substituto automático da tabela PIP.
+
+Se os valores divergirem, suspender a conversão mundial até explicar conceitualmente e numericamente a diferença.
 
 ---
 
@@ -1780,13 +1906,13 @@ Antes do lançamento da V1:
 - `V1032` validado no arquivo real;
 - missing, zeros, negativos e extremos inspecionados;
 - regra operacional do deflator comprovada;
-- alinhamento da renda do usuário com preços médios de 2025 definido;
+- alinhamento da renda do usuário com preços médios de 2025 canonizado em D065, usando IPCA nacional SIDRA 1737 / variável 2266;
 - média de R$ 2.264 e agregados compatíveis reproduzidos;
-- procedimento exato de partição/arredondamento dos cortes documentado antes dos golden cases;
+- CDF brasileira, empates, extremos e golden cases validados; resíduos de R$ 1 em P90 e P99 permanecem documentados sem correção artificial;
 - PIP versionado;
 - ano global definido;
 - PPP definida;
-- manifestos gerados;
+- manifestos brasileiros de fonte, CDF e alinhamento temporal gerados/versionados; manifestos globais permanecem pendentes;
 - URLs oficiais registradas;
 - metodologia pública atualizada;
 - fontes exibidas na interface;

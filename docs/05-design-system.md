@@ -1,7 +1,7 @@
 ---
 title: 05-design-system
 created: 2026-08-12T17:23:10.000-03:00
-modified: 2026-08-12T17:28:42.575-03:00
+modified: 2026-08-14T16:55:00.000-03:00
 ---
 
 # 05-design-system
@@ -11,8 +11,8 @@ modified: 2026-08-12T17:28:42.575-03:00
 **Produto:** Renda Comparada  
 **Documento:** `05-design-system.md`  
 **Status:** Canônico para interface e apresentação visual  
-**Versão:** 1.0  
-**Última revisão:** 12/08/2026
+**Versão:** 1.1
+**Última revisão:** 14/08/2026
 
 Documentos relacionados:
 
@@ -610,12 +610,14 @@ Exemplo:
 ```text
 BRASIL
 
-67,9%
-
-Percentil aproximado
-
 TOP 32%
+
+Percentil 68
+
+explicação curta
 ```
+
+Para a V1, a leitura intuitiva `TOP X%` é o resultado principal; o percentil fica como leitura estatística secundária.
 
 A hierarquia visual deve permitir compreender o resultado antes de ler o parágrafo explicativo.
 
@@ -985,8 +987,8 @@ Pode usar dois painéis:
 ┌─────────────────┐  ┌─────────────────┐
 │ BRASIL          │  │ MUNDO           │
 │                 │  │                 │
-│ 67,9%           │  │ 76,6%           │
-│ TOP 32%         │  │ TOP 23%         │
+│ TOP 32%         │  │ TOP Y%          │
+│ Percentil 68    │  │ posição estimada │
 └─────────────────┘  └─────────────────┘
 ```
 
@@ -1009,12 +1011,14 @@ em sequência vertical.
 Ordem:
 
 1. contexto: Brasil/Mundo;
-2. número principal;
-3. TOP percentual;
+2. `TOP X%` ou posição intuitiva equivalente;
+3. percentil/leitura estatística secundária;
 4. interpretação;
 5. visualização;
 6. fonte;
 7. metodologia.
+
+No resultado Mundo, a hierarquia deve incluir sinalização textual de que a posição é estimada e metodologicamente menos direta que a brasileira.
 
 ---
 
@@ -1137,19 +1141,54 @@ em vez de nomenclatura estatística excessivamente técnica quando não necessá
 
 Não fazer a interface parecer mais precisa que os dados.
 
-Se a metodologia recomenda:
+Para **Brasil**, seguir D071.
+
+### Faixa principal
+
+Quando a posição `TOP` for de pelo menos 1%, usar inteiros complementares:
 
 ```text
-68%
+TOP 30%
+Percentil 70
 ```
 
-não desenhar um marcador em:
+O percentil é arredondado primeiro para exibição e o `TOP` visual é seu complemento, evitando resultados como `Percentil 68` + `TOP 33%`.
+
+### Cauda superior
+
+Entre 0,1% e 1% no topo, usar uma casa decimal.
+
+Abaixo de 0,1%, usar:
+
+> **TOP < 0,1%**
+
+ou a frase editorial equivalente:
+
+> **Entre menos de 0,1% de maior renda na distribuição observada.**
+
+Nunca usar:
+
+> **TOP 0%**
+
+### Acima do máximo observado
+
+Não inventar posição mais fina. Substituir o número por mensagem de limite da pesquisa.
+
+### Renda zero
+
+Não usar `TOP 100%` como headline. Usar linguagem de menor nível observado/empate.
+
+### Precisão interna versus visual
+
+A posição pode ser calculada internamente com muitas casas, mas a interface não deve desenhar marcador em:
 
 ```text
 67,9324%
 ```
 
-com precisão de pixel como se essa exatidão fosse real.
+como se essa precisão correspondesse a uma posição individual exata.
+
+A regra D071 vale somente para Brasil. A precisão do Mundo depende de D070.
 
 ---
 
@@ -1160,14 +1199,18 @@ O bloco deve aparecer imediatamente após o resultado principal.
 Estrutura:
 
 ```text
-Compartilhe sua posição
+Compartilhar
 
 Sua renda não será mostrada.
 
 [ Compartilhar ]
 [ WhatsApp ]
 [ Copiar link ]
+
+[ ] Incluir minha posição — sem mostrar minha renda
 ```
+
+O modo inicial é genérico e sem posição. A inclusão da posição exige ação explícita.
 
 A frase de privacidade é parte da UX.
 
@@ -1195,7 +1238,22 @@ compartilhamento
 
 O card social deve ser minimalista.
 
-Formato conceitual:
+### Card padrão
+
+Genérico:
+
+```text
+RENDA COMPARADA
+
+Você é mais rico do que
+quantos brasileiros?
+
+Descubra sua posição.
+```
+
+### Card com posição
+
+Somente após escolha explícita:
 
 ```text
 RENDA COMPARADA
@@ -1208,13 +1266,15 @@ de renda brasileira.
 E você?
 ```
 
-Não incluir por padrão:
+Não incluir:
 
 - renda;
 - número de moradores;
 - nome;
 - localização;
 - patrimônio.
+
+Não codificar a posição em URL pública individual.
 
 ---
 
@@ -1431,19 +1491,32 @@ Não usar:
 
 # 63. Loading
 
-Se o cálculo for instantâneo:
+Seguir D072.
 
-> não criar loading artificial.
+### Primeiro cálculo Brasil
 
-Se necessário:
+A CDF brasileira é carregada sob demanda e não faz parte do bundle inicial. Enquanto esse trabalho real estiver em andamento, usar feedback simples:
 
-```text
-Calculando sua posição…
-```
+> **Calculando sua posição…**
 
-com feedback simples.
+O estado deve:
 
-Evitar skeleton complexo para operação de milissegundos.
+- preservar contexto e campos;
+- ser perceptível por tecnologia assistiva;
+- não usar animação longa;
+- não bloquear toda a página desnecessariamente.
+
+### Cálculos seguintes
+
+Quando a CDF já estiver disponível em memória/cache e o cálculo for imediato:
+
+> **não criar loading artificial.**
+
+Evitar skeleton complexo para operação curta.
+
+### Falha
+
+Se o dataset não puder ser carregado, trocar o loading por estado de erro claro. Nunca preencher o resultado com fallback numérico antigo.
 
 ---
 
@@ -1606,8 +1679,11 @@ Exemplo:
 
 ```text
 Fonte: IBGE — PNAD Contínua 2025
-Atualização: agosto de 2026
+Referência de preços: média de 2025
+IPCA usado no alinhamento: [mês vindo do manifesto]
 ```
+
+Para Mundo, ano, versão PIP e referência PPP devem vir do manifesto global aprovado.
 
 Usar:
 
@@ -2039,16 +2115,21 @@ R$ 10.000
 R$ 1.000.000
 ```
 
-### Percentis
+### Posições
+
+Testar:
 
 ```text
-0,1%
-50%
-99%
-99,9%
+RDPC = 0
+TOP 50%
+TOP 1%
+TOP 0,9%
+TOP < 0,1%
+RDPC exatamente no máximo observado
+RDPC acima do máximo observado
 ```
 
-A interface não pode quebrar com valores longos.
+A interface não pode quebrar, exibir `TOP 0%`, extrapolar a cauda ou transformar renda zero em headline `TOP 100%`.
 
 ---
 
