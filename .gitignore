@@ -2,6 +2,7 @@
 node_modules/
 dist/
 coverage/
+public/data/brazil/
 *.tsbuildinfo
 vite.config.js
 vite.config.d.ts

@@ -1,7 +1,7 @@
 # Renda Comparada — Índice da Documentação
 
 **Última revisão:** 15/08/2026
-**Estado:** V1 em preparação; pacote de dados Brasil liberado para futura integração; frontend ainda legado; Mundo parcialmente canonizado e numericamente bloqueado.
+**Estado:** V1 em preparação; motor Brasil integrado ao frontend; Mundo parcialmente canonizado e numericamente bloqueado.
 
 Este diretório contém a documentação de autoridade do projeto. Ele deve ser lido antes de alterações relevantes de produto, dados, UX ou implementação.
 
@@ -72,7 +72,7 @@ Princípios:
 
 ## 4. Brasil — estado
 
-**Status: pacote de dados liberado para futura integração.** Isso não declara o frontend atual integrado nem a aplicação pronta para produção.
+**Status: pacote de dados integrado ao frontend.** Isso não declara a aplicação completa pronta para produção nem autoriza deploy.
 
 Fonte:
 
@@ -131,7 +131,7 @@ Esse manifesto combina, sem modificar os artefatos originais:
 
 A CDF original contém um flag histórico de integração bloqueada porque foi gerada antes de D065. **Não editar a CDF para mudar esse flag.** O manifesto de motor registra a promoção posterior e preserva o SHA da CDF.
 
-O Gate G0 regenerou os manifestos por script determinístico e executou uma suíte nova e explícita de **44/44 checks PASS**. Os relatórios estão em `validation/brazil/brazil-production-package-validation.{json,md}`. A alegação histórica `21/21 PASS` não foi preservada, porque os 21 itens e os relatórios originais não foram encontrados. O PASS atual cobre o pacote de dados, não o frontend.
+O Gate G0 regenerou os manifestos por script determinístico e executou uma suíte nova e explícita de **44/44 checks PASS**. Os relatórios estão em `validation/brazil/brazil-production-package-validation.{json,md}`. A alegação histórica `21/21 PASS` não foi preservada, porque os 21 itens e os relatórios originais não foram encontrados. O Gate G1 adicionou a validação específica do contrato de integração frontend.
 
 Schemas verificáveis:
 
@@ -149,6 +149,8 @@ A CDF possui 3.955.036 bytes brutos e 1.788.882 bytes em gzip -9 local. O lookup
 - reutilizá-lo em memória nas simulações seguintes;
 - nunca enviar renda/moradores na requisição do dataset;
 - falhar com segurança, sem fallback antigo.
+
+O frontend implementa esse contrato por um processo reproduzível que valida e copia os três artefatos canônicos para a área pública do build. Manifesto, alinhamento e CDF são solicitados no primeiro cálculo; hashes, tamanhos e consistência cruzada são verificados no navegador; o runtime compilado é então mantido em memória.
 
 Os números de tamanho e o diagnóstico local de desempenho permanecem registrados em D072. Não existe relatório autônomo `brazil-cdf-delivery-performance` neste checkout; portanto, ele não é tratado como artefato de validação do Gate G0.
 
@@ -254,9 +256,7 @@ research/fase-2a-metodologia-mundo.md
 
 ## 6. Frontend atual
 
-O `src/App.tsx` deve ser tratado como **protótipo visual com motor numérico antigo**.
-
-Ele não é fonte de autoridade metodológica.
+O `src/App.tsx` preserva a direção visual do protótipo, mas o caminho ativo Brasil usa os módulos testáveis de domínio e carregamento em `src/brazil/`. O código continua subordinado à metodologia canônica.
 
 Constantes antigas como:
 
@@ -267,7 +267,7 @@ PPP_2021_BRL
 BRAZIL_CPI_2024
 ```
 
-não devem ser preservadas por compatibilidade nem usadas como fallback.
+não participam mais do caminho ativo e não são usadas como fallback. Mundo aparece apenas em estado explícito de indisponibilidade, sem número provisório.
 
 ---
 
@@ -359,7 +359,7 @@ Antes de usar o Codex ou outro agente de código:
 2. não reabrir D063/D065 sem evidência;
 3. não mostrar Mundo enquanto D068–D070 estiverem bloqueadas;
 4. manter Brasil e Mundo como pipelines metodologicamente distintos;
-5. implementar testes antes de substituir fixtures por valores reais;
+5. preservar e ampliar os testes do contrato Brasil ao alterar a integração;
 6. preservar privacidade como requisito de domínio, não como detalhe de UI;
 7. não promover itens do backlog sem decisão explícita.
 
@@ -383,7 +383,7 @@ golden cases
 D070
 ```
 
-O Brasil pode ser considerado pronto para integração do motor de dados. A experiência completa Brasil + Mundo ainda não está pronta para produção enquanto D068–D070 permanecerem abertas.
+O motor Brasil está integrado. A experiência completa Brasil + Mundo ainda não está pronta para produção enquanto D068–D070 permanecerem abertas.
 
 ## Coleta reprodutível do Mundo — Fase 2A
 

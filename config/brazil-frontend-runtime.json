@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "publicBasePath": "/data/brazil",
+  "engineManifest": {
+    "sourcePath": "data/production/brazil/brazil-income-engine-manifest.json",
+    "publicPath": "/data/brazil/brazil-income-engine-manifest.json",
+    "sha256": "5BE810FA4ED0BA1A1842239CA8FF4CAD65DB5EB9ED71EF1AC7B5228589DDD15F"
+  }
+}

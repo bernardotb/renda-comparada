@@ -4,8 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "sync:brazil-runtime": "node scripts/frontend/sync-brazil-runtime-artifacts.mjs",
+    "predev": "pnpm run sync:brazil-runtime",
     "dev": "vite",
     "typecheck": "tsc -b",
+    "test:frontend": "node --experimental-strip-types --test tests/frontend/*.test.ts",
+    "prebuild": "pnpm run sync:brazil-runtime",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },

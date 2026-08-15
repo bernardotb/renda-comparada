@@ -4,12 +4,12 @@ Aplicação para comparar a renda domiciliar por pessoa com distribuições de r
 
 ## Estado atual
 
-O pacote de dados Brasil está **liberado para uma futura integração**, com metodologia, CDF histórica, alinhamento temporal, manifestos, schemas e validação reproduzível. Isso não significa que o frontend atual esteja integrado nem que a aplicação completa esteja pronta para produção.
+O motor Brasil está integrado ao frontend a partir do pacote canonizado, com metodologia, CDF histórica, alinhamento temporal, manifestos, schemas e validação reproduzível. A aplicação completa ainda não está pronta para produção porque Mundo permanece bloqueado e não houve gate de publicação.
 
 - Brasil: decisões D063, D065, D071 e D072 ativas; pacote de dados validado.
 - Mundo: D066 e D067 ativas; D068, D069 e D070 continuam bloqueadas.
-- Frontend: protótipo visual/histórico com motor numérico legado; não é fonte metodológica.
-- Deploy: fora do Gate G0 e não executado.
+- Frontend: cálculo Brasil usa o pacote canônico; Mundo não exibe resultado numérico.
+- Deploy: fora do Gate G1 e não executado.
 
 ## Autoridade e navegação
 
@@ -28,6 +28,8 @@ data/production/brazil/brazil-income-engine-manifest.json
 ```
 
 A CDF é histórica e imutável. A autorização posterior para integração está no manifesto do motor, não em alteração retroativa da CDF.
+
+No frontend, `pnpm.cmd run sync:brazil-runtime` verifica hashes e tamanhos e copia os três arquivos canônicos para `public/data/brazil/`. Essa saída é ignorada pelo Git e recriada no desenvolvimento/build. O navegador carrega e valida os artefatos somente no primeiro cálculo e os reutiliza em memória.
 
 Geração e validação determinística dos manifestos e relatórios:
 
@@ -52,9 +54,10 @@ python -m unittest discover -s tests/data/brazil -p "test_*.py" -v
 python scripts/data/brazil/production_package.py --validate-only
 ```
 
-Validação do frontend sem modificar o protótipo:
+Validação do frontend:
 
 ```powershell
+pnpm.cmd run test:frontend
 pnpm.cmd run typecheck
 pnpm.cmd run build
 ```
