@@ -16,6 +16,8 @@ data/production/*
 data/production/brazil/*
 !data/production/brazil/README.md
 !data/production/brazil/brazil-income-cdf-2025.json
+!data/production/brazil/brazil-price-alignment.json
+!data/production/brazil/brazil-income-engine-manifest.json
 
 # Caches locais do pipeline Python
 __pycache__/

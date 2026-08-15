@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rendacomparada.local/schemas/brazil-income-engine-manifest.schema.json",
+  "title": "Brazil income engine manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "schema",
+    "schemaSha256",
+    "dataset",
+    "version",
+    "status",
+    "generatedAt",
+    "generatedBy",
+    "decisionIds",
+    "artifacts",
+    "methodology",
+    "precision",
+    "displayPolicy",
+    "delivery",
+    "goldenCases",
+    "integration"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "schema": {"const": "config/schemas/brazil-income-engine-manifest.schema.json"},
+    "schemaSha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "dataset": {"const": "brazil-income-engine"},
+    "version": {"type": "string", "minLength": 1},
+    "status": {"const": "CANONICAL_APPROVED_FOR_INTEGRATION"},
+    "generatedAt": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "generatedBy": {"const": "scripts/data/brazil/production_package.py"},
+    "decisionIds": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^D\\d{3}$"},
+      "minItems": 4
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cdf", "priceAlignment"],
+      "properties": {
+        "cdf": {"$ref": "#/$defs/artifact"},
+        "priceAlignment": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "priceReference", "populationUnit", "weight", "formula", "lookupSemantics"],
+      "properties": {
+        "version": {"const": "1.0.0"},
+        "priceReference": {"const": "preços médios de 2025"},
+        "populationUnit": {"const": "pessoas elegíveis"},
+        "weight": {"const": "V1032"},
+        "formula": {"type": "string", "minLength": 1},
+        "lookupSemantics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["shareBelow", "shareAtOrBelow", "topShare", "interpolation"],
+          "properties": {
+            "shareBelow": {"type": "string", "minLength": 1},
+            "shareAtOrBelow": {"type": "string", "minLength": 1},
+            "topShare": {"const": "1 - shareBelow"},
+            "interpolation": {"const": "nenhuma; CDF empírica em degraus"}
+          }
+        }
+      }
+    },
+    "precision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calculation", "moneyDisplay", "rankingDisplay"],
+      "properties": {
+        "calculation": {"const": "Decimal com 50 dígitos; sem arredondamento prematuro"},
+        "moneyDisplay": {"const": "duas casas decimais quando exibido"},
+        "rankingDisplay": {"const": "D071"}
+      }
+    },
+    "displayPolicy": {"type": "object"},
+    "delivery": {"type": "object"},
+    "goldenCases": {"type": "object"},
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["brazilFrontendIntegrationAllowed", "worldFrontendIntegrationAllowed", "authorization", "cdfHistoricalState"],
+      "properties": {
+        "brazilFrontendIntegrationAllowed": {"const": true},
+        "worldFrontendIntegrationAllowed": {"const": false},
+        "authorization": {"const": "este manifesto resolve a promoção posterior sem reescrever a CDF histórica"},
+        "cdfHistoricalState": {"type": "object"}
+      }
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256", "version", "schema"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+        "version": {"type": "string", "minLength": 1},
+        "schema": {"type": "string", "minLength": 1},
+        "sizeBytes": {"type": "integer", "minimum": 1}
+      }
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rendacomparada.local/schemas/brazil-price-alignment.schema.json",
+  "title": "Brazil price alignment manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "schema",
+    "schemaSha256",
+    "dataset",
+    "version",
+    "status",
+    "decisionId",
+    "generatedAt",
+    "generatedBy",
+    "sourceProposal",
+    "sourceProposalSha256",
+    "source",
+    "sourceUrl",
+    "sidraTable",
+    "sidraVariable",
+    "territory",
+    "index",
+    "indexDescription",
+    "basePriceReference",
+    "baseYear",
+    "baseCalculation",
+    "baseIndex",
+    "inputIncomePeriod",
+    "priceIndexReferenceMonth",
+    "currentIndex",
+    "factorBaseToCurrent",
+    "multiplierCurrentToBase",
+    "conversion",
+    "precision",
+    "accessedAt",
+    "cdfSha256",
+    "monthlyIndex",
+    "integration"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "schema": {"const": "config/schemas/brazil-price-alignment.schema.json"},
+    "schemaSha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "dataset": {"const": "brazil-income-price-alignment"},
+    "version": {"type": "string", "minLength": 1},
+    "status": {"const": "CANONICAL_APPROVED"},
+    "decisionId": {"const": "D065"},
+    "generatedAt": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "generatedBy": {"const": "scripts/data/brazil/production_package.py"},
+    "sourceProposal": {"const": "validation/brazil/brazil-price-alignment-proposal.json"},
+    "sourceProposalSha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "source": {"const": "IBGE SIDRA"},
+    "sourceUrl": {"type": "string", "minLength": 1},
+    "sidraTable": {"const": 1737},
+    "sidraVariable": {"const": 2266},
+    "territory": {"const": "Brasil"},
+    "index": {"const": "IPCA"},
+    "indexDescription": {"type": "string", "minLength": 1},
+    "basePriceReference": {"const": "preços médios de 2025"},
+    "baseYear": {"const": 2025},
+    "baseCalculation": {"type": "string", "minLength": 1},
+    "baseIndex": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"},
+    "inputIncomePeriod": {"type": "string", "minLength": 1},
+    "priceIndexReferenceMonth": {"type": "string", "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])$"},
+    "currentIndex": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"},
+    "factorBaseToCurrent": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"},
+    "multiplierCurrentToBase": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"},
+    "conversion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["currentToBase", "baseToCurrent", "lookupOrder"],
+      "properties": {
+        "currentToBase": {"type": "string", "minLength": 1},
+        "baseToCurrent": {"type": "string", "minLength": 1},
+        "lookupOrder": {"type": "string", "minLength": 1}
+      }
+    },
+    "precision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decimalDigits", "storage", "rounding"],
+      "properties": {
+        "decimalDigits": {"const": 50},
+        "storage": {"const": "decimal strings"},
+        "rounding": {"const": "nenhum arredondamento antes do lookup; arredondamento apenas na apresentação"}
+      }
+    },
+    "accessedAt": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "cdfSha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "monthlyIndex": {
+      "type": "array",
+      "minItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["month", "value"],
+        "properties": {
+          "month": {"type": "string", "pattern": "^\\d{4}-(?:0[1-9]|1[0-2])$"},
+          "value": {"type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)?$"}
+        }
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["frontendIntegrationAllowed", "authorizationSource"],
+      "properties": {
+        "frontendIntegrationAllowed": {"const": false},
+        "authorizationSource": {"const": "data/production/brazil/brazil-income-engine-manifest.json"}
+      }
+    }
+  }
+}

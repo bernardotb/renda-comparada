@@ -1,0 +1,376 @@
+{
+  "artifacts": {
+    "cdf": {
+      "path": "data/production/brazil/brazil-income-cdf-2025.json",
+      "sha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5"
+    },
+    "engine": {
+      "path": "data/production/brazil/brazil-income-engine-manifest.json",
+      "sha256": "5BE810FA4ED0BA1A1842239CA8FF4CAD65DB5EB9ED71EF1AC7B5228589DDD15F"
+    },
+    "priceAlignment": {
+      "path": "data/production/brazil/brazil-price-alignment.json",
+      "sha256": "78A7F6E61C7327124743741F59F0F27715200AD1A17E9F712D34C6A5294F3948"
+    }
+  },
+  "checks": [
+    {
+      "evidence": "C:\\Users\\Usuario\\Downloads\\Novos Vaults\\vault-template-main\\vault-template-main\\Tools and Knowlegde\\Calculadora de renda\\data\\production\\brazil\\brazil-income-cdf-2025.json",
+      "expected": true,
+      "id": "artifact.cdf.exists",
+      "observed": true,
+      "status": "PASS"
+    },
+    {
+      "evidence": "C:\\Users\\Usuario\\Downloads\\Novos Vaults\\vault-template-main\\vault-template-main\\Tools and Knowlegde\\Calculadora de renda\\data\\production\\brazil\\brazil-price-alignment.json",
+      "expected": true,
+      "id": "artifact.price.exists",
+      "observed": true,
+      "status": "PASS"
+    },
+    {
+      "evidence": "C:\\Users\\Usuario\\Downloads\\Novos Vaults\\vault-template-main\\vault-template-main\\Tools and Knowlegde\\Calculadora de renda\\data\\production\\brazil\\brazil-income-engine-manifest.json",
+      "expected": true,
+      "id": "artifact.engine.exists",
+      "observed": true,
+      "status": "PASS"
+    },
+    {
+      "evidence": "data/production/brazil/brazil-income-cdf-2025.json",
+      "expected": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "id": "cdf.sha256",
+      "observed": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "status": "PASS"
+    },
+    {
+      "evidence": "data/production/brazil/brazil-income-cdf-2025.json",
+      "expected": 3955036,
+      "id": "cdf.size",
+      "observed": 3955036,
+      "status": "PASS"
+    },
+    {
+      "evidence": "vetor rdpc",
+      "expected": 83358,
+      "id": "cdf.uniqueValues",
+      "observed": 83358,
+      "status": "PASS"
+    },
+    {
+      "evidence": "metadados CDF",
+      "expected": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+      "id": "cdf.sourceSha256",
+      "observed": "8A44A26C47F16BE54DE787D215145C60B82E33319F806A0F890411B799EDA469",
+      "status": "PASS"
+    },
+    {
+      "evidence": "metadados CDF",
+      "expected": false,
+      "id": "cdf.historicalFrontendFlag",
+      "observed": false,
+      "status": "PASS"
+    },
+    {
+      "evidence": "metadados CDF",
+      "expected": null,
+      "id": "cdf.historicalPriceAlignment",
+      "observed": null,
+      "status": "PASS"
+    },
+    {
+      "evidence": "config/schemas/brazil-price-alignment.schema.json",
+      "expected": "1.0.0",
+      "id": "price.schemaVersion",
+      "observed": "1.0.0",
+      "status": "PASS"
+    },
+    {
+      "evidence": "config/schemas/brazil-price-alignment.schema.json",
+      "expected": "A5531D86FFAE5AC4D319414C8C854DA4F1E67974FA36308C269B11DE1FCD57BB",
+      "id": "price.schemaSha256",
+      "observed": "A5531D86FFAE5AC4D319414C8C854DA4F1E67974FA36308C269B11DE1FCD57BB",
+      "status": "PASS"
+    },
+    {
+      "evidence": "validation/brazil/brazil-price-alignment-proposal.json",
+      "expected": "A302237DB4B4637C815F54B2E63170A9204FB741966E82251F6A40D0C4E5553B",
+      "id": "price.sourceProposalSha256",
+      "observed": "A302237DB4B4637C815F54B2E63170A9204FB741966E82251F6A40D0C4E5553B",
+      "status": "PASS"
+    },
+    {
+      "evidence": "data/production/brazil/brazil-price-alignment.json",
+      "expected": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "id": "price.cdfSha256",
+      "observed": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": "IPCA",
+      "id": "price.index",
+      "observed": "IPCA",
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": 1737,
+      "id": "price.sidraTable",
+      "observed": 1737,
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": 2266,
+      "id": "price.sidraVariable",
+      "observed": 2266,
+      "status": "PASS"
+    },
+    {
+      "evidence": "manifesto congelado",
+      "expected": "2026-07",
+      "id": "price.referenceMonth",
+      "observed": "2026-07",
+      "status": "PASS"
+    },
+    {
+      "evidence": "série mensal versionada",
+      "expected": "7300.8416666666666666666666666666666666666666666667",
+      "id": "price.baseIndex",
+      "observed": "7300.8416666666666666666666666666666666666666666667",
+      "status": "PASS"
+    },
+    {
+      "evidence": "série mensal versionada",
+      "expected": "7657.73",
+      "id": "price.currentIndex",
+      "observed": "7657.73",
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": "CANONICAL_APPROVED",
+      "id": "price.status",
+      "observed": "CANONICAL_APPROVED",
+      "status": "PASS"
+    },
+    {
+      "evidence": "config/schemas/brazil-income-engine-manifest.schema.json",
+      "expected": "1.0.0",
+      "id": "engine.schemaVersion",
+      "observed": "1.0.0",
+      "status": "PASS"
+    },
+    {
+      "evidence": "config/schemas/brazil-income-engine-manifest.schema.json",
+      "expected": "F40FF4731EACA9AADD4FE5FED73422AE259A21B22366613D842CE401D221AB04",
+      "id": "engine.schemaSha256",
+      "observed": "F40FF4731EACA9AADD4FE5FED73422AE259A21B22366613D842CE401D221AB04",
+      "status": "PASS"
+    },
+    {
+      "evidence": "contrato de produção",
+      "expected": "CANONICAL_APPROVED_FOR_INTEGRATION",
+      "id": "engine.status",
+      "observed": "CANONICAL_APPROVED_FOR_INTEGRATION",
+      "status": "PASS"
+    },
+    {
+      "evidence": "docs/decisoes.md",
+      "expected": [
+        "D063",
+        "D065",
+        "D071",
+        "D072"
+      ],
+      "id": "engine.decisions",
+      "observed": [
+        "D063",
+        "D065",
+        "D071",
+        "D072"
+      ],
+      "status": "PASS"
+    },
+    {
+      "evidence": "data/production/brazil/brazil-income-engine-manifest.json",
+      "expected": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "id": "engine.cdfSha256",
+      "observed": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "status": "PASS"
+    },
+    {
+      "evidence": "data/production/brazil/brazil-income-engine-manifest.json",
+      "expected": "78A7F6E61C7327124743741F59F0F27715200AD1A17E9F712D34C6A5294F3948",
+      "id": "engine.priceSha256",
+      "observed": "78A7F6E61C7327124743741F59F0F27715200AD1A17E9F712D34C6A5294F3948",
+      "status": "PASS"
+    },
+    {
+      "evidence": "manifesto de motor",
+      "expected": true,
+      "id": "engine.brazilIntegration",
+      "observed": true,
+      "status": "PASS"
+    },
+    {
+      "evidence": "D068-D070 bloqueadas",
+      "expected": false,
+      "id": "engine.worldIntegration",
+      "observed": false,
+      "status": "PASS"
+    },
+    {
+      "evidence": "D072",
+      "expected": false,
+      "id": "delivery.initialBundle",
+      "observed": false,
+      "status": "PASS"
+    },
+    {
+      "evidence": "D072",
+      "expected": "primeiro cálculo",
+      "id": "delivery.loadTrigger",
+      "observed": "primeiro cálculo",
+      "status": "PASS"
+    },
+    {
+      "evidence": "IPCA mensal versionado",
+      "expected": "1.0488831767113609047358694944989219279512293673903",
+      "id": "price.factor",
+      "observed": "1.0488831767113609047358694944989219279512293673903",
+      "status": "PASS"
+    },
+    {
+      "evidence": "inverso do fator",
+      "expected": "0.95339502263290383268496887023526118923841225358776",
+      "id": "price.multiplier",
+      "observed": "0.95339502263290383268496887023526118923841225358776",
+      "status": "PASS"
+    },
+    {
+      "evidence": "aritmética Decimal",
+      "expected": "6500",
+      "id": "price.roundTrip",
+      "observed": "6500.0000000000000000000000000000000000000000000000",
+      "status": "PASS"
+    },
+    {
+      "evidence": "validation/brazil/brazil-income-golden-cases.json",
+      "expected": 0.701561259093934,
+      "id": "golden.base.shareBelow",
+      "observed": 0.701561259093934,
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": "6197.0676471138749124522976565291977300496796483204",
+      "id": "golden.current.householdComparable",
+      "observed": "6197.0676471138749124522976565291977300496796483204",
+      "status": "PASS"
+    },
+    {
+      "evidence": "D065",
+      "expected": "2065.6892157046249708174325521763992433498932161068",
+      "id": "golden.current.rdpcComparable",
+      "observed": "2065.6892157046249708174325521763992433498932161068",
+      "status": "PASS"
+    },
+    {
+      "evidence": "CDF + D065",
+      "expected": 0.6866910622833815,
+      "id": "golden.current.shareBelow",
+      "observed": 0.6866910622833815,
+      "status": "PASS"
+    },
+    {
+      "evidence": "CDF empírica",
+      "expected": "shareBelow < shareAtOrBelow",
+      "id": "lookup.tieSemantics",
+      "observed": {
+        "shareAtOrBelow": 0.5005345976000194,
+        "shareBelow": 0.49991707375376493
+      },
+      "status": "PASS"
+    },
+    {
+      "evidence": "D071",
+      "expected": {
+        "shareAtOrBelowGreaterThan": 0.0,
+        "shareBelow": 0.0
+      },
+      "id": "lookup.lowerTail",
+      "observed": {
+        "shareAtOrBelow": 0.011123332604987381,
+        "shareBelow": 0.0,
+        "topShare": 1.0
+      },
+      "status": "PASS"
+    },
+    {
+      "evidence": "D071",
+      "expected": {
+        "shareAtOrBelow": 1.0,
+        "shareBelowLessThan": 1.0
+      },
+      "id": "lookup.maximum",
+      "observed": {
+        "shareAtOrBelow": 1.0,
+        "shareBelow": 0.9999980748661246,
+        "topShare": 1.9251338754244784e-06
+      },
+      "status": "PASS"
+    },
+    {
+      "evidence": "D071",
+      "expected": {
+        "shareAtOrBelow": 1.0,
+        "shareBelow": 1.0
+      },
+      "id": "lookup.aboveMaximum",
+      "observed": {
+        "shareAtOrBelow": 1.0,
+        "shareBelow": 1.0,
+        "topShare": 0.0
+      },
+      "status": "PASS"
+    },
+    {
+      "evidence": "price_alignment.py",
+      "expected": "rejeitar",
+      "id": "failure.negativeIncome",
+      "observed": "Renda corrente não pode ser negativa",
+      "status": "PASS"
+    },
+    {
+      "evidence": "production_package.py",
+      "expected": "rejeitar",
+      "id": "failure.missingArtifact",
+      "observed": "Artefato obrigatório ausente: C:\\Users\\Usuario\\Downloads\\Novos Vaults\\vault-template-main\\vault-template-main\\Tools and Knowlegde\\Calculadora de renda\\validation\\brazil\\__g0_missing__.json",
+      "status": "PASS"
+    },
+    {
+      "evidence": "config/schemas/brazil-price-alignment.schema.json",
+      "expected": "rejeitar",
+      "id": "failure.invalidSchema",
+      "observed": "$: campos ausentes: ['accessedAt', 'baseCalculation', 'baseIndex', 'basePriceReference', 'baseYear', 'cdfSha256', 'conversion', 'currentIndex', 'dataset', 'decisionId', 'factorBaseToCurrent', 'generatedAt', 'generatedBy', 'index', 'indexDescription', 'inputIncomePeriod', 'integration', 'monthlyIndex', 'multiplierCurrentToBase', 'precision', 'priceIndexReferenceMonth', 'schema', 'schemaSha256', 'schemaVersion', 'sidraTable', 'sidraVariable', 'source', 'sourceProposal', 'sourceProposalSha256', 'sourceUrl', 'status', 'territory', 'version']",
+      "status": "PASS"
+    }
+  ],
+  "dataset": "brazil-production-package-validation",
+  "generatedAt": "2026-08-15",
+  "generatedBy": "scripts/data/brazil/production_package.py",
+  "historicalClaim": {
+    "claim": "21/21 PASS",
+    "reason": "os 21 checks individuais e os relatórios históricos não foram encontrados; esta suíte é nova e explícita",
+    "status": "NOT_REPRODUCIBLE_AS_HISTORICAL_SUITE"
+  },
+  "schemaVersion": "1.0.0",
+  "summary": {
+    "fail": 0,
+    "pass": 44,
+    "status": "PASS",
+    "total": 44
+  },
+  "version": "g0-2026-08-15-v1"
+}

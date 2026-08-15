@@ -1,0 +1,123 @@
+{
+  "accessedAt": "2026-08-13",
+  "baseCalculation": "média aritmética dos 12 números-índice mensais de janeiro a dezembro de 2025",
+  "baseIndex": "7300.8416666666666666666666666666666666666666666667",
+  "basePriceReference": "preços médios de 2025",
+  "baseYear": 2025,
+  "cdfSha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+  "conversion": {
+    "baseToCurrent": "incomeCurrentEquivalent = income2025 * currentIndex / baseIndex",
+    "currentToBase": "incomeComparable2025 = incomeCurrent * baseIndex / currentIndex",
+    "lookupOrder": "converter renda domiciliar corrente; dividir por moradores elegíveis; consultar CDF 2025"
+  },
+  "currentIndex": "7657.73",
+  "dataset": "brazil-income-price-alignment",
+  "decisionId": "D065",
+  "factorBaseToCurrent": "1.0488831767113609047358694944989219279512293673903",
+  "generatedAt": "2026-08-15",
+  "generatedBy": "scripts/data/brazil/production_package.py",
+  "index": "IPCA",
+  "indexDescription": "IPCA - Número-índice (base: dezembro de 1993 = 100)",
+  "inputIncomePeriod": "renda mensal nominal vigente na data do cálculo",
+  "integration": {
+    "authorizationSource": "data/production/brazil/brazil-income-engine-manifest.json",
+    "frontendIntegrationAllowed": false
+  },
+  "monthlyIndex": [
+    {
+      "month": "2025-01",
+      "value": "7111.86"
+    },
+    {
+      "month": "2025-02",
+      "value": "7205.03"
+    },
+    {
+      "month": "2025-03",
+      "value": "7245.38"
+    },
+    {
+      "month": "2025-04",
+      "value": "7276.54"
+    },
+    {
+      "month": "2025-05",
+      "value": "7295.46"
+    },
+    {
+      "month": "2025-06",
+      "value": "7312.97"
+    },
+    {
+      "month": "2025-07",
+      "value": "7331.98"
+    },
+    {
+      "month": "2025-08",
+      "value": "7323.91"
+    },
+    {
+      "month": "2025-09",
+      "value": "7359.06"
+    },
+    {
+      "month": "2025-10",
+      "value": "7365.68"
+    },
+    {
+      "month": "2025-11",
+      "value": "7378.94"
+    },
+    {
+      "month": "2025-12",
+      "value": "7403.29"
+    },
+    {
+      "month": "2026-01",
+      "value": "7427.72"
+    },
+    {
+      "month": "2026-02",
+      "value": "7479.71"
+    },
+    {
+      "month": "2026-03",
+      "value": "7545.53"
+    },
+    {
+      "month": "2026-04",
+      "value": "7596.09"
+    },
+    {
+      "month": "2026-05",
+      "value": "7640.15"
+    },
+    {
+      "month": "2026-06",
+      "value": "7652.37"
+    },
+    {
+      "month": "2026-07",
+      "value": "7657.73"
+    }
+  ],
+  "multiplierCurrentToBase": "0.95339502263290383268496887023526118923841225358776",
+  "precision": {
+    "decimalDigits": 50,
+    "rounding": "nenhum arredondamento antes do lookup; arredondamento apenas na apresentação",
+    "storage": "decimal strings"
+  },
+  "priceIndexReferenceMonth": "2026-07",
+  "schema": "config/schemas/brazil-price-alignment.schema.json",
+  "schemaSha256": "A5531D86FFAE5AC4D319414C8C854DA4F1E67974FA36308C269B11DE1FCD57BB",
+  "schemaVersion": "1.0.0",
+  "sidraTable": 1737,
+  "sidraVariable": 2266,
+  "source": "IBGE SIDRA",
+  "sourceProposal": "validation/brazil/brazil-price-alignment-proposal.json",
+  "sourceProposalSha256": "A302237DB4B4637C815F54B2E63170A9204FB741966E82251F6A40D0C4E5553B",
+  "sourceUrl": "https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/2266/p/202501-202607?formato=json",
+  "status": "CANONICAL_APPROVED",
+  "territory": "Brasil",
+  "version": "2025-2026-07-v1"
+}

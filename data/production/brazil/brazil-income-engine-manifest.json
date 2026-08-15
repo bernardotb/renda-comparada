@@ -1,0 +1,99 @@
+{
+  "artifacts": {
+    "cdf": {
+      "path": "data/production/brazil/brazil-income-cdf-2025.json",
+      "schema": "scripts/data/brazil/cdf.py::load_cdf_artifact",
+      "sha256": "5FC02C5F328EA1DAD334BDE7E3921AEF17793E1F6BA4739A334276B2D6E609E5",
+      "sizeBytes": 3955036,
+      "version": "2025-20260508-v1"
+    },
+    "priceAlignment": {
+      "path": "data/production/brazil/brazil-price-alignment.json",
+      "schema": "config/schemas/brazil-price-alignment.schema.json",
+      "sha256": "78A7F6E61C7327124743741F59F0F27715200AD1A17E9F712D34C6A5294F3948",
+      "sizeBytes": 3432,
+      "version": "2025-2026-07-v1"
+    }
+  },
+  "dataset": "brazil-income-engine",
+  "decisionIds": [
+    "D063",
+    "D065",
+    "D071",
+    "D072"
+  ],
+  "delivery": {
+    "failSafe": "indisponibilidade e nova tentativa; sem fallback estatístico legado",
+    "initialBundleContainsCdf": false,
+    "loadTrigger": "primeiro cálculo",
+    "requestData": "nenhuma renda, moradores ou resultado em URL, query, headers, analytics ou logs",
+    "reuse": "memória na mesma sessão e cache HTTP normal"
+  },
+  "displayPolicy": {
+    "aboveObservedMaximum": "não extrapolar; informar limite da distribuição observada",
+    "mainRange": "percentil inteiro e TOP inteiro complementar",
+    "topBelow0_1": "exibir menos de 0,1%; não exibir TOP 0%",
+    "topBetween0_1And1": "uma casa decimal",
+    "zeroRdpc": "linguagem neutra; não usar TOP 100% como headline"
+  },
+  "generatedAt": "2026-08-15",
+  "generatedBy": "scripts/data/brazil/production_package.py",
+  "goldenCases": {
+    "basePriceCase": {
+      "eligibleResidents": 3,
+      "householdIncome2025": "6500",
+      "name": "householdIncome6500Residents3",
+      "rdpc2025": "2166.666666666666666666666667",
+      "shareAtOrBelow": 0.701561259093934,
+      "shareBelow": 0.701561259093934,
+      "topShare": 0.29843874090606604
+    },
+    "currentNominalCase": {
+      "comparableHouseholdIncome2025": "6197.0676471138749124522976565291977300496796483204",
+      "comparableRdpc2025": "2065.6892157046249708174325521763992433498932161068",
+      "displayPercentile": 69,
+      "displayTop": 31,
+      "eligibleResidents": 3,
+      "name": "currentHouseholdIncome6500Residents3At2026-07",
+      "nominalHouseholdIncome": "6500",
+      "nominalRdpc": "2166.6666666666666666666666666666666666666666666667",
+      "shareAtOrBelow": 0.6866910622833815,
+      "shareBelow": 0.6866910622833815,
+      "topShare": 0.3133089377166185
+    },
+    "source": "validation/brazil/brazil-income-golden-cases.json",
+    "sourceSha256": "C03AC1EB25DAA2E392E95D4E8CE0F10098FD0FBEFFA058E3C2E6BAD6447E9C23"
+  },
+  "integration": {
+    "authorization": "este manifesto resolve a promoção posterior sem reescrever a CDF histórica",
+    "brazilFrontendIntegrationAllowed": true,
+    "cdfHistoricalState": {
+      "frontendIntegrationAllowed": false,
+      "userIncomePriceAlignmentMethod": null
+    },
+    "worldFrontendIntegrationAllowed": false
+  },
+  "methodology": {
+    "formula": "soma_domiciliar(VD4019 × CO1 + VD4048 × CO1e) ÷ VD2003",
+    "lookupSemantics": {
+      "interpolation": "nenhuma; CDF empírica em degraus",
+      "shareAtOrBelow": "peso com RDPC <= x / peso total",
+      "shareBelow": "peso com RDPC < x / peso total",
+      "topShare": "1 - shareBelow"
+    },
+    "populationUnit": "pessoas elegíveis",
+    "priceReference": "preços médios de 2025",
+    "version": "1.0.0",
+    "weight": "V1032"
+  },
+  "precision": {
+    "calculation": "Decimal com 50 dígitos; sem arredondamento prematuro",
+    "moneyDisplay": "duas casas decimais quando exibido",
+    "rankingDisplay": "D071"
+  },
+  "schema": "config/schemas/brazil-income-engine-manifest.schema.json",
+  "schemaSha256": "F40FF4731EACA9AADD4FE5FED73422AE259A21B22366613D842CE401D221AB04",
+  "schemaVersion": "1.0.0",
+  "status": "CANONICAL_APPROVED_FOR_INTEGRATION",
+  "version": "1.0.0"
+}
