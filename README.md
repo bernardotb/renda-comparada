@@ -6,8 +6,8 @@ Aplicação para comparar a renda domiciliar por pessoa com distribuições de r
 
 O motor Brasil está integrado ao frontend a partir do pacote canonizado, com metodologia, CDF histórica, alinhamento temporal, manifestos, schemas e validação reproduzível. A aplicação completa ainda não está pronta para produção porque Mundo permanece bloqueado e não houve gate de publicação.
 
-- Brasil: decisões D063, D065, D071 e D072 ativas; pacote de dados validado.
-- Mundo: D066 e D067 ativas; D068, D069 e D070 continuam bloqueadas.
+- Brasil: decisões D063, D065 e D071–D073 ativas; pacote de dados validado e integrado. O G2 foi registrado como PASS COM RESSALVAS, sem converter verificações dinâmicas ausentes em PASS.
+- Mundo: D066 e D067 ativas; D068 foi executada e validada como candidata não canônica; D069 e D070 não foram executadas neste checkout e continuam não canônicas.
 - Frontend: cálculo Brasil usa o pacote canônico; Mundo não exibe resultado numérico.
 - Deploy: fora do Gate G1 e não executado.
 
@@ -69,4 +69,4 @@ git diff --check
 git status --short --branch
 ```
 
-Não execute deploy, não use constantes antigas do frontend como fallback e não publique resultado mundial enquanto D068–D070 permanecerem bloqueadas.
+Não execute deploy, não use constantes antigas do frontend como fallback e não publique resultado mundial enquanto D068–D070 não estiverem explicitamente canonizadas e os artefatos de produção e integração não forem autorizados.

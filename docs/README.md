@@ -1,7 +1,7 @@
 # Renda Comparada — Índice da Documentação
 
-**Última revisão:** 15/08/2026
-**Estado:** V1 em preparação; motor Brasil integrado ao frontend; Mundo parcialmente canonizado e numericamente bloqueado.
+**Última revisão:** 18/08/2026
+**Estado:** V1 em preparação; motor Brasil integrado ao frontend; Mundo parcialmente canonizado, com D068 validada apenas como candidata e integração numérica bloqueada.
 
 Este diretório contém a documentação de autoridade do projeto. Ele deve ser lido antes de alterações relevantes de produto, dados, UX ou implementação.
 
@@ -133,6 +133,8 @@ A CDF original contém um flag histórico de integração bloqueada porque foi g
 
 O Gate G0 regenerou os manifestos por script determinístico e executou uma suíte nova e explícita de **44/44 checks PASS**. Os relatórios estão em `validation/brazil/brazil-production-package-validation.{json,md}`. A alegação histórica `21/21 PASS` não foi preservada, porque os 21 itens e os relatórios originais não foram encontrados. O Gate G1 adicionou a validação específica do contrato de integração frontend.
 
+O Gate G2 foi registrado como **PASS COM RESSALVAS** no histórico operacional. As verificações dinâmicas que não puderam ser executadas permanecem não verificadas e não são apresentadas como PASS. Esse registro não comprova deploy público.
+
 Schemas verificáveis:
 
 ```text
@@ -210,47 +212,21 @@ Essa regra pertence somente à apresentação. A CDF conserva precisão interna 
 
 ## 5. Mundo — estado
 
-**Status: parcialmente canonizado; integração numérica bloqueada.**
+**Status: parcialmente canonizado; integração numérica bloqueada.** Pesquisa, scripts, testes e artefatos em `validation/world/` não equivalem a canonização, produção ou integração.
 
-Já canonizado:
+| Item | Estado no checkout | Autoridade/evidência |
+|---|---|---|
+| D066 | **ATIVA / CANÔNICA** | `decisoes.md` |
+| D067 | **ATIVA / CANÔNICA** | `decisoes.md` |
+| D068 | **EXECUTADA E VALIDADA COMO CANDIDATA; NÃO CANÔNICA** | `research/fase-2a-d068-execucao-2026-08-17.md` e `../validation/world/world-cdf-validation.md` |
+| D069 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe protocolo, mas não relatório de execução; a proveniência dos raws oficiais PIP `aux/ppp` e `aux/cpi` permanece pendente |
+| D070 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe molde/protocolo, sem relatório de execução ou decisão ativa |
+| Produção Mundo | **BLOQUEADA** | não existe pacote autorizado em `data/production/world/` |
+| Frontend Mundo | **BLOQUEADO / NÃO INTEGRADO** | nenhuma decisão ou manifesto autorizador permite resultado numérico |
 
-### D066
+D066 congela a versão/build PIP, o ano global de 2024 e a base PPP 2021. D067 define o resultado como **posição monetária global estimada**, baseada na distribuição harmonizada do PIP, que combina renda ou consumo domiciliar per capita conforme a fonte nacional.
 
-```text
-PIP_VERSION = 20260324_2021
-PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
-GLOBAL_REFERENCE_YEAR = 2024
-PPP_BASE = 2021
-```
-
-### D067
-
-O resultado mundial representa:
-
-> **posição monetária global estimada**, baseada na distribuição harmonizada do PIP, que combina renda ou consumo domiciliar per capita conforme a fonte nacional.
-
-Ainda pendente:
-
-```text
-D068 — fonte operacional e quantis/CDF mundial
-D069 — conversão da renda atual em BRL para PPP 2021 compatível com PIP
-D070 — golden cases, caudas e apresentação final
-```
-
-Direção de pesquisa atual:
-
-1. usar a `1000 Binned Global Distribution` como candidata operacional para a CDF mundial;
-2. validar essa CDF contra `pip wb` / `pip-grp` por `povline` em múltiplos pontos;
-3. obter `ppp` e `cpi` das tabelas/saídas da própria versão PIP;
-4. não usar `popshare` no agregado mundial: o cliente oficial só o aceita no nível de país.
-
-Nenhum valor mundial provisório deve entrar no frontend.
-
-Relatório de pesquisa:
-
-```text
-research/fase-2a-metodologia-mundo.md
-```
+A execução D068 construiu uma CDF candidata reproduzível a partir da `1000 Binned Global Distribution` e mediu seu erro contra 18 checkpoints oficiais. A aceitação da aproximação intrabin ainda exige revisão humana e decisão explícita. Nenhum valor mundial provisório deve entrar no frontend.
 
 ---
 
@@ -365,26 +341,8 @@ Antes de usar o Codex ou outro agente de código:
 
 ---
 
-## 11. Próximo bloqueio real
+## 11. Próximo gate
 
-O próximo trabalho metodológico é concluir a Fase 2A Mundo:
+O próximo gate recomendado é **fechar a execução e a proveniência de D069**. Depois disso, D068 e D069 candidatas devem passar por revisão humana e eventual canonização explícita antes da execução de D070. Este índice apenas identifica a sequência; não autoriza nenhuma dessas etapas.
 
-```text
-1000 Binned Global Distribution
-        +
-PPP e CPI auxiliares da versão congelada
-        ↓
-validação
-        ↓
-D068 + D069
-        ↓
-golden cases
-        ↓
-D070
-```
-
-O motor Brasil está integrado. A experiência completa Brasil + Mundo ainda não está pronta para produção enquanto D068–D070 permanecerem abertas.
-
-## Coleta reprodutível do Mundo — Fase 2A
-
-Há protocolos e pesquisa preparatória em `docs/research`, mas o checkout atual não contém o coletor `scripts/research/world/collect-pip-world-evidence.R` nem a saída `validation/world/pip-20260324-2021/`. Nenhuma dessas peças é tratada como existente ou aprovada. D068–D070 continuam bloqueadas.
+O motor Brasil está integrado. A experiência completa Brasil + Mundo continua bloqueada para produção enquanto as decisões e os manifests autorizadores do Mundo não existirem.
