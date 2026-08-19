@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rendacomparada.local/schemas/world-income-cdf.schema.json",
+  "title": "World income empirical CDF",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "schema", "schemaSha256", "dataset", "version", "status", "generatedAt", "generatedBy", "source", "methodology", "statistics", "pointColumns", "points", "integration"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "schema": {"const": "config/schemas/world-income-cdf.schema.json"},
+    "schemaSha256": {"$ref": "#/$defs/sha256"},
+    "dataset": {"const": "world-income-cdf"},
+    "version": {"const": "2024-pip-20260324_2021-v1"},
+    "status": {"const": "CANONICAL_PRODUCTION_FRONTEND_BLOCKED"},
+    "generatedAt": {"type": "string", "format": "date"},
+    "generatedBy": {"const": "scripts/data/world/production_package.py"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "dataset", "resource", "rawPath", "rawSha256", "candidatePath", "candidateSha256"],
+      "properties": {
+        "provider": {"const": "World Bank"},
+        "dataset": {"const": "1000 Binned Global Distribution"},
+        "resource": {"const": "DR0094423"},
+        "rawPath": {"type": "string", "minLength": 1},
+        "rawSha256": {"$ref": "#/$defs/sha256"},
+        "candidatePath": {"const": "validation/world/world-income-cdf-2024-candidate.json"},
+        "candidateSha256": {"const": "56C53483744176A50090E16058A0CF4FC6221C83D1D80A60060B931110C54DC2"}
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "pipVersion", "productionBuild", "referenceYear", "pppBase", "unit", "populationUnit", "lookup", "tieSemantics", "interpolation", "extrapolation"],
+      "properties": {
+        "version": {"const": "D066-D070-v1"},
+        "pipVersion": {"const": "20260324_2021"},
+        "productionBuild": {"const": "20260324_2021_01_02_PROD"},
+        "referenceYear": {"const": 2024},
+        "pppBase": {"const": 2021},
+        "unit": {"const": "international_2021_ppp_per_person_per_day"},
+        "populationUnit": {"const": "millions_of_people"},
+        "lookup": {"const": "empirical_step_cdf"},
+        "tieSemantics": {"type": "string", "minLength": 1},
+        "interpolation": {"const": "none"},
+        "extrapolation": {"const": "none"}
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceBinCount", "economyCount", "pointCount", "totalPopulationMillions", "minWelfare", "maxWelfare"],
+      "properties": {
+        "sourceBinCount": {"const": 218000},
+        "economyCount": {"const": 218},
+        "pointCount": {"const": 216790},
+        "totalPopulationMillions": {"$ref": "#/$defs/nonnegativeDecimal"},
+        "minWelfare": {"$ref": "#/$defs/nonnegativeDecimal"},
+        "maxWelfare": {"$ref": "#/$defs/nonnegativeDecimal"}
+      }
+    },
+    "pointColumns": {"const": ["welfare", "cumulativePopulationMillionsAtOrBelow"]},
+    "points": {
+      "type": "array",
+      "minItems": 216790,
+      "maxItems": 216790,
+      "items": {
+        "type": "array",
+        "prefixItems": [{"$ref": "#/$defs/nonnegativeDecimal"}, {"$ref": "#/$defs/nonnegativeDecimal"}],
+        "items": false,
+        "minItems": 2,
+        "maxItems": 2
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["worldFrontendIntegrationAllowed"],
+      "properties": {"worldFrontendIntegrationAllowed": {"const": false}}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "nonnegativeDecimal": {"type": "string", "pattern": "^(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?$"}
+  }
+}

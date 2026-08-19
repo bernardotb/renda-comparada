@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rendacomparada.local/schemas/world-price-alignment.schema.json",
+  "title": "World price and PPP alignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "schema", "schemaSha256", "dataset", "version", "status", "generatedAt", "generatedBy", "decisionIds", "source", "sidraTable", "sidraVariable", "basePriceReference", "baseIndex", "priceIndexReferenceMonth", "currentIndex", "pipVersion", "productionBuild", "referenceYear", "pppBase", "brazilPipPpp2021", "brazilPipCpi2024Base2021", "brlPerIntl2024Derived", "combinedFactorState", "formula", "temporalUpdateRule", "rawSources", "precision", "integration"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "schema": {"const": "config/schemas/world-price-alignment.schema.json"},
+    "schemaSha256": {"$ref": "#/$defs/sha256"},
+    "dataset": {"const": "world-price-alignment"},
+    "version": {"const": "2024-2026-07-pip-20260324_2021-v1"},
+    "status": {"const": "CANONICAL_PRODUCTION_FRONTEND_BLOCKED"},
+    "generatedAt": {"type": "string", "format": "date"},
+    "generatedBy": {"const": "scripts/data/world/production_package.py"},
+    "decisionIds": {"const": ["D069", "D070"]},
+    "source": {"const": "IBGE SIDRA"},
+    "sidraTable": {"const": 1737},
+    "sidraVariable": {"const": 2266},
+    "basePriceReference": {"const": "preços médios de 2024"},
+    "baseIndex": {"const": "6952.07333333333333333333333333333333333333333333333333333333"},
+    "priceIndexReferenceMonth": {"const": "2026-07"},
+    "currentIndex": {"const": "7657.7300000000000"},
+    "pipVersion": {"const": "20260324_2021"},
+    "productionBuild": {"const": "20260324_2021_01_02_PROD"},
+    "referenceYear": {"const": 2024},
+    "pppBase": {"const": 2021},
+    "brazilPipPpp2021": {"const": "2.44986319541931"},
+    "brazilPipCpi2024Base2021": {"const": "1.192919586578344"},
+    "brlPerIntl2024Derived": {"const": "2.92248979025310406149724542264"},
+    "combinedFactorState": {"const": "DERIVED"},
+    "formula": {"type": "string", "minLength": 1},
+    "temporalUpdateRule": {"type": "string", "minLength": 1},
+    "rawSources": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "path", "sha256", "sizeBytes", "accessedAtUtc"],
+        "properties": {
+          "kind": {"enum": ["PIP_PPP", "PIP_CPI", "IBGE_IPCA"]},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "sizeBytes": {"type": "integer", "minimum": 1},
+          "accessedAtUtc": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    "precision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storage", "intermediateRounding"],
+      "properties": {
+        "storage": {"const": "decimal_strings"},
+        "intermediateRounding": {"const": "none"}
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["worldFrontendIntegrationAllowed"],
+      "properties": {"worldFrontendIntegrationAllowed": {"const": false}}
+    }
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"}}
+}

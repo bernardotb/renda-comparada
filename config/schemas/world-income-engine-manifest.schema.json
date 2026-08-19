@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rendacomparada.local/schemas/world-income-engine-manifest.schema.json",
+  "title": "World income engine manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "schema", "schemaSha256", "dataset", "version", "status", "generatedAt", "generatedBy", "decisionIds", "artifacts", "methodology", "displayPolicy", "maxAbsoluteErrorPp", "delivery", "integration"],
+  "properties": {
+    "schemaVersion": {"const": "1.0.0"},
+    "schema": {"const": "config/schemas/world-income-engine-manifest.schema.json"},
+    "schemaSha256": {"$ref": "#/$defs/sha256"},
+    "dataset": {"const": "world-income-engine"},
+    "version": {"const": "1.0.0"},
+    "status": {"const": "CANONICAL_PRODUCTION_FRONTEND_BLOCKED"},
+    "generatedAt": {"type": "string", "format": "date"},
+    "generatedBy": {"const": "scripts/data/world/production_package.py"},
+    "decisionIds": {"const": ["D066", "D067", "D068", "D069", "D070"]},
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cdf", "priceAlignment", "goldenCases"],
+      "properties": {
+        "cdf": {"$ref": "#/$defs/artifact"},
+        "priceAlignment": {"$ref": "#/$defs/artifact"},
+        "goldenCases": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "pipVersion", "productionBuild", "referenceYear", "pppBase", "source", "resource", "unit", "lookup"],
+      "properties": {
+        "version": {"const": "D066-D070-v1"},
+        "pipVersion": {"const": "20260324_2021"},
+        "productionBuild": {"const": "20260324_2021_01_02_PROD"},
+        "referenceYear": {"const": 2024},
+        "pppBase": {"const": 2021},
+        "source": {"const": "World Bank Poverty and Inequality Platform"},
+        "resource": {"const": "DR0094423"},
+        "unit": {"const": "international_2021_ppp_per_person_per_day"},
+        "lookup": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["shareBelow", "shareAtOrBelow", "topShare", "interpolation", "extrapolation"],
+          "properties": {
+            "shareBelow": {"type": "string", "minLength": 1},
+            "shareAtOrBelow": {"type": "string", "minLength": 1},
+            "topShare": {"const": "1 - shareBelow"},
+            "interpolation": {"const": "none"},
+            "extrapolation": {"const": "none"}
+          }
+        }
+      }
+    },
+    "displayPolicy": {"type": "object", "minProperties": 5},
+    "maxAbsoluteErrorPp": {"const": "0.022516991848920"},
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["failSafe", "requestData", "persistence", "legacyFallback"],
+      "properties": {
+        "failSafe": {"type": "string", "minLength": 1},
+        "requestData": {"type": "string", "minLength": 1},
+        "persistence": {"const": "none"},
+        "legacyFallback": {"const": "forbidden"}
+      }
+    },
+    "integration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["worldFrontendIntegrationAllowed"],
+      "properties": {"worldFrontendIntegrationAllowed": {"const": false}}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema", "sha256", "sizeBytes", "version"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "schema": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "sizeBytes": {"type": "integer", "minimum": 1},
+        "version": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
