@@ -19,8 +19,13 @@ test('o caminho ativo não contém motor legado nem fallback mundial', async () 
     assert.equal(activeSource.includes(forbidden), false, forbidden)
   }
 
-  assert.match(app, /Indisponível nesta versão/)
-  assert.match(app, /Nenhum número provisório ou curva antiga é exibido/)
+  assert.match(app, /worldEngineLoader\.load\(\)/)
+  assert.match(app, /Nenhum número provisório ou fallback legado é exibido/)
+  assert.match(app, /posição monetária global estimada/i)
+  assert.match(app, /World Bank — Poverty and Inequality Platform/)
+  assert.match(app, /Referência global 2024, PPP 2021/)
+  assert.match(app, /setBrazilCalculation\(\{ status: 'unavailable'/)
+  assert.match(app, /setWorldCalculation\(\{ status: 'unavailable'/)
 })
 
 test('o frontend não persiste nem transmite entradas ou resultados', async () => {

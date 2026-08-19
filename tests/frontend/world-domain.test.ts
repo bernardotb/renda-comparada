@@ -17,7 +17,6 @@ const paths = {
   manifest: '/data/world/world-income-engine-manifest.json',
   price: '/data/world/world-price-alignment.json',
   cdf: '/data/world/world-income-cdf-2024.json',
-  golden: '/data/world/world-income-golden-cases-d070-candidate.json',
 }
 
 async function canonicalBytes() {
@@ -25,7 +24,6 @@ async function canonicalBytes() {
     [paths.manifest, await readFile(new URL('data/production/world/world-income-engine-manifest.json', root))],
     [paths.price, await readFile(new URL('data/production/world/world-price-alignment.json', root))],
     [paths.cdf, await readFile(new URL('data/production/world/world-income-cdf-2024.json', root))],
-    [paths.golden, await readFile(new URL('validation/world/world-income-golden-cases-d070-candidate.json', root))],
   ])
 }
 

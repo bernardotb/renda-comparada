@@ -11,7 +11,7 @@
     "schemaSha256": {"$ref": "#/$defs/sha256"},
     "dataset": {"const": "world-income-engine"},
     "version": {"const": "1.0.0"},
-    "status": {"const": "CANONICAL_PRODUCTION_FRONTEND_BLOCKED"},
+    "status": {"const": "CANONICAL_APPROVED_FOR_INTEGRATION"},
     "generatedAt": {"type": "string", "format": "date"},
     "generatedBy": {"const": "scripts/data/world/production_package.py"},
     "decisionIds": {"const": ["D066", "D067", "D068", "D069", "D070"]},
@@ -69,7 +69,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["worldFrontendIntegrationAllowed"],
-      "properties": {"worldFrontendIntegrationAllowed": {"const": false}}
+      "properties": {"worldFrontendIntegrationAllowed": {"const": true}}
     }
   },
   "$defs": {

@@ -1,3 +1,4 @@
+import runtimeConfig from '../../config/world-frontend-runtime.json' with { type: 'json' };
 import type { WorldIncomeRuntime } from './domain.ts';
 
 interface ArtifactContract {
@@ -67,20 +68,14 @@ interface WorldCdfDocument {
   integration: { worldFrontendIntegrationAllowed: boolean };
 }
 
-interface GoldenCasesDocument {
-  status: string;
-  canonical: boolean;
-  frontendIntegrationAllowed: boolean;
-  inputs: { ipcaCurrentMonth: string };
-  cases: Array<{ pipVersion: string; productionBuild: string; referenceYear: number; pppBase: number }>;
-}
-
 export interface WorldRuntimeBootstrap {
   publicBasePath: string;
   engineManifest: { publicPath: string; sha256: string; sizeBytes?: number };
 }
 
 type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+const defaultBootstrap = runtimeConfig as WorldRuntimeBootstrap;
 
 function artifactPublicPath(basePath: string, repositoryPath: string): string {
   const filename = repositoryPath.replaceAll('\\', '/').split('/').at(-1);
@@ -122,8 +117,8 @@ function assertManifest(value: EngineManifest): void {
     value.schemaVersion !== '1.0.0'
     || value.dataset !== 'world-income-engine'
     || value.version !== '1.0.0'
-    || value.status !== 'CANONICAL_PRODUCTION_FRONTEND_BLOCKED'
-    || value.integration?.worldFrontendIntegrationAllowed !== false
+    || value.status !== 'CANONICAL_APPROVED_FOR_INTEGRATION'
+    || value.integration?.worldFrontendIntegrationAllowed !== true
     || value.methodology?.version !== 'D066-D070-v1'
     || value.methodology?.pipVersion !== '20260324_2021'
     || value.methodology?.productionBuild !== '20260324_2021_01_02_PROD'
@@ -219,19 +214,10 @@ function compileCdf(value: WorldCdfDocument, engine: EngineManifest): WorldIncom
   return { welfare, cumulativePopulationAtOrBelow, totalPopulationMillions, minWelfare, maxWelfare };
 }
 
-function assertGoldenCases(value: GoldenCasesDocument, engine: EngineManifest, referenceMonth: string): void {
-  if (
-    value.status !== 'D070_CANONICAL_GOLDEN_CASES'
-    || value.canonical !== true
-    || value.frontendIntegrationAllowed !== false
-    || value.inputs?.ipcaCurrentMonth !== referenceMonth
-    || !Array.isArray(value.cases)
-    || value.cases.length !== 11
-    || value.cases.some((item) => item.pipVersion !== engine.methodology.pipVersion || item.productionBuild !== engine.methodology.productionBuild || item.referenceYear !== 2024 || item.pppBase !== 2021)
-  ) throw new Error('Golden cases Mundo incompatíveis com o pacote.');
-}
-
-export function createWorldEngineLoader(fetcher: Fetcher, bootstrap: WorldRuntimeBootstrap) {
+export function createWorldEngineLoader(
+  fetcher: Fetcher = globalThis.fetch.bind(globalThis),
+  bootstrap: WorldRuntimeBootstrap = defaultBootstrap,
+) {
   let cachedRuntime: WorldIncomeRuntime | null = null;
   let inFlight: Promise<WorldIncomeRuntime> | null = null;
 
@@ -242,8 +228,6 @@ export function createWorldEngineLoader(fetcher: Fetcher, bootstrap: WorldRuntim
     const runtimeBase = assertPrice(price, engine);
     const cdfDocument = await fetchVerifiedJson<WorldCdfDocument>(fetcher, artifactPublicPath(bootstrap.publicBasePath, engine.artifacts.cdf.path), engine.artifacts.cdf.sha256, engine.artifacts.cdf.sizeBytes);
     const cdf = compileCdf(cdfDocument, engine);
-    const golden = await fetchVerifiedJson<GoldenCasesDocument>(fetcher, artifactPublicPath(bootstrap.publicBasePath, engine.artifacts.goldenCases.path), engine.artifacts.goldenCases.sha256, engine.artifacts.goldenCases.sizeBytes);
-    assertGoldenCases(golden, engine, price.priceIndexReferenceMonth);
     return { ...runtimeBase, cdf };
   }
 
@@ -261,3 +245,5 @@ export function createWorldEngineLoader(fetcher: Fetcher, bootstrap: WorldRuntim
     },
   };
 }
+
+export const worldEngineLoader = createWorldEngineLoader();

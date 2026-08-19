@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "1.0.0",
+  "publicBasePath": "/data/world",
+  "engineManifest": {
+    "sourcePath": "data/production/world/world-income-engine-manifest.json",
+    "publicPath": "/data/world/world-income-engine-manifest.json",
+    "sha256": "7DFE725F032D97098EF3BA71950DB9A60AEF24DF7EDA0770423A1B9DBF049C56"
+  }
+}

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
+import { readFile, readdir } from 'node:fs/promises'
 import test from 'node:test'
 import { createWorldEngineLoader, type WorldRuntimeBootstrap } from '../../src/world/loader.ts'
 
@@ -9,7 +9,6 @@ const paths = {
   manifest: '/data/world/world-income-engine-manifest.json',
   price: '/data/world/world-price-alignment.json',
   cdf: '/data/world/world-income-cdf-2024.json',
-  golden: '/data/world/world-income-golden-cases-d070-candidate.json',
 }
 
 async function canonicalBytes() {
@@ -17,7 +16,6 @@ async function canonicalBytes() {
     [paths.manifest, await readFile(new URL('data/production/world/world-income-engine-manifest.json', root))],
     [paths.price, await readFile(new URL('data/production/world/world-price-alignment.json', root))],
     [paths.cdf, await readFile(new URL('data/production/world/world-income-cdf-2024.json', root))],
-    [paths.golden, await readFile(new URL('validation/world/world-income-golden-cases-d070-candidate.json', root))],
   ])
 }
 
@@ -49,7 +47,9 @@ test('loader valida o pacote completo e reutiliza runtime em memória', async ()
   const second = await loader.load()
   assert.equal(first, second)
   assert.equal(loader.getCached(), first)
-  assert.deepEqual(calls.map(({ url }) => url), [paths.manifest, paths.price, paths.cdf, paths.golden])
+  assert.deepEqual(calls.map(({ url }) => url), [paths.manifest, paths.price, paths.cdf])
+  await loader.load()
+  assert.equal(calls.length, 3)
 })
 
 test('requisições de artefato são GET estáticos sem renda, moradores ou resultado', async () => {
@@ -95,9 +95,11 @@ test('manifesto divergente em versão, ano, PPP ou autorização é rejeitado', 
   const base = await canonicalBytes()
   for (const mutate of [
     (manifest: any) => { manifest.methodology.pipVersion = 'wrong' },
+    (manifest: any) => { manifest.methodology.productionBuild = 'wrong' },
     (manifest: any) => { manifest.methodology.referenceYear = 2025 },
     (manifest: any) => { manifest.methodology.pppBase = 2017 },
-    (manifest: any) => { manifest.integration.worldFrontendIntegrationAllowed = true },
+    (manifest: any) => { manifest.integration.worldFrontendIntegrationAllowed = false },
+    (manifest: any) => { manifest.status = 'CANONICAL_PRODUCTION_FRONTEND_BLOCKED' },
   ]) {
     const files = new Map(base)
     const manifest = JSON.parse(new TextDecoder().decode(files.get(paths.manifest)))
@@ -111,13 +113,100 @@ test('manifesto divergente em versão, ano, PPP ou autorização é rejeitado', 
   }
 })
 
-test('runtime Mundo permanece isolado da aplicação e da área pública', async () => {
+test('runtime Mundo está integrado sem embutir a CDF ou publicar golden cases', async () => {
   const app = await readFile(new URL('src/App.tsx', root), 'utf8')
   const packageJson = await readFile(new URL('package.json', root), 'utf8')
-  const publicFiles = await readFile(new URL('public/data/brazil/brazil-income-engine-manifest.json', root))
-  assert.equal(app.includes("./world/"), false)
-  assert.equal(app.includes("world/loader"), false)
-  assert.equal(packageJson.includes('sync:world'), false)
-  assert.ok(publicFiles.byteLength > 0)
-  await assert.rejects(readFile(new URL('public/data/world/world-income-engine-manifest.json', root)))
+  const publicFiles = (await readdir(new URL('public/data/world/', root))).sort()
+  assert.match(app, /worldEngineLoader/)
+  assert.match(packageJson, /sync:world-runtime/)
+  assert.deepEqual(publicFiles, [
+    'world-income-cdf-2024.json',
+    'world-income-engine-manifest.json',
+    'world-price-alignment.json',
+  ])
+  assert.equal(publicFiles.some((name) => name.includes('golden')), false)
+})
+
+test('JSON inválido, tamanho divergente e referências cruzadas falham fechados', async () => {
+  const base = await canonicalBytes()
+
+  const invalidJson = new Map(base)
+  const invalidManifest = new TextEncoder().encode('{')
+  invalidJson.set(paths.manifest, invalidManifest)
+  await assert.rejects(
+    createWorldEngineLoader(mockFetcher(invalidJson, []), bootstrap(invalidManifest)).load(),
+    /JSON inválido/,
+  )
+
+  const manifestBytes = base.get(paths.manifest)!
+  const wrongSize = bootstrap(manifestBytes)
+  wrongSize.engineManifest.sizeBytes = manifestBytes.byteLength + 1
+  await assert.rejects(
+    createWorldEngineLoader(mockFetcher(base, []), wrongSize).load(),
+    /Tamanho incompatível/,
+  )
+
+  const crossed = new Map(base)
+  const manifest = JSON.parse(new TextDecoder().decode(manifestBytes))
+  manifest.artifacts.cdf.version = 'wrong'
+  const crossedBytes = new TextEncoder().encode(JSON.stringify(manifest))
+  crossed.set(paths.manifest, crossedBytes)
+  await assert.rejects(
+    createWorldEngineLoader(mockFetcher(crossed, []), bootstrap(crossedBytes)).load(),
+    /CDF Mundo incompatível/,
+  )
+})
+
+test('SHA ou tamanho divergente de qualquer artefato falha fechado', async () => {
+  const base = await canonicalBytes()
+
+  const wrongManifestHash = bootstrap(base.get(paths.manifest)!)
+  wrongManifestHash.engineManifest.sha256 = '0'.repeat(64)
+  await assert.rejects(
+    createWorldEngineLoader(mockFetcher(base, []), wrongManifestHash).load(),
+    /SHA-256 incompatível/,
+  )
+
+  for (const artifact of ['priceAlignment', 'cdf'] as const) {
+    const files = new Map(base)
+    const manifest = JSON.parse(new TextDecoder().decode(files.get(paths.manifest)))
+    manifest.artifacts[artifact].sha256 = '0'.repeat(64)
+    const bytes = new TextEncoder().encode(JSON.stringify(manifest))
+    files.set(paths.manifest, bytes)
+    await assert.rejects(
+      createWorldEngineLoader(mockFetcher(files, []), bootstrap(bytes)).load(),
+      /SHA-256 incompatível/,
+    )
+
+    manifest.artifacts[artifact].sha256 = artifact === 'cdf'
+      ? hash(base.get(paths.cdf)!)
+      : hash(base.get(paths.price)!)
+    manifest.artifacts[artifact].sizeBytes += 1
+    const wrongSizeBytes = new TextEncoder().encode(JSON.stringify(manifest))
+    files.set(paths.manifest, wrongSizeBytes)
+    await assert.rejects(
+      createWorldEngineLoader(mockFetcher(files, []), bootstrap(wrongSizeBytes)).load(),
+      /Tamanho incompatível/,
+    )
+  }
+})
+
+test('404 de manifesto, price ou CDF deixa o runtime indisponível', async () => {
+  const base = await canonicalBytes()
+  for (const missing of [paths.manifest, paths.price, paths.cdf]) {
+    const files = new Map(base)
+    files.delete(missing)
+    await assert.rejects(
+      createWorldEngineLoader(mockFetcher(files, []), bootstrap(base.get(paths.manifest)!)).load(),
+      /indisponível/,
+      missing,
+    )
+  }
+})
+
+test('bootstrap Mundo referencia exatamente o SHA final do manifesto', async () => {
+  const config = JSON.parse(await readFile(new URL('config/world-frontend-runtime.json', root), 'utf8'))
+  const manifest = await readFile(new URL('data/production/world/world-income-engine-manifest.json', root))
+  assert.equal(config.engineManifest.sha256, hash(manifest))
+  assert.deepEqual(Object.keys(config).sort(), ['engineManifest', 'publicBasePath', 'schemaVersion'])
 })

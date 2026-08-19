@@ -6,9 +6,9 @@ Artefatos:
 
 - `world-income-cdf-2024.json` — 216.790 pontos; SHA-256 `5225C58933C76FF657A4515D6A3B17CB38F0C34E0F01563C2950E50D3DD6CFD1`; 8.379.914 bytes;
 - `world-price-alignment.json` — SHA-256 `E0117227FE0F4AB2C2F220467CE93CAEF482507DE7213AF4E3C57841E119D4F0`; 2.145 bytes;
-- `world-income-engine-manifest.json` — SHA-256 `E9F3B291A4231A860FD6194017E8A82EF2134AE7C3D1B1AA5141BBBF29BE902B`; 2.411 bytes.
+- `world-income-engine-manifest.json` — SHA-256 `7DFE725F032D97098EF3BA71950DB9A60AEF24DF7EDA0770423A1B9DBF049C56`; 2.407 bytes.
 
-O manifesto registra `worldFrontendIntegrationAllowed = false`.
+O manifesto agregador registra `worldFrontendIntegrationAllowed = true`. A CDF e o alinhamento de preços preservam seus flags históricos bloqueados e seus hashes originais.
 
 Regeneração e validação:
 

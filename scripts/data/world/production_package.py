@@ -163,10 +163,10 @@ def validate_price_alignment(document: Mapping[str, Any]) -> None:
 def validate_engine_manifest(document: Mapping[str, Any]) -> None:
     if document.get("schemaVersion") != "1.0.0" or document.get("dataset") != "world-income-engine":
         raise WorldProductionError("Contrato do manifesto Mundo inválido")
-    if document.get("status") != "CANONICAL_PRODUCTION_FRONTEND_BLOCKED":
+    if document.get("status") != "CANONICAL_APPROVED_FOR_INTEGRATION":
         raise WorldProductionError("Status do manifesto Mundo inválido")
-    if document.get("integration", {}).get("worldFrontendIntegrationAllowed") is not False:
-        raise WorldProductionError("Manifesto Mundo não pode autorizar o frontend")
+    if document.get("integration", {}).get("worldFrontendIntegrationAllowed") is not True:
+        raise WorldProductionError("Manifesto Mundo deve autorizar explicitamente o frontend")
     if document.get("decisionIds") != ["D066", "D067", "D068", "D069", "D070"]:
         raise WorldProductionError("Decisões canônicas do manifesto Mundo divergentes")
     methodology = document.get("methodology", {})
@@ -359,7 +359,7 @@ def build_package() -> dict[str, Any]:
         "schemaSha256": schema_hashes["engine"],
         "dataset": "world-income-engine",
         "version": "1.0.0",
-        "status": "CANONICAL_PRODUCTION_FRONTEND_BLOCKED",
+        "status": "CANONICAL_APPROVED_FOR_INTEGRATION",
         "generatedAt": GENERATED_AT,
         "generatedBy": "scripts/data/world/production_package.py",
         "decisionIds": ["D066", "D067", "D068", "D069", "D070"],
@@ -406,7 +406,7 @@ def build_package() -> dict[str, Any]:
             "persistence": "none",
             "legacyFallback": "forbidden",
         },
-        "integration": {"worldFrontendIntegrationAllowed": False},
+        "integration": {"worldFrontendIntegrationAllowed": True},
     }
     validate_engine_manifest(manifest)
     manifest_path = repository_path("data/production/world/world-income-engine-manifest.json")
@@ -428,7 +428,7 @@ def build_package() -> dict[str, Any]:
             "sha256": sha256_file(manifest_path),
             "sizeBytes": manifest_path.stat().st_size,
         },
-        "worldFrontendIntegrationAllowed": False,
+        "worldFrontendIntegrationAllowed": True,
     }
 
 
@@ -436,7 +436,7 @@ def validate_negative_mutations() -> None:
     manifest = json.loads(repository_path("data/production/world/world-income-engine-manifest.json").read_text(encoding="utf-8"))
     price = json.loads(repository_path("data/production/world/world-price-alignment.json").read_text(encoding="utf-8"))
     mutations = []
-    for key, value in (("worldFrontendIntegrationAllowed", True),):
+    for key, value in (("worldFrontendIntegrationAllowed", False),):
         changed = deepcopy(manifest)
         changed["integration"][key] = value
         mutations.append((validate_engine_manifest, changed))

@@ -115,11 +115,12 @@ class WorldProductionPackageTests(unittest.TestCase):
         self.assertEqual(combined, Decimal(self.price["brlPerIntl2024Derived"]))
         self.assertEqual(self.price["combinedFactorState"], "DERIVED")
 
-    def test_frontend_integration_remains_blocked_everywhere(self) -> None:
+    def test_manifest_authorizes_integration_without_rewriting_historical_artifacts(self) -> None:
         self.assertFalse(self.cdf["integration"]["worldFrontendIntegrationAllowed"])
         self.assertFalse(self.price["integration"]["worldFrontendIntegrationAllowed"])
-        self.assertFalse(self.manifest["integration"]["worldFrontendIntegrationAllowed"])
-        self.assertFalse(self.first_result["worldFrontendIntegrationAllowed"])
+        self.assertTrue(self.manifest["integration"]["worldFrontendIntegrationAllowed"])
+        self.assertTrue(self.first_result["worldFrontendIntegrationAllowed"])
+        self.assertEqual(self.manifest["status"], "CANONICAL_APPROVED_FOR_INTEGRATION")
 
     def test_one_byte_change_fails_integrity(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
@@ -137,15 +138,36 @@ class WorldProductionPackageTests(unittest.TestCase):
                 verify_artifact(missing, self.manifest["artifacts"]["cdf"])
 
     def test_wrong_pip_year_ppp_and_authorization_are_rejected(self) -> None:
-        for field, value in (("pipVersion", "wrong"), ("referenceYear", 2025), ("pppBase", 2017)):
+        for field, value in (
+            ("pipVersion", "wrong"),
+            ("productionBuild", "wrong"),
+            ("referenceYear", 2025),
+            ("pppBase", 2017),
+        ):
             changed = deepcopy(self.manifest)
             changed["methodology"][field] = value
             with self.assertRaises(WorldProductionError):
                 validate_engine_manifest(changed)
         changed = deepcopy(self.manifest)
-        changed["integration"]["worldFrontendIntegrationAllowed"] = True
+        changed["integration"]["worldFrontendIntegrationAllowed"] = False
         with self.assertRaises(WorldProductionError):
             validate_engine_manifest(changed)
+
+    def test_blocked_unknown_or_incomplete_manifest_is_rejected(self) -> None:
+        for mutate in (
+            lambda value: value.update(status="CANONICAL_PRODUCTION_FRONTEND_BLOCKED"),
+            lambda value: value.update(status="UNKNOWN"),
+            lambda value: value["integration"].pop("worldFrontendIntegrationAllowed"),
+        ):
+            changed = deepcopy(self.manifest)
+            mutate(changed)
+            with self.assertRaises(WorldProductionError):
+                validate_engine_manifest(changed)
+
+    def test_runtime_bootstrap_references_final_manifest_hash(self) -> None:
+        bootstrap = json.loads((ROOT / "config/world-frontend-runtime.json").read_text(encoding="utf-8"))
+        self.assertEqual(bootstrap["engineManifest"]["sha256"], sha256_file(self.manifest_path))
+        self.assertEqual(bootstrap["engineManifest"]["sourcePath"], "data/production/world/world-income-engine-manifest.json")
 
     def test_generation_is_byte_deterministic(self) -> None:
         before = {path: sha256_file(path) for path in (self.cdf_path, self.price_path, self.manifest_path)}

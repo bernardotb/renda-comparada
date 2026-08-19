@@ -8,7 +8,7 @@ modified: 2026-08-14T16:31:00.000-03:00
 
 **Produto:** Renda Comparada  
 **Versão:** V1  
-**Status:** Canônico para a jornada da V1, condicionado ao fechamento da metodologia Mundo
+**Status:** Canônico para a jornada da V1; Brasil e Mundo integrados com estados assíncronos independentes
 **Versão do documento:** 1.1
 **Última revisão:** 14/08/2026
 **Visão:** `01-visao-produto.md`  

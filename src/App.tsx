@@ -18,6 +18,8 @@ import {
   type BrazilIncomePosition,
 } from './brazil/domain.ts'
 import { brazilEngineLoader } from './brazil/loader.ts'
+import { calculateWorldIncomePosition, type WorldIncomePosition } from './world/domain.ts'
+import { worldEngineLoader } from './world/loader.ts'
 
 function money(value: number, maximumFractionDigits = 2) {
   return new Intl.NumberFormat('pt-BR', {
@@ -35,9 +37,13 @@ function formatCurrencyInput(value: number) {
   }).format(value)
 }
 
-type CalculationState =
+type BrazilCalculationState =
   | { status: 'idle' | 'loading' | 'unavailable'; result: null }
   | { status: 'success'; result: BrazilIncomePosition }
+
+type WorldCalculationState =
+  | { status: 'idle' | 'loading' | 'unavailable'; result: null }
+  | { status: 'success'; result: WorldIncomePosition }
 
 type FieldErrors = {
   income?: string
@@ -46,7 +52,6 @@ type FieldErrors = {
 
 function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
   const display = formatBrazilPosition(result)
-
   return (
     <article className="result-card brasil">
       <div className="result-head">
@@ -71,17 +76,62 @@ function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
   )
 }
 
-function WorldUnavailableCard() {
+function WorldResultCard({ result }: { result: WorldIncomePosition }) {
+  const presentation = result.presentation
+  const topLabel = presentation.kind === 'main' || presentation.kind === 'upper-tail'
+    ? `TOP ${presentation.topDisplayPp.toLocaleString('pt-BR')}%`
+    : null
+  const positionLabel = presentation.kind === 'main'
+    ? `Percentil ${presentation.percentileDisplay}`
+    : presentation.kind === 'upper-tail'
+      ? 'Cauda superior da distribuição observada'
+      : null
+  const headline = 'headline' in presentation ? presentation.headline : null
+
   return (
-    <article className="result-card mundo unavailable">
+    <article className="result-card mundo">
       <div className="result-head">
         <span className="result-icon"><Globe2 size={20} strokeWidth={1.8} /></span>
         <span>No mundo</span>
       </div>
-      <p className="eyebrow">Comparação mundial</p>
-      <p className="limit-headline">Indisponível nesta versão</p>
-      <p className="position-label">A base mundial ainda está em validação.</p>
-      <p className="rank-note">Nenhum número provisório ou curva antiga é exibido.</p>
+      <p className="eyebrow">Posição monetária global estimada</p>
+      {topLabel ? (
+        <div className="position-number"><strong>{topLabel}</strong></div>
+      ) : (
+        <p className="limit-headline">{headline}</p>
+      )}
+      {positionLabel && <p className="position-label">{positionLabel}</p>}
+      <p className="rank-note">
+        Referência global 2024, PPP 2021. Resultado estimado com base na distribuição observada pelo World Bank — Poverty and Inequality Platform.
+      </p>
+    </article>
+  )
+}
+
+function EngineLoadingCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
+  return (
+    <article className={`result-card ${engine === 'Brasil' ? 'brasil' : 'mundo'} unavailable`}>
+      <div className="result-head">
+        <span className="result-icon">{engine === 'Brasil' ? <Sparkles size={20} /> : <Globe2 size={20} />}</span>
+        <span>No {engine === 'Brasil' ? 'Brasil' : 'mundo'}</span>
+      </div>
+      <p className="eyebrow">Carregando base</p>
+      <p className="limit-headline">Calculando…</p>
+      <p className="rank-note">O artefato estático é validado antes do cálculo.</p>
+    </article>
+  )
+}
+
+function EngineUnavailableCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
+  return (
+    <article className={`result-card ${engine === 'Brasil' ? 'brasil' : 'mundo'} unavailable`} role="alert">
+      <div className="result-head">
+        <span className="result-icon"><CircleHelp size={20} /></span>
+        <span>No {engine === 'Brasil' ? 'Brasil' : 'mundo'}</span>
+      </div>
+      <p className="eyebrow">Base indisponível</p>
+      <p className="limit-headline">Não foi possível calcular</p>
+      <p className="rank-note">Nenhum número provisório ou fallback legado é exibido. Tente novamente.</p>
     </article>
   )
 }
@@ -90,7 +140,8 @@ function App() {
   const [incomeInput, setIncomeInput] = useState('12.000')
   const [householdInput, setHouseholdInput] = useState('3')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
-  const [calculation, setCalculation] = useState<CalculationState>({ status: 'idle', result: null })
+  const [brazilCalculation, setBrazilCalculation] = useState<BrazilCalculationState>({ status: 'idle', result: null })
+  const [worldCalculation, setWorldCalculation] = useState<WorldCalculationState>({ status: 'idle', result: null })
   const [showMethod, setShowMethod] = useState(false)
   const calculationRequest = useRef(0)
 
@@ -101,7 +152,8 @@ function App() {
 
   function invalidateResult() {
     calculationRequest.current += 1
-    setCalculation({ status: 'idle', result: null })
+    setBrazilCalculation({ status: 'idle', result: null })
+    setWorldCalculation({ status: 'idle', result: null })
   }
 
   function updateIncome(value: string) {
@@ -138,30 +190,49 @@ function App() {
     }
     setFieldErrors(errors)
     if (!income.ok || !household.ok) {
-      setCalculation({ status: 'idle', result: null })
+      setBrazilCalculation({ status: 'idle', result: null })
+      setWorldCalculation({ status: 'idle', result: null })
       return
     }
 
-    const cachedRuntime = brazilEngineLoader.getCached()
-    if (cachedRuntime) {
-      setCalculation({
+    const cachedBrazilRuntime = brazilEngineLoader.getCached()
+    if (cachedBrazilRuntime) {
+      setBrazilCalculation({
         status: 'success',
-        result: calculateBrazilIncomePosition(cachedRuntime, income.value, household.value),
+        result: calculateBrazilIncomePosition(cachedBrazilRuntime, income.value, household.value),
       })
-      return
+    } else {
+      setBrazilCalculation({ status: 'loading', result: null })
+      void brazilEngineLoader.load().then((runtime) => {
+        if (request !== calculationRequest.current) return
+        setBrazilCalculation({
+          status: 'success',
+          result: calculateBrazilIncomePosition(runtime, income.value, household.value),
+        })
+      }).catch(() => {
+        if (request !== calculationRequest.current) return
+        setBrazilCalculation({ status: 'unavailable', result: null })
+      })
     }
 
-    setCalculation({ status: 'loading', result: null })
-    try {
-      const runtime = await brazilEngineLoader.load()
-      if (request !== calculationRequest.current) return
-      setCalculation({
+    const cachedWorldRuntime = worldEngineLoader.getCached()
+    if (cachedWorldRuntime) {
+      setWorldCalculation({
         status: 'success',
-        result: calculateBrazilIncomePosition(runtime, income.value, household.value),
+        result: calculateWorldIncomePosition(cachedWorldRuntime, income.value, household.value),
       })
-    } catch {
-      if (request !== calculationRequest.current) return
-      setCalculation({ status: 'unavailable', result: null })
+    } else {
+      setWorldCalculation({ status: 'loading', result: null })
+      void worldEngineLoader.load().then((runtime) => {
+        if (request !== calculationRequest.current) return
+        setWorldCalculation({
+          status: 'success',
+          result: calculateWorldIncomePosition(runtime, income.value, household.value),
+        })
+      }).catch(() => {
+        if (request !== calculationRequest.current) return
+        setWorldCalculation({ status: 'unavailable', result: null })
+      })
     }
   }
 
@@ -178,9 +249,9 @@ function App() {
       <main id="top">
         <section className="hero">
           <div className="hero-copy">
-            <div className="kicker"><span /> Brasil disponível</div>
-            <h1><span>Ranking de renda familiar</span><br /><em>no Brasil.</em></h1>
-            <p>Informe a renda da sua casa e veja sua posição. A comparação mundial continua em validação.</p>
+            <div className="kicker"><span /> Brasil e mundo disponíveis</div>
+            <h1><span>Ranking de renda familiar</span><br /><em>em duas escalas.</em></h1>
+            <p>Informe a renda da sua casa e veja sua posição no Brasil e uma posição monetária global estimada.</p>
           </div>
           <aside className="hero-note">
             <span>01</span>
@@ -244,42 +315,32 @@ function App() {
               <span>Renda nominal por pessoa</span>
               <strong>{nominalPerPerson === null ? '—' : money(nominalPerPerson)}</strong>
             </div>
-            <button className="calculate-button" type="submit" disabled={calculation.status === 'loading'}>
-              {calculation.status === 'loading' ? 'Calculando sua posição…' : 'Descobrir minha posição'}
+            <button className="calculate-button" type="submit" disabled={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
+              {brazilCalculation.status === 'loading' || worldCalculation.status === 'loading' ? 'Calculando sua posição…' : 'Descobrir minha posição'}
             </button>
             <div className="privacy-note"><ShieldCheck size={15} /><span>O cálculo acontece no seu navegador. Renda, moradores e resultado não são enviados.</span></div>
           </form>
 
-          <div className="results-panel" aria-live="polite" aria-busy={calculation.status === 'loading'}>
+          <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
             <div className="panel-heading light">
               <span>SUA POSIÇÃO ESTIMADA</span>
               <small>Brasil: preços médios de 2025</small>
             </div>
-            {calculation.status === 'idle' && (
+            {brazilCalculation.status === 'idle' && worldCalculation.status === 'idle' && (
               <div className="results-state">
                 <Sparkles size={28} />
                 <p>Preencha os dados e selecione “Descobrir minha posição”.</p>
               </div>
             )}
-            {calculation.status === 'loading' && (
-              <div className="results-state loading-state">
-                <span className="loading-dot" />
-                <p>Calculando sua posição…</p>
-                <small>A base brasileira é carregada somente no primeiro cálculo.</small>
-              </div>
-            )}
-            {calculation.status === 'unavailable' && (
-              <div className="results-state error-state" role="alert">
-                <CircleHelp size={28} />
-                <p>Não foi possível carregar a base brasileira.</p>
-                <small>Seus dados foram preservados. Tente novamente pelo mesmo botão.</small>
-              </div>
-            )}
-            {calculation.status === 'success' && (
+            {(brazilCalculation.status !== 'idle' || worldCalculation.status !== 'idle') && (
               <>
                 <div className="results-grid">
-                  <BrazilResultCard result={calculation.result} />
-                  <WorldUnavailableCard />
+                  {brazilCalculation.status === 'success' && <BrazilResultCard result={brazilCalculation.result} />}
+                  {brazilCalculation.status === 'loading' && <EngineLoadingCard engine="Brasil" />}
+                  {brazilCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Brasil" />}
+                  {worldCalculation.status === 'success' && <WorldResultCard result={worldCalculation.result} />}
+                  {worldCalculation.status === 'loading' && <EngineLoadingCard engine="Mundo" />}
+                  {worldCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Mundo" />}
                 </div>
                 <div className="interpretation">
                   <CircleHelp size={18} />
@@ -312,8 +373,8 @@ function App() {
             <article>
               <span>MUNDO</span>
               <p>Resultado global</p>
-              <strong>Em validação</strong>
-              <small>sem número provisório nesta versão</small>
+              <strong>PIP 2024</strong>
+              <small>posição monetária global estimada, PPP 2021</small>
             </article>
           </div>
         </section>
@@ -334,7 +395,8 @@ function App() {
           {showMethod && (
             <div className="method-details">
               <p>A distribuição usa a PNAD Contínua 2025. O RDPC é construído pela soma domiciliar de VD4019 × CO1 e VD4048 × CO1e, dividida por VD2003, com peso V1032 e unidade final de pessoas elegíveis.</p>
-              <p>A renda informada é convertida de julho de 2026 para preços médios de 2025 antes da consulta. A CDF é observada em degraus: não há interpolação nem extrapolação acima do máximo. A comparação mundial permanece bloqueada até a validação de fonte, conversão e caudas.</p>
+              <p>A renda informada é convertida de julho de 2026 para preços médios de 2025 antes da consulta brasileira. A CDF é observada em degraus: não há interpolação nem extrapolação acima do máximo.</p>
+              <p>No mundo, a renda mensal por pessoa é alinhada à referência de preços de 2024 e convertida para dólares internacionais diários em PPP 2021. A consulta preserva empates e limites do suporte observado, sem extrapolação.</p>
             </div>
           )}
         </section>
@@ -355,6 +417,10 @@ function App() {
             </a>
             <a href="https://biblioteca.ibge.gov.br/visualizacao/livros/liv102275_informativo.pdf" target="_blank" rel="noreferrer">
               <span><strong>IBGE — Rendimento de todas as fontes</strong><small>Informativo da PNAD Contínua 2025</small></span>
+              <ArrowUpRight size={19} />
+            </a>
+            <a href="https://pip.worldbank.org/" target="_blank" rel="noreferrer">
+              <span><strong>World Bank — Poverty and Inequality Platform</strong><small>Distribuição global, referência 2024 e PPP 2021</small></span>
               <ArrowUpRight size={19} />
             </a>
           </div>
