@@ -55,6 +55,9 @@ test('carrega o pacote canônico, reproduz o golden atual e reutiliza a CDF em m
   const runtime = await loader.load()
   const result = calculateBrazilIncomePosition(runtime, 6500, 3)
 
+  assert.equal(runtime.datasetVersion, '2025-20260508-v1')
+  assert.equal(runtime.referenceMonth, '2026-07')
+  assert.equal(runtime.priceReference, 'preços médios de 2025')
   assert.ok(Math.abs(result.comparableHouseholdIncome - 6197.067647113874) < 1e-9)
   assert.ok(Math.abs(result.comparableRdpc - 2065.689215704624) < 1e-9)
   assert.ok(Math.abs(result.shareBelow - 0.6866910622833815) < 1e-15)

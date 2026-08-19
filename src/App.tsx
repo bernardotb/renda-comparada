@@ -21,8 +21,13 @@ import {
   type BrazilIncomePosition,
 } from './brazil/domain.ts'
 import { brazilEngineLoader } from './brazil/loader.ts'
-import { calculateWorldIncomePosition, type WorldIncomePosition } from './world/domain.ts'
+import { calculateWorldIncomePosition, type WorldIncomePosition, type WorldIncomeRuntime } from './world/domain.ts'
 import { worldEngineLoader } from './world/loader.ts'
+import {
+  datasetYearFromVersion,
+  formatReferenceMonth,
+  shouldShowSharing,
+} from './presentation.ts'
 import {
   buildPositionShareMessage,
   buildSharePayload,
@@ -85,7 +90,7 @@ function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
   )
 }
 
-function WorldResultCard({ result }: { result: WorldIncomePosition }) {
+function WorldResultCard({ result, runtime }: { result: WorldIncomePosition; runtime: WorldIncomeRuntime | null }) {
   const presentation = result.presentation
   const topLabel = presentation.kind === 'main' || presentation.kind === 'upper-tail'
     ? `TOP ${presentation.topDisplayPp.toLocaleString('pt-BR')}%`
@@ -111,7 +116,10 @@ function WorldResultCard({ result }: { result: WorldIncomePosition }) {
       )}
       {positionLabel && <p className="position-label">{positionLabel}</p>}
       <p className="rank-note">
-        Referência global 2024, PPP 2021. Resultado estimado com base na distribuição observada pelo World Bank — Poverty and Inequality Platform.
+        {runtime
+          ? `Referência global ${runtime.referenceYear}, PPP ${runtime.pppBase}. `
+          : 'Referência global validada pelo runtime. '}
+        Resultado estimado com base na distribuição observada pelo World Bank — Poverty and Inequality Platform.
       </p>
     </article>
   )
@@ -257,7 +265,15 @@ function App() {
   const positionShareMessage = buildPositionShareMessage(brazilDisplay)
   const shareUrl = buildShareUrl(window.location.origin)
   const sharePayload = buildSharePayload(shareUrl, includePosition, positionShareMessage)
-  const showSharing = brazilCalculation.status === 'success' || worldCalculation.status === 'success'
+  const showSharing = shouldShowSharing(brazilCalculation.status, worldCalculation.status)
+  const brazilRuntime = brazilEngineLoader.getCached()
+  const worldRuntime = worldEngineLoader.getCached()
+  const brazilDatasetYear = brazilRuntime
+    ? datasetYearFromVersion(brazilRuntime.datasetVersion)
+    : null
+  const brazilReferenceMonth = brazilRuntime
+    ? formatReferenceMonth(brazilRuntime.referenceMonth)
+    : null
 
   async function copyShareLink(fallbackMessage = 'Link copiado') {
     if (!navigator.clipboard?.writeText) {
@@ -377,7 +393,7 @@ function App() {
           <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
             <div className="panel-heading light">
               <span>SUA POSIÇÃO ESTIMADA</span>
-              <small>Brasil: preços médios de 2025</small>
+              <small>{brazilRuntime ? `Brasil: ${brazilRuntime.priceReference}` : 'Brasil: referência validada no cálculo'}</small>
             </div>
             {brazilCalculation.status === 'idle' && worldCalculation.status === 'idle' && (
               <div className="results-state">
@@ -391,7 +407,7 @@ function App() {
                   {brazilCalculation.status === 'success' && <BrazilResultCard result={brazilCalculation.result} />}
                   {brazilCalculation.status === 'loading' && <EngineLoadingCard engine="Brasil" />}
                   {brazilCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Brasil" />}
-                  {worldCalculation.status === 'success' && <WorldResultCard result={worldCalculation.result} />}
+                  {worldCalculation.status === 'success' && <WorldResultCard result={worldCalculation.result} runtime={worldRuntime} />}
                   {worldCalculation.status === 'loading' && <EngineLoadingCard engine="Mundo" />}
                   {worldCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Mundo" />}
                 </div>
@@ -453,20 +469,20 @@ function App() {
             <article>
               <span>BASE</span>
               <p>Distribuição brasileira</p>
-              <strong>PNAD 2025</strong>
+              <strong>{brazilDatasetYear ? `PNAD ${brazilDatasetYear}` : 'PNAD Contínua'}</strong>
               <small>pessoas elegíveis, ponderadas por V1032</small>
             </article>
             <article className="accent">
               <span>R$</span>
               <p>Referência monetária da comparação</p>
-              <strong>2025</strong>
-              <small>preços médios do ano</small>
+              <strong>{brazilRuntime?.priceReference ?? 'Referência validada'}</strong>
+              <small>base monetária do runtime Brasil</small>
             </article>
             <article>
               <span>MUNDO</span>
               <p>Resultado global</p>
-              <strong>PIP 2024</strong>
-              <small>posição monetária global estimada, PPP 2021</small>
+              <strong>{worldRuntime ? `PIP ${worldRuntime.referenceYear}` : 'PIP'}</strong>
+              <small>posição monetária global estimada{worldRuntime ? `, PPP ${worldRuntime.pppBase}` : ''}</small>
             </article>
           </div>
         </section>
@@ -475,22 +491,25 @@ function App() {
           <div className="method-title">
             <div className="section-label">METODOLOGIA</div>
             <h2>Sem falsa precisão.</h2>
-            <button type="button" onClick={() => setShowMethod((value) => !value)} aria-expanded={showMethod}>
+            <button type="button" onClick={() => setShowMethod((value) => !value)} aria-expanded={showMethod} aria-controls="method-details">
               {showMethod ? 'Ocultar detalhes' : 'Ver os detalhes'} <Plus size={18} />
             </button>
           </div>
           <div className="method-summary">
-            <div><Check size={17} /><p><strong>Primeiro</strong> alinhamos a renda nominal atual aos preços médios de 2025 pelo IPCA.</p></div>
+            <div><Check size={17} /><p><strong>Primeiro</strong> alinhamos a renda nominal atual à referência monetária validada pelo IPCA{brazilRuntime ? `: ${brazilRuntime.priceReference}` : ''}.</p></div>
             <div><Check size={17} /><p><strong>Depois</strong> dividimos a renda comparável pelo número inteiro de moradores.</p></div>
             <div><Check size={17} /><p><strong>Por fim</strong> consultamos a CDF empírica brasileira, sem interpolação.</p></div>
           </div>
-          {showMethod && (
-            <div className="method-details">
-              <p>A distribuição usa a PNAD Contínua 2025. O RDPC é construído pela soma domiciliar de VD4019 × CO1 e VD4048 × CO1e, dividida por VD2003, com peso V1032 e unidade final de pessoas elegíveis.</p>
-              <p>A renda informada é convertida de julho de 2026 para preços médios de 2025 antes da consulta brasileira. A CDF é observada em degraus: não há interpolação nem extrapolação acima do máximo.</p>
-              <p>No mundo, a renda mensal por pessoa é alinhada à referência de preços de 2024 e convertida para dólares internacionais diários em PPP 2021. A consulta preserva empates e limites do suporte observado, sem extrapolação.</p>
-            </div>
-          )}
+          <div className="method-details" id="method-details" hidden={!showMethod}>
+              <p>A distribuição usa a PNAD Contínua{brazilDatasetYear ? ` ${brazilDatasetYear}` : ''}. O RDPC é construído pela soma domiciliar de VD4019 × CO1 e VD4048 × CO1e, dividida por VD2003, com peso V1032 e unidade final de pessoas elegíveis.</p>
+              <p>{brazilReferenceMonth && brazilRuntime
+                ? `A renda informada é convertida de ${brazilReferenceMonth} para ${brazilRuntime.priceReference} antes da consulta brasileira. `
+                : 'A renda informada é alinhada à referência monetária validada pelo runtime Brasil antes da consulta. '}
+                A CDF é observada em degraus: não há interpolação nem extrapolação acima do máximo.</p>
+              <p>No mundo, a renda mensal por pessoa é alinhada à referência de preços{worldRuntime ? ` de ${worldRuntime.referenceYear}` : ''} e convertida para dólares internacionais diários{worldRuntime ? ` em PPP ${worldRuntime.pppBase}` : ' pela PPP aprovada'}. A consulta preserva empates e limites do suporte observado, sem extrapolação.</p>
+              <p>Brasil e Mundo não medem patrimônio e não são comparações idênticas: o Brasil usa renda domiciliar per capita de pessoas elegíveis na PNAD; o resultado mundial é uma estimativa monetária baseada em pesquisas harmonizadas de renda ou consumo entre países, não um ranking exato de salário.</p>
+              <p>Como a V1 não coleta UF, o alinhamento brasileiro usa o IPCA nacional como aproximação oficial; diferenças regionais de preços não são modeladas.</p>
+          </div>
         </section>
 
         <section className="sources">
@@ -500,7 +519,7 @@ function App() {
           </div>
           <div className="source-list">
             <a href="https://www.ibge.gov.br/estatisticas/sociais/populacao/17270-pnad-continua.html" target="_blank" rel="noreferrer">
-              <span><strong>IBGE — PNAD Contínua</strong><small>Microdados anuais de 2025</small></span>
+              <span><strong>IBGE — PNAD Contínua</strong><small>Microdados anuais{brazilDatasetYear ? ` de ${brazilDatasetYear}` : ''}</small></span>
               <ArrowUpRight size={19} />
             </a>
             <a href="https://apisidra.ibge.gov.br/values/t/1737/n1/all/v/2266/p/202501-202607?formato=json" target="_blank" rel="noreferrer">
@@ -508,11 +527,11 @@ function App() {
               <ArrowUpRight size={19} />
             </a>
             <a href="https://biblioteca.ibge.gov.br/visualizacao/livros/liv102275_informativo.pdf" target="_blank" rel="noreferrer">
-              <span><strong>IBGE — Rendimento de todas as fontes</strong><small>Informativo da PNAD Contínua 2025</small></span>
+              <span><strong>IBGE — Rendimento de todas as fontes</strong><small>Informativo da PNAD Contínua{brazilDatasetYear ? ` ${brazilDatasetYear}` : ''}</small></span>
               <ArrowUpRight size={19} />
             </a>
             <a href="https://pip.worldbank.org/" target="_blank" rel="noreferrer">
-              <span><strong>World Bank — Poverty and Inequality Platform</strong><small>Distribuição global, referência 2024 e PPP 2021</small></span>
+              <span><strong>World Bank — Poverty and Inequality Platform</strong><small>Distribuição global{worldRuntime ? `, referência ${worldRuntime.referenceYear} e PPP ${worldRuntime.pppBase}` : ''}</small></span>
               <ArrowUpRight size={19} />
             </a>
           </div>

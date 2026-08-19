@@ -1,6 +1,10 @@
 import runtimeConfig from '../../config/brazil-frontend-runtime.json' with { type: 'json' };
 import type { BrazilIncomeRuntime } from './domain.ts';
 
+export type BrazilFrontendRuntime = BrazilIncomeRuntime & {
+  datasetVersion: string;
+};
+
 export interface BrazilRuntimeBootstrap {
   publicBasePath: string;
   engineManifest: {
@@ -209,10 +213,10 @@ export function createBrazilEngineLoader(
   fetcher: Fetcher = globalThis.fetch.bind(globalThis),
   bootstrap: BrazilRuntimeBootstrap = defaultBootstrap,
 ) {
-  let cachedRuntime: BrazilIncomeRuntime | null = null;
-  let inFlight: Promise<BrazilIncomeRuntime> | null = null;
+  let cachedRuntime: BrazilFrontendRuntime | null = null;
+  let inFlight: Promise<BrazilFrontendRuntime> | null = null;
 
-  async function loadUncached(): Promise<BrazilIncomeRuntime> {
+  async function loadUncached(): Promise<BrazilFrontendRuntime> {
     const engine = await fetchVerifiedJson<EngineManifest>(
       fetcher,
       bootstrap.engineManifest.publicPath,
@@ -238,6 +242,7 @@ export function createBrazilEngineLoader(
 
     return {
       engineVersion: engine.version,
+      datasetVersion: cdfArtifact.brazilDatasetVersion,
       priceReference: engine.methodology.priceReference,
       referenceMonth: price.priceIndexReferenceMonth,
       multiplierCurrentToBase,
@@ -246,10 +251,10 @@ export function createBrazilEngineLoader(
   }
 
   return {
-    getCached(): BrazilIncomeRuntime | null {
+    getCached(): BrazilFrontendRuntime | null {
       return cachedRuntime;
     },
-    load(): Promise<BrazilIncomeRuntime> {
+    load(): Promise<BrazilFrontendRuntime> {
       if (cachedRuntime) return Promise.resolve(cachedRuntime);
       if (!inFlight) {
         inFlight = loadUncached()
