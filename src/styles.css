@@ -22,7 +22,7 @@ body { margin: 0; min-width: 320px; min-height: 100vh; background: var(--paper);
 button, input { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; }
-button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+button:focus-visible, input:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
 
 .site-shell { min-height: 100vh; overflow: hidden; }
 .topbar, main, footer { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
@@ -77,9 +77,9 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .household-row .field-label { margin: 0; }
 .stepper { flex: 0 0 auto; display: flex; border: 1px solid var(--ink); border-radius: 999px; overflow: hidden; background: var(--cream); }
 .stepper.invalid { border-color: var(--error); box-shadow: 0 0 0 1px var(--error); }
-.stepper button { width: 42px; height: 42px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; color: var(--ink); }
+.stepper button { width: 44px; height: 44px; display: grid; place-items: center; border: 0; background: transparent; cursor: pointer; color: var(--ink); }
 .stepper button:hover { background: var(--lime); }
-.stepper input { width: 42px; border: 0; border-left: 1px solid var(--line); border-right: 1px solid var(--line); text-align: center; font-weight: 800; background: transparent; appearance: textfield; }
+.stepper input { width: 44px; border: 0; border-left: 1px solid var(--line); border-right: 1px solid var(--line); text-align: center; font-weight: 800; background: transparent; appearance: textfield; }
 .stepper input::-webkit-inner-spin-button { appearance: none; }
 .per-capita-strip { display: flex; justify-content: space-between; align-items: center; margin-top: 38px; padding: 19px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 12px; }
 .per-capita-strip strong { font-size: 20px; }
@@ -88,6 +88,9 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .calculate-button:disabled { cursor: wait; opacity: .72; }
 .privacy-note { display: flex; gap: 8px; align-items: flex-start; color: #68746c; font-size: 11px; margin-top: 18px; line-height: 1.45; }
 .privacy-note svg { flex: 0 0 auto; }
+.household-technical-help { margin-top: 10px; max-width: 360px; color: #526058; font-size: 11px; line-height: 1.5; }
+.household-technical-help summary { width: fit-content; cursor: pointer; color: var(--green); font-weight: 700; }
+.household-technical-help p { margin: 8px 0 0; }
 
 .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
 .results-state { min-height: 350px; display: grid; place-content: center; justify-items: center; gap: 12px; padding: 40px; text-align: center; color: rgba(255,255,255,.75); }
@@ -119,6 +122,20 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .interpretation { display: grid; grid-template-columns: auto 1fr; gap: 10px; margin-top: 22px; color: rgba(255,255,255,.67); font-size: 11px; line-height: 1.55; }
 .interpretation p { margin: 0; }
 .interpretation strong { color: #fff; }
+
+.sharing { margin-top: 24px; padding: 24px; border: 1px solid rgba(255,255,255,.24); border-radius: 20px; background: rgba(255,255,255,.06); }
+.sharing-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
+.sharing .eyebrow { margin: 0 0 6px; color: var(--lime); font-size: 10px; letter-spacing: .14em; }
+.sharing h2 { margin: 0; font: 700 29px/1 'Bricolage Grotesque', sans-serif; letter-spacing: -.035em; }
+.sharing > p { margin: 13px 0 0; color: rgba(255,255,255,.75); font-size: 12px; line-height: 1.5; }
+.share-position-toggle { display: flex; align-items: center; gap: 11px; min-height: 48px; margin-top: 19px; padding: 10px 13px; border: 1px solid rgba(255,255,255,.25); border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 700; }
+.share-position-toggle input { width: 20px; height: 20px; flex: 0 0 auto; accent-color: var(--lime); }
+.share-position-toggle.disabled { cursor: not-allowed; opacity: .62; }
+.sharing .share-limit-note { margin-top: 8px; font-size: 11px; }
+.share-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-top: 18px; }
+.share-actions button, .share-actions a { min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.38); border-radius: 999px; background: transparent; color: #fff; font-size: 12px; font-weight: 800; text-decoration: none; cursor: pointer; text-align: center; }
+.share-actions button:hover, .share-actions a:hover { background: var(--lime); border-color: var(--lime); color: var(--ink); }
+.sharing .share-feedback { min-height: 18px; margin-top: 10px; color: var(--lime); font-weight: 700; }
 
 .benchmarks { padding: 140px 0; }
 .benchmark-intro { display: grid; grid-template-columns: 1.1fr .9fr; gap: 80px; align-items: end; margin: 26px 0 55px; }
@@ -172,19 +189,22 @@ footer > a { display: inline-flex; align-items: center; gap: 7px; font-size: 12p
 }
 
 @media (max-width: 700px) {
-  .topbar, main, footer { width: min(100% - 28px, 1240px); }
+  .topbar, main, footer { width: min(1240px, calc(100% - 28px)); }
   .topbar { height: 88px; }
   .method-link { font-size: 0; border: 0; padding: 10px; }
   .method-link svg { width: 20px; height: 20px; }
   .hero { min-height: auto; padding: 70px 0 55px; }
-  .hero h1 { font-size: clamp(49px, 16vw, 78px); }
+  .hero h1 { font-size: clamp(42px, 13.5vw, 64px); }
   .hero-copy > p { font-size: 17px; }
   .calculator { border-radius: 20px; box-shadow: 7px 7px 0 rgba(23,35,29,.1); }
   .form-panel, .results-panel { padding: 24px 19px; }
   .money-input-wrap input { font-size: 47px; }
-  .household-row { align-items: flex-end; }
+  .household-row { flex-direction: column; align-items: stretch; }
+  .stepper { align-self: flex-start; }
   .results-grid { grid-template-columns: 1fr; }
   .result-card { min-height: 325px; }
+  .sharing { padding: 20px 16px; }
+  .share-actions { grid-template-columns: 1fr; }
   .percentile-number strong { font-size: 78px; }
   .benchmarks { padding: 95px 0; }
   .benchmark-intro { gap: 24px; margin-bottom: 35px; }

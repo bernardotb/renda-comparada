@@ -1,6 +1,6 @@
 # Pacote de produção Mundo
 
-Pacote canônico e isolado do motor Mundo, derivado exclusivamente de D066–D070. Ele não é publicado em `public/**`, não é importado por `src/App.tsx` e não participa de `predev`, `prebuild` ou `build`.
+Pacote canônico do motor Mundo, derivado exclusivamente de D066–D070 e integrado ao frontend por meio do manifesto agregador autorizado.
 
 Artefatos:
 
@@ -9,6 +9,8 @@ Artefatos:
 - `world-income-engine-manifest.json` — SHA-256 `7DFE725F032D97098EF3BA71950DB9A60AEF24DF7EDA0770423A1B9DBF049C56`; 2.407 bytes.
 
 O manifesto agregador registra `worldFrontendIntegrationAllowed = true`. A CDF e o alinhamento de preços preservam seus flags históricos bloqueados e seus hashes originais.
+
+`predev` e `prebuild` validam e sincronizam exatamente os três artefatos acima para `public/data/world/`; o build os publica em `dist/data/world/`. Os golden cases permanecem como evidência de regressão e não são copiados para a área pública. O loader solicita os três artefatos sob demanda, valida integridade e referências cruzadas, mantém o runtime em memória e falha fechado, sem fallback numérico.
 
 Regeneração e validação:
 

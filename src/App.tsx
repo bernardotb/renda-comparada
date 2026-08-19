@@ -5,8 +5,11 @@ import {
   Check,
   CircleHelp,
   Globe2,
+  Link2,
+  MessageCircle,
   Minus,
   Plus,
+  Share2,
   ShieldCheck,
   Sparkles,
 } from 'lucide-react'
@@ -20,6 +23,12 @@ import {
 import { brazilEngineLoader } from './brazil/loader.ts'
 import { calculateWorldIncomePosition, type WorldIncomePosition } from './world/domain.ts'
 import { worldEngineLoader } from './world/loader.ts'
+import {
+  buildPositionShareMessage,
+  buildSharePayload,
+  buildShareUrl,
+  buildWhatsAppUrl,
+} from './share.ts'
 
 function money(value: number, maximumFractionDigits = 2) {
   return new Intl.NumberFormat('pt-BR', {
@@ -137,12 +146,14 @@ function EngineUnavailableCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
 }
 
 function App() {
-  const [incomeInput, setIncomeInput] = useState('12.000')
-  const [householdInput, setHouseholdInput] = useState('3')
+  const [incomeInput, setIncomeInput] = useState('')
+  const [householdInput, setHouseholdInput] = useState('')
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [brazilCalculation, setBrazilCalculation] = useState<BrazilCalculationState>({ status: 'idle', result: null })
   const [worldCalculation, setWorldCalculation] = useState<WorldCalculationState>({ status: 'idle', result: null })
   const [showMethod, setShowMethod] = useState(false)
+  const [includePosition, setIncludePosition] = useState(false)
+  const [shareFeedback, setShareFeedback] = useState('')
   const calculationRequest = useRef(0)
 
   const parsedIncome = parseBrazilianCurrency(incomeInput)
@@ -154,6 +165,8 @@ function App() {
     calculationRequest.current += 1
     setBrazilCalculation({ status: 'idle', result: null })
     setWorldCalculation({ status: 'idle', result: null })
+    setIncludePosition(false)
+    setShareFeedback('')
   }
 
   function updateIncome(value: string) {
@@ -179,6 +192,8 @@ function App() {
     const income = parseBrazilianCurrency(incomeInput)
     const household = parseHouseholdSize(householdInput)
     const errors: FieldErrors = {}
+    setIncludePosition(false)
+    setShareFeedback('')
 
     if (!income.ok) {
       errors.income = income.reason === 'negative'
@@ -236,12 +251,47 @@ function App() {
     }
   }
 
+  const brazilDisplay = brazilCalculation.status === 'success'
+    ? formatBrazilPosition(brazilCalculation.result)
+    : null
+  const positionShareMessage = buildPositionShareMessage(brazilDisplay)
+  const shareUrl = buildShareUrl(window.location.origin)
+  const sharePayload = buildSharePayload(shareUrl, includePosition, positionShareMessage)
+  const showSharing = brazilCalculation.status === 'success' || worldCalculation.status === 'success'
+
+  async function copyShareLink(fallbackMessage = 'Link copiado') {
+    if (!navigator.clipboard?.writeText) {
+      setShareFeedback('Não foi possível copiar automaticamente. Use o endereço desta página.')
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      setShareFeedback(fallbackMessage)
+    } catch {
+      setShareFeedback('Não foi possível copiar automaticamente. Use o endereço desta página.')
+    }
+  }
+
+  async function handleNativeShare() {
+    if (typeof navigator.share !== 'function') {
+      await copyShareLink('Compartilhamento nativo indisponível. Link copiado.')
+      return
+    }
+    try {
+      await navigator.share(sharePayload)
+      setShareFeedback('Compartilhamento aberto')
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return
+      setShareFeedback('Não foi possível abrir o compartilhamento.')
+    }
+  }
+
   return (
     <div className="site-shell">
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Renda em Duas Escalas — início">
+        <a className="brand" href="#top" aria-label="Renda Comparada — início">
           <span className="brand-mark"><i /><i /></span>
-          <span>RENDA<br />EM DUAS ESCALAS</span>
+          <span>RENDA<br />COMPARADA</span>
         </a>
         <a className="method-link" href="#metodologia">Como calculamos <ArrowDown size={15} /></a>
       </header>
@@ -250,12 +300,12 @@ function App() {
         <section className="hero">
           <div className="hero-copy">
             <div className="kicker"><span /> Brasil e mundo disponíveis</div>
-            <h1><span>Ranking de renda familiar</span><br /><em>em duas escalas.</em></h1>
-            <p>Informe a renda da sua casa e veja sua posição no Brasil e uma posição monetária global estimada.</p>
+            <h1><span>Você é mais rico do que</span><br /><em>quantos brasileiros?</em></h1>
+            <p>Descubra onde a renda da sua família está no Brasil — e onde ela estaria no mundo.</p>
           </div>
           <aside className="hero-note">
             <span>01</span>
-            <p>Não mede riqueza.<br />Considera a renda total da família<br />e quantas pessoas vivem dela.</p>
+            <p>A comparação é de renda,<br />não de patrimônio.<br />O cálculo considera todo o domicílio.</p>
           </aside>
         </section>
 
@@ -282,13 +332,17 @@ function App() {
                 aria-invalid={Boolean(fieldErrors.income)}
               />
             </div>
-            <p className="field-help" id="income-help">Some salários e outras rendas regulares de quem mora com você.</p>
+            <p className="field-help" id="income-help">Use a renda bruta mensal, antes de impostos e despesas.</p>
             {fieldErrors.income && <p className="field-error" id="income-error">{fieldErrors.income}</p>}
 
             <div className="household-row">
               <div>
-                <label className="field-label" htmlFor="household">Pessoas sustentadas por essa renda</label>
-                <p className="field-help">Inclua adultos e crianças.</p>
+                <label className="field-label" htmlFor="household">Quantas pessoas fazem parte deste domicílio?</label>
+                <p className="field-help" id="household-help">Inclua adultos e crianças, mesmo que não tenham renda.</p>
+                <details className="household-technical-help" id="household-technical-help">
+                  <summary>Quem não entra no indicador brasileiro?</summary>
+                  <p>Há exclusões técnicas do IBGE para empregado doméstico residente, parente de empregado doméstico e “pensionista” na classificação da condição no domicílio. Aqui, “pensionista” é uma categoria técnica e não significa automaticamente alguém que recebe pensão.</p>
+                </details>
                 {fieldErrors.household && <p className="field-error" id="household-error">{fieldErrors.household}</p>}
               </div>
               <div className={`stepper ${fieldErrors.household ? 'invalid' : ''}`}>
@@ -301,8 +355,7 @@ function App() {
                   inputMode="numeric"
                   value={householdInput}
                   onChange={(event) => updateHousehold(event.target.value)}
-                  aria-label="Número de pessoas"
-                  aria-describedby={fieldErrors.household ? 'household-error' : undefined}
+                  aria-describedby={fieldErrors.household ? 'household-help household-technical-help household-error' : 'household-help household-technical-help'}
                   aria-invalid={Boolean(fieldErrors.household)}
                 />
                 <button type="button" onClick={() => changeHousehold(1)} aria-label="Aumentar número de pessoas">
@@ -346,6 +399,45 @@ function App() {
                   <CircleHelp size={18} />
                   <p><strong>Como ler:</strong> o percentil usa a parcela com renda estritamente menor; o TOP é seu complemento. Empates permanecem no mesmo degrau da distribuição.</p>
                 </div>
+                {showSharing && (
+                  <section className="sharing" aria-labelledby="sharing-title">
+                    <div className="sharing-heading">
+                      <div>
+                        <p className="eyebrow">PRIVADO POR PADRÃO</p>
+                        <h2 id="sharing-title">Compartilhar</h2>
+                      </div>
+                      <ShieldCheck size={24} aria-hidden="true" />
+                    </div>
+                    <p>Sua renda e o número de moradores não serão mostrados.</p>
+                    <label className={`share-position-toggle ${positionShareMessage ? '' : 'disabled'}`}>
+                      <input
+                        type="checkbox"
+                        checked={includePosition}
+                        disabled={!positionShareMessage}
+                        onChange={(event) => {
+                          setIncludePosition(event.target.checked)
+                          setShareFeedback('')
+                        }}
+                      />
+                      <span>Incluir minha posição — sem mostrar minha renda</span>
+                    </label>
+                    {!positionShareMessage && brazilCalculation.status === 'success' && (
+                      <p className="share-limit-note">Esta posição está em um limite da pesquisa e será compartilhada sem número.</p>
+                    )}
+                    <div className="share-actions">
+                      <button type="button" onClick={handleNativeShare}>
+                        <Share2 size={18} aria-hidden="true" /> Compartilhar
+                      </button>
+                      <a href={buildWhatsAppUrl(sharePayload)} target="_blank" rel="noopener noreferrer">
+                        <MessageCircle size={18} aria-hidden="true" /> WhatsApp
+                      </a>
+                      <button type="button" onClick={() => void copyShareLink()}>
+                        <Link2 size={18} aria-hidden="true" /> Copiar link
+                      </button>
+                    </div>
+                    <p className="share-feedback" role="status" aria-live="polite">{shareFeedback}</p>
+                  </section>
+                )}
               </>
             )}
           </div>
@@ -430,7 +522,7 @@ function App() {
       <footer>
         <div className="brand footer-brand">
           <span className="brand-mark"><i /><i /></span>
-          <span>RENDA<br />EM DUAS ESCALAS</span>
+          <span>RENDA<br />COMPARADA</span>
         </div>
         <p>Ferramenta educativa. Não é aconselhamento financeiro, econômico ou tributário.</p>
         <a href="#top">Voltar ao topo <ArrowUpRight size={15} /></a>
