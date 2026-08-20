@@ -1,15 +1,17 @@
 # Renda Comparada
 
-Aplicação para comparar a renda domiciliar por pessoa com distribuições de renda do Brasil e, futuramente, do mundo. O produto compara **renda**, não patrimônio.
+Aplicação para comparar a renda domiciliar por pessoa com distribuições de renda do Brasil e do mundo. O produto compara **renda**, não patrimônio.
 
 ## Estado atual
 
-O motor Brasil está integrado ao frontend a partir do pacote canonizado, com metodologia, CDF histórica, alinhamento temporal, manifestos, schemas e validação reproduzível. A aplicação completa ainda não está pronta para produção porque Mundo permanece bloqueado e não houve gate de publicação.
+Os motores Brasil e Mundo estão integrados ao frontend a partir de pacotes canonizados, com metodologia, CDFs, alinhamentos temporais, manifestos, schemas e validação reproduzível. A conclusão do frontend V1 e o fechamento das lacunas pré-release estão registrados no histórico Git. Isso não equivale a publicação: não há evidência versionada de execução do **V1 Release Readiness Gate**, e o deploy permanece não autorizado.
 
 - Brasil: decisões D063, D065 e D071–D073 ativas; pacote de dados validado e integrado. O G2 foi registrado como PASS COM RESSALVAS, sem converter verificações dinâmicas ausentes em PASS.
-- Mundo: D066 e D067 ativas; D068 foi executada e validada como candidata não canônica; D069 e D070 não foram executadas neste checkout e continuam não canônicas.
-- Frontend: cálculo Brasil usa o pacote canônico; Mundo não exibe resultado numérico.
-- Deploy: fora do Gate G1 e não executado.
+- Mundo: D066–D070 ativas e canônicas; pacote de produção materializado e validado; integração autorizada pelo manifesto agregador.
+- Frontend: Brasil e Mundo calculam resultados numéricos por loaders independentes, sob demanda e sem fallback legado.
+- V1: Frontend Completion e Pre-Release Gap Closure concluídos no checkout.
+- Release readiness: execução e resultado não comprovados no checkout, no histórico Git ou na PR remota inspecionada.
+- Deploy: não autorizado e não executado.
 
 ## Autoridade e navegação
 
@@ -69,4 +71,4 @@ git diff --check
 git status --short --branch
 ```
 
-Não execute deploy, não use constantes antigas do frontend como fallback e não publique resultado mundial enquanto D068–D070 não estiverem explicitamente canonizadas e os artefatos de produção e integração não forem autorizados.
+Não execute deploy sem avaliação de release readiness versionada e autorização explícita. Não use constantes antigas do frontend como fallback nem confunda integração local/build com publicação em produção.

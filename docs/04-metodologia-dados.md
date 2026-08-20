@@ -8,7 +8,7 @@ modified: 2026-08-14T16:49:00.000-03:00
 
 **Produto:** Renda Comparada  
 **Versão do documento:** 1.4
-**Status:** Canônico — sujeito a validação estatística antes da produção  
+**Status:** Canônico — motores Brasil e Mundo validados e integrados; deploy não autorizado
 **Última revisão:** 14/08/2026
 
 **Documentos relacionados:**
@@ -105,7 +105,7 @@ A arquitetura metodológica atual utiliza:
 |Rendimento domiciliar|IBGE — PNAD Contínua|
 |Inflação brasileira|IBGE — IPCA|
 |Distribuição internacional|World Bank — Poverty and Inequality Platform|
-|Paridade de poder de compra|World Bank — ICP / WDI PPP|
+|Paridade de poder de compra operacional do pipeline Mundo|World Bank PIP — tabelas auxiliares `aux/ppp` e `aux/cpi`|
 |Futuro orçamento familiar|IBGE — POF|
 |Futuro crédito e juros|Banco Central do Brasil|
 
@@ -138,7 +138,7 @@ IBGE_RELEASE = 20260508
 IBGE_FILE = PNADC_2025_visita1_20260508.zip
 ```
 
-A versão exata e seu SHA-256 foram registrados em `docs/research/artifacts/fase-1c-source-manifest.json`. O futuro manifesto do dataset produzido pelo projeto deverá referenciar essa proveniência.
+A versão exata e seu SHA-256 foram registrados em `docs/research/artifacts/fase-1c-source-manifest.json`. O pacote Brasil está materializado, e `data/production/brazil/brazil-income-engine-manifest.json` referencia a CDF canônica por caminho, versão e SHA-256, preservando a proveniência documentada.
 
 Se o IBGE substituir explicitamente essa edição por arquivo posterior, a atualização deve ser interrompida para comparação e nova decisão. Não utilizar automaticamente a versão mais nova.
 
@@ -314,7 +314,7 @@ Valor aproximado:
 
 > **R$ 2.166,67 por pessoa/mês.**
 
-Esse valor será comparado com a distribuição brasileira preparada para produção.
+Esse valor é comparado com a CDF brasileira canônica materializada e autorizada para integração pelo manifesto de motor.
 
 ---
 
@@ -824,7 +824,7 @@ Classificação:
 
 > **VALIDAÇÃO AUXILIAR / CONTEXTO OFICIAL**
 
-O futuro pipeline brasileiro não deve ser obrigado a reproduzir R$ 2.316, e a diferença para R$ 2.264 não constitui erro.
+O pipeline brasileiro não deve ser obrigado a reproduzir R$ 2.316, e a diferença para R$ 2.264 não constitui erro.
 
 Nenhuma média deve ser usada para calcular percentis.
 
@@ -856,7 +856,7 @@ Esse segundo método é proibido.
 
 # 33. Fonte Internacional
 
-A fonte principal será:
+A fonte principal é:
 
 > **World Bank — Poverty and Inequality Platform — PIP**
 
@@ -949,25 +949,19 @@ Isso busca ajustar diferenças de nível de preços entre países.
 
 ---
 
-# 39. PPP De Consumo Das Famílias
+# 39. PPP E CPI Operacionais Da Build PIP
 
-Para uma renda familiar, a série conceitualmente mais adequada é a PPP ligada ao consumo das famílias.
-
-Indicador do World Bank WDI:
+D069 canoniza as tabelas auxiliares `ppp` e `cpi` da própria build PIP congelada como fontes operacionais da conversão Mundo:
 
 ```text
-PA.NUS.PRVT.PP
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+BRAZIL_PIP_PPP_2021 = 2.44986319541931
+BRAZIL_PIP_CPI_2024_BASE_2021 = 1.192919586578344
+BRL_PER_INTL_2024 = BRAZIL_PIP_PPP_2021 × BRAZIL_PIP_CPI_2024_BASE_2021
+                  = 2.92248979025310406149724542264
 ```
 
-Descrição:
-
-> PPP conversion factor, households and NPISHs final consumption expenditure.
-
-Unidade:
-
-> moeda local por dólar internacional.
-
-O Banco Mundial informa que os valores mais recentes são extrapolados a partir dos benchmarks do ICP utilizando índices de preços.
+`BRL_PER_INTL_2024` é fator derivado, não terceira fonte independente. O valor CPI de 2024 aparece diretamente no raw da tabela auxiliar. ICP e WDI, inclusive `PA.NUS.PRVT.PP`, permanecem apenas como cross-check e não substituem os fatores observados na build PIP.
 
 ---
 
@@ -989,28 +983,22 @@ A escolha deve refletir o conceito que estamos tentando comparar:
 
 ---
 
-# 41. Conversão Internacional — Estrutura
+# 41. Conversão Internacional — Estrutura Canônica
 
-Primeiro calcular:
-
-```text
-RDPC_usuario_BRL
-```
-
-Depois convertê-lo para a unidade monetária compatível com a versão do PIP utilizada.
-
-Estrutura conceitual:
+D069 define a seguinte estrutura:
 
 ```text
-BRL por pessoa/mês
+BRL corrente por domicílio/mês
 ↓
-ajuste temporal/preços
+divisão pelo número de moradores
 ↓
-PPP de consumo
+alinhamento pelo IPCA nacional para preços médios de 2024
 ↓
-dólares internacionais 2021 por pessoa
+divisão pelo fator PPP × CPI da build PIP
 ↓
-valor diário
+dólares internacionais PPP 2021 por pessoa/mês
+↓
+conversão mensal para diária
 ↓
 distribuição global PIP
 ```
@@ -1021,7 +1009,7 @@ distribuição global PIP
 
 Como o PIP utiliza unidade por dia, definir explicitamente a conversão.
 
-Abordagem recomendada:
+Regra canônica da V1, conforme D069:
 
 ```text
 valor_anual = valor_mensal × 12
@@ -1051,27 +1039,44 @@ A constante utilizada deve ser única e testada.
 
 ---
 
-# 43. Conversão PPP — Regra Final Deve Ser Validada
+# 43. Conversão PPP — Regra Canônica D069
 
-O pipeline deve determinar, com base na versão do PIP e na série PPP selecionada, a conversão exata entre:
-
-```text
-BRL no período do usuário
-```
-
-e
+Para o pipeline Mundo, definir:
 
 ```text
-2021 PPP international dollars
+IPCA_AVG_2024 = média aritmética dos 12 números-índice mensais de janeiro a dezembro de 2024
+IPCA_AVG_2024 = 6952.07333333333333333333333333333333333333333333333333333333
+CURRENT_PRICE_REFERENCE_MONTH = 2026-07
+IPCA_CURRENT = 7657.7300000000000
+
+dailyPPP = (householdIncomeCurrent / residents)
+         × (IPCA_AVG_2024 / IPCA_CURRENT)
+         ÷ (BRAZIL_PIP_PPP_2021 × BRAZIL_PIP_CPI_2024_BASE_2021)
+         × 12 / 365
 ```
 
-Essa conversão deverá ser validada numericamente contra dados oficiais do Banco Mundial.
+Saída:
 
-O Codex não deve criar essa transformação por tentativa ou aproximação.
+```text
+international_2021_ppp_per_person_per_day
+```
+
+A primeira perna é uma extensão brasileira do Renda Comparada: ela alinha a renda nominal corrente a preços médios de 2024 pelo IPCA nacional, SIDRA tabela 1737, variável 2266. O PIP não deflaciona diretamente a renda digitada.
+
+Regras do contrato:
+
+- dividir a renda domiciliar corrente pelo número de moradores antes da comparação;
+- usar os valores completos de PPP e CPI observados nos raws da build congelada;
+- não fazer arredondamento intermediário;
+- não usar câmbio comercial;
+- não usar constantes legadas;
+- não usar WDI ou ICP como substitutos dos fatores `PIP aux`;
+- não reutilizar D065 automaticamente: D065 alinha Brasil a preços médios de 2025, enquanto D069 alinha Mundo ao ano global de 2024;
+- tratar julho/2026 como referência versionada desta versão, não como constante corrente eterna; atualização exige nova evidência oficial preservada, regeneração dos golden cases, testes e promoção explícita em artefato ou manifesto Mundo.
 
 ---
 
-# 44. Método Recomendado Para O Percentil Mundial
+# 44. Fonte E Método Canônicos Para A CDF Mundial
 
 O PIP permite calcular indicadores para países, regiões ou agregados em diferentes linhas monetárias.
 
@@ -1084,7 +1089,9 @@ A API oficial possui endpoints para:
 - versões;
 - anos válidos.
 
-A abordagem recomendada para a V1 é construir **offline** uma função acumulada global a partir do PIP.
+D068 canoniza a construção **offline** a partir do dataset oficial **1000 Binned Global Distribution**, recurso `DR0094423`, arquivo `GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv`.
+
+Para 2024, a fonte contém 218 economias e 1.000 bins por economia. `welf` representa dólares internacionais PPP 2021 por pessoa por dia; `pop` representa milhões de pessoas no bin.
 
 ---
 
@@ -1106,13 +1113,13 @@ Essa proporção corresponde conceitualmente à posição acumulada do usuário.
 
 # 46. CDF Global
 
-Definir:
+Definir, conforme D068:
 
 ```text
 GlobalCDF(x)
 ```
 
-como proporção da população mundial abaixo do nível de bem-estar monetário `x`.
+como proporção da população mundial com `welf` estritamente menor que o nível de bem-estar monetário `x`.
 
 Então:
 
@@ -1120,11 +1127,58 @@ Então:
 percentil_global = 100 × GlobalCDF(x)
 ```
 
-E:
+Preservar também:
 
 ```text
-top_global = 100 - percentil_global
+shareBelow(x) = peso com welf < x / peso total
+shareAtOrBelow(x) = peso com welf <= x / peso total
+topShare(x) = 1 - shareBelow(x)
 ```
+
+Valores empatados de `welf` são agrupados em um único degrau. A CDF não interpola entre pontos e não extrapola além do suporte observado.
+
+---
+
+# 46A. Precisão, Caudas E Golden Cases Mundiais — D070
+
+D070 congela o contrato de golden cases reproduzíveis. O teste versionado espera 11 casos, e o manifesto Mundo registra `validation/world/world-income-golden-cases-d070-candidate.json` por caminho, versão, SHA-256 e tamanho; o conteúdo detalhado do artefato permanece fora do HEAD atual. O contrato usa a CDF D068 e a conversão D069 sem arredondamento intermediário.
+
+Definir:
+
+```text
+topPercent = 100 × topShare
+maxErrorPp = 0.022516991848920
+```
+
+Dentro do suporte observado:
+
+```text
+topShare >= 0,01
+    → percentil inteiro e TOP inteiro complementar
+
+0,001 <= topShare < 0,01
+    → TOP com uma casa decimal
+
+topPercent < 0,1 e topPercent + maxErrorPp < 0,1
+    → "menos de 0,1%"
+
+topPercent < 0,1 e topPercent + maxErrorPp >= 0,1
+    → "aproximadamente 0,1%"
+```
+
+A decisão da cauda extrema usa valores internos não arredondados. A margem de erro D068 impede afirmar “menos de 0,1%” quando o limite de 0,1 ponto percentual ainda estiver dentro da incerteza medida.
+
+Regras de suporte:
+
+- no mínimo, preservar o primeiro degrau e empates, sem `TOP 100%` como headline;
+- abaixo do mínimo, informar fora do suporte inferior, sem extrapolação;
+- no máximo, preservar o último degrau observado;
+- acima do máximo, informar fora do suporte superior, sem extrapolação;
+- nunca exibir `TOP 0%`;
+- preservar `shareBelow` com `<` e `shareAtOrBelow` com `<=`;
+- usar sempre a linguagem **posição monetária global estimada**, conforme D067.
+
+Essa política é exclusiva do Mundo e não altera D071.
 
 ---
 
@@ -1146,27 +1200,31 @@ A aplicação deve utilizar dataset preparado previamente.
 
 ---
 
-# 48. Construção Offline Mundial
+# 48. Construção Offline Mundial Canonizada Por D068
 
-Pipeline desejado:
+Pipeline canônico:
 
 ```text
-PIP
+raw oficial DR0094423 com hash verificado
 ↓
-versão fixa
+filtrar exatamente year = 2024 e build 20260324_2021_01_02_PROD
 ↓
-ano de referência
+validar schema, chaves, 218 economias e 1.000 bins por economia
 ↓
-CDF mundial
+ordenar por welf, agrupar empates e acumular pop
 ↓
-validação
+CDF empírica em degraus
 ↓
-lookup table versionada
+validar contra checkpoints oficiais PIP da mesma vintage
 ↓
-aplicação
+artefato versionado, somente após autorização de produção
 ```
 
-A aplicação deve responder localmente ou através da infraestrutura própria do projeto.
+Missing, campos não numéricos ou não finitos, `welf` negativo e `pop` não positivo invalidam a construção. Não imputar, interpolar, extrapolar nem usar fallback legado.
+
+A base binned perde desigualdade dentro de cada faixa. D068 prevê validação contra checkpoints oficiais PIP da mesma vintage; o pacote e o manifesto versionados preservam `0,022516991848920` ponto percentual como erro absoluto máximo operacional, sem comprovar aqui a quantidade detalhada desses checkpoints. D070 usa esse limite para restringir a precisão visual e a linguagem da cauda extrema; ele não autoriza posição individual exata.
+
+Na etapa de D068, a aplicação futura deveria responder localmente ou pela infraestrutura própria do projeto; D068, isoladamente, não autorizava integração nem promoção da candidata. Posteriormente, o pacote foi promovido e a integração foi autorizada pelo manifesto agregador `data/production/world/world-income-engine-manifest.json`, sem alterar a metodologia ou os hashes históricos.
 
 ---
 
@@ -1326,7 +1384,8 @@ Exemplo:
   "pip_version": "20260324_2021",
   "reference_year": 2024,
   "ppp_basis": 2021,
-  "ppp_indicator": "PA.NUS.PRVT.PP",
+  "ppp_source": "PIP aux/ppp",
+  "cpi_source": "PIP aux/cpi",
   "processed_at": "YYYY-MM-DD",
   "methodology_version": "1.0.0",
   "checksum": "…"
@@ -1495,7 +1554,7 @@ Verificar:
 RDPC = 2166,666…
 ```
 
-O percentil esperado será preenchido somente após a construção validada da distribuição.
+O resultado esperado deste caso deve ser obtido dos golden cases Brasil referenciados, com seu SHA-256, por `data/production/brazil/brazil-income-engine-manifest.json`; não preencher um percentil manualmente.
 
 ---
 
@@ -1799,19 +1858,19 @@ Antes do deploy definitivo da V1, resolver:
 - definir alinhamento da renda do usuário com preços médios de 2025 — **feito e canonizado por D065**;
 - documentar o procedimento de CDF/empates — **feito; resíduos de R$ 1 em P90/P99 permanecem documentados sem ajuste artificial**;
 - reproduzir indicadores oficiais do IBGE — **feito na Fase 1C, com resíduos documentados**;
-- gerar CDF brasileira — **feito e validado; artefato deve ser recuperado/regenerado com SHA-256 aprovado antes da integração**;
+- gerar CDF brasileira — **feito; CDF materializada com SHA-256 protegido e integração autorizada pelo manifesto de motor; futuras regenerações não podem substituir silenciosamente o artefato canônico**;
 - validar percentis brasileiros — **feito com golden cases**;
 - definir precisão visual Brasil — **feito por D071**;
 - congelar versão PIP — **feito por D066**;
 - definir ano mundial — **feito por D066: 2024**;
 - definir tratamento de nowcast — **feito por D066: anos posteriores a 2024 não entram automaticamente**;
-- validar PPP utilizada — **pendente D069**;
-- validar conversão BRL → PPP — **pendente D069**;
-- construir CDF/representação mundial — **pendente D068**;
-- reproduzir headcounts/quantis na mesma release PIP — **pendente D068**;
-- definir limites, empates e precisão do Mundo — **pendente D070**;
-- gerar manifestos/checksums de produção — **Brasil parcial; Mundo pendente**;
-- executar testes de regressão finais — **Brasil definido; Mundo pendente D068–D070**.
+- validar PPP utilizada — **feito e canonizado por D069**;
+- validar conversão BRL → PPP — **feito e canonizado por D069; fator IPCA Mundo materializado em artefato versionado**;
+- construir CDF/representação mundial — **contrato definido por D068; artefato de produção posteriormente materializado e integração habilitada pelo manifesto agregador**;
+- reproduzir headcounts em múltiplas linhas na mesma release PIP — **contrato definido por D068; o HEAD versionado preserva o limite operacional de erro, enquanto a evidência detalhada de execução permanece fora do HEAD**;
+- definir limites, empates e precisão do Mundo — **feito por D070**;
+- gerar manifestos/checksums de produção — **Brasil e Mundo materializados; manifesto agregador Mundo autorizado para integração, com CDF e price alignment históricos preservados**;
+- executar testes de regressão metodológicos — **Brasil definido; contrato D070 referenciado pelo manifesto Mundo e pacote/runtime integrado com regressões próprias**.
 
 ## Validações Formais Executadas Na Fase 1C
 

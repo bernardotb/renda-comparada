@@ -8,7 +8,7 @@ modified: 2026-08-14T16:34:00.000-03:00
 
 **Produto:** Renda Comparada  
 **Versão:** V1  
-**Status:** Canônico para o escopo da V1; integração final bloqueada pelo fechamento da metodologia Mundo
+**Status:** Canônico para o escopo da V1; metodologia Mundo fechada e integração frontend autorizada pelo manifesto agregador
 **Versão do documento:** 1.1
 **Última revisão:** 14/08/2026
 **Documento de visão:** `01-visao-produto.md`  
@@ -423,7 +423,7 @@ A linguagem deve ser validada em conjunto com `04-metodologia-dados.md`.
 
 # 13. FR-006 — Calcular Posição Mundial
 
-O sistema deve fornecer uma comparação internacional **somente depois de a metodologia Mundo ser canonizada**.
+O sistema deve fornecer uma comparação internacional **somente depois de a metodologia Mundo canonizada e do pacote/runtime operacional serem explicitamente autorizados para integração frontend**.
 
 A metodologia deve considerar as conversões e ajustes definidos em:
 
@@ -443,7 +443,7 @@ O resultado deve possuir:
 - ano/versão;
 - indicação explícita de que a comparação internacional é mais aproximada que a brasileira.
 
-Enquanto `WORLD_CDF`, `WORLD_BRL_TO_2021_PPP` e os golden cases mundiais não estiverem aprovados, a integração do resultado Mundo permanece bloqueada.
+`WORLD_CDF`, `WORLD_BRL_TO_2021_PPP` e a apresentação são regidas por D068, D069 e D070. O manifesto agregador autorizado registra `worldFrontendIntegrationAllowed = true`; os flags históricos bloqueados da CDF e do alinhamento de preços permanecem imutáveis e não substituem essa autorização posterior.
 
 ---
 

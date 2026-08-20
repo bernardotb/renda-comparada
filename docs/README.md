@@ -1,7 +1,7 @@
 # Renda Comparada — Índice da Documentação
 
 **Última revisão:** 18/08/2026
-**Estado:** V1 em preparação; motor Brasil integrado ao frontend; Mundo parcialmente canonizado, com D068 validada apenas como candidata e integração numérica bloqueada.
+**Estado:** V1 em preparação; motores Brasil e Mundo integrados ao frontend; D066–D070 canônicas; sem autorização de deploy.
 
 Este diretório contém a documentação de autoridade do projeto. Ele deve ser lido antes de alterações relevantes de produto, dados, UX ou implementação.
 
@@ -212,21 +212,25 @@ Essa regra pertence somente à apresentação. A CDF conserva precisão interna 
 
 ## 5. Mundo — estado
 
-**Status: parcialmente canonizado; integração numérica bloqueada.** Pesquisa, scripts, testes e artefatos em `validation/world/` não equivalem a canonização, produção ou integração.
+**Status: metodologia e pacote/runtime canonizados; integração frontend autorizada pelo manifesto agregador e implementada.** A CDF e o alinhamento de preços preservam seus flags históricos bloqueados e seus hashes; a autorização posterior pertence ao manifesto do motor.
 
 | Item | Estado no checkout | Autoridade/evidência |
 |---|---|---|
 | D066 | **ATIVA / CANÔNICA** | `decisoes.md` |
 | D067 | **ATIVA / CANÔNICA** | `decisoes.md` |
-| D068 | **EXECUTADA E VALIDADA COMO CANDIDATA; NÃO CANÔNICA** | `research/fase-2a-d068-execucao-2026-08-17.md` e `../validation/world/world-cdf-validation.md` |
-| D069 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe protocolo, mas não relatório de execução; a proveniência dos raws oficiais PIP `aux/ppp` e `aux/cpi` permanece pendente |
-| D070 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe molde/protocolo, sem relatório de execução ou decisão ativa |
-| Produção Mundo | **BLOQUEADA** | não existe pacote autorizado em `data/production/world/` |
-| Frontend Mundo | **BLOQUEADO / NÃO INTEGRADO** | nenhuma decisão ou manifesto autorizador permite resultado numérico |
+| D068 | **ATIVA / CANÔNICA** | `decisoes.md`; contrato e estatísticas estruturais verificados pelo pacote/teste de produção versionados |
+| D069 | **ATIVA / CANÔNICA** | `decisoes.md`; fatores PIP `aux/ppp` e `aux/cpi` preservados no alinhamento de preços versionado |
+| D070 | **ATIVA / CANÔNICA** | `decisoes.md`; o teste versionado espera 11 golden cases; o manifesto registra caminho, versão, SHA-256 e tamanho do artefato |
+| Produção Mundo | **MATERIALIZADA / VALIDADA / INCLUÍDA NO BUILD LOCAL** | `../data/production/world/`; manifesto agregador autorizado; nenhum deploy comprovado |
+| Frontend Mundo | **INTEGRADO** | bootstrap mínimo, carregamento sob demanda e falha independente do Brasil |
 
 D066 congela a versão/build PIP, o ano global de 2024 e a base PPP 2021. D067 define o resultado como **posição monetária global estimada**, baseada na distribuição harmonizada do PIP, que combina renda ou consumo domiciliar per capita conforme a fonte nacional.
 
-A execução D068 construiu uma CDF candidata reproduzível a partir da `1000 Binned Global Distribution` e mediu seu erro contra 18 checkpoints oficiais. A aceitação da aproximação intrabin ainda exige revisão humana e decisão explícita. Nenhum valor mundial provisório deve entrar no frontend.
+D069 canoniza a conversão da renda domiciliar nominal corrente para dólares internacionais PPP 2021 por pessoa por dia. Ela usa IPCA nacional para alinhar a entrada a preços médios de 2024 e os fatores completos observados no PIP aux: PPP `2.44986319541931` e CPI 2024/base 2021 `1.192919586578344`. O fator combinado é derivado. Isoladamente, D069 não autorizou integração; a autorização posterior está no manifesto agregador do motor Mundo.
+
+D068 canoniza a fonte e a construção da CDF mundial a partir da `1000 Binned Global Distribution`, com agrupamento de empates e acumulação populacional em degraus. A perda de desigualdade intrabin foi aceita com restrição de precisão. A autorização não veio de D068 isoladamente: o pacote posterior preserva todos os 216.790 pontos, e o manifesto agregador autoriza o valor mundial no frontend.
+
+D070 congela julho/2026 como referência operacional desta versão, o contrato de golden cases, a precisão visual e as regras de cauda. O teste versionado espera 11 casos, e o manifesto registra o artefato por caminho, versão, SHA-256 e tamanho; o conteúdo detalhado permanece fora do HEAD atual. Na cauda extrema, “menos de 0,1%” só é permitido quando `topPercent + 0,022516991848920 < 0,1`; sem essa margem, usar “aproximadamente 0,1%”. O runtime integrado reproduz esse contrato.
 
 ---
 
@@ -243,7 +247,7 @@ PPP_2021_BRL
 BRAZIL_CPI_2024
 ```
 
-não participam mais do caminho ativo e não são usadas como fallback. Mundo aparece apenas em estado explícito de indisponibilidade, sem número provisório.
+não participam mais do caminho ativo e não são usadas como fallback. O navegador carrega somente manifesto, alinhamento de preços e CDF Mundo; golden cases permanecem como evidência de pipeline e regressão, fora de `public/data/world` e do tráfego runtime.
 
 ---
 
@@ -333,7 +337,7 @@ Antes de usar o Codex ou outro agente de código:
 
 1. ler esta ordem documental;
 2. não reabrir D063/D065 sem evidência;
-3. não mostrar Mundo enquanto D068–D070 estiverem bloqueadas;
+3. mostrar Mundo somente quando o manifesto agregador autorizado e os três artefatos estáticos passarem por validação de integridade;
 4. manter Brasil e Mundo como pipelines metodologicamente distintos;
 5. preservar e ampliar os testes do contrato Brasil ao alterar a integração;
 6. preservar privacidade como requisito de domínio, não como detalhe de UI;
@@ -341,8 +345,10 @@ Antes de usar o Codex ou outro agente de código:
 
 ---
 
-## 11. Próximo gate
+## 11. Estado de Release Readiness
 
-O próximo gate recomendado é **fechar a execução e a proveniência de D069**. Depois disso, D068 e D069 candidatas devem passar por revisão humana e eventual canonização explícita antes da execução de D070. Este índice apenas identifica a sequência; não autoriza nenhuma dessas etapas.
+O gate metodológico D070 está fechado e canônico, e o pacote/runtime operacional foi materializado, validado e integrado por autorização explícita do manifesto agregador. O carregamento ocorre sob demanda, com cache em memória e falha fechada independente por motor.
 
-O motor Brasil está integrado. A experiência completa Brasil + Mundo continua bloqueada para produção enquanto as decisões e os manifests autorizadores do Mundo não existirem.
+Os motores Brasil e Mundo estão integrados. Falha no carregamento Mundo não remove o resultado Brasil, não aciona fallback numérico e não reutiliza resultado mundial anterior.
+
+O **V1 Frontend Completion** e o **V1 Pre-Release Gap Closure** estão concluídos no checkout. Não há no checkout ou no histórico Git evidência versionada de execução do **V1 Release Readiness Gate**. Até que essa evidência seja incorporada, a prontidão de release permanece não comprovada e o deploy continua não autorizado.
