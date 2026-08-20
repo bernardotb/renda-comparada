@@ -319,7 +319,7 @@ Um relatório de pesquisa **não altera** automaticamente metodologia ou decisõ
 
 `research/artifacts/` preserva evidências e manifestos de pesquisa.
 
-Documento de prontidão atual:
+Registro histórico de prontidão pré-Codex, não canônico e não utilizável como fotografia do estado atual:
 
 ```text
 research/gate-pre-codex-v1.md
