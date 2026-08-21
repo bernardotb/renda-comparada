@@ -4,6 +4,11 @@ import test from 'node:test'
 
 const root = new URL('../../', import.meta.url)
 
+function attribute(tag: string, name: string): string | null {
+  const match = tag.match(new RegExp(`\\b${name}\\s*=\\s*(["'])(.*?)\\1`, 'i'))
+  return match?.[2] ?? null
+}
+
 test('o caminho ativo não contém motor legado nem fallback mundial', async () => {
   const app = await readFile(new URL('src/App.tsx', root), 'utf8')
   const domain = await readFile(new URL('src/brazil/domain.ts', root), 'utf8')
@@ -54,4 +59,54 @@ test('a CDF é referenciada somente como artefato estático sob demanda', async 
   assert.equal(app.includes('brazil-income-cdf-2025.json'), false)
   assert.equal(/import\s+.*brazil-income-cdf-2025\.json/.test(loader), false)
   assert.match(app, /brazilEngineLoader\.load\(\)/)
+})
+
+test('erros de validação recebem anúncio e foco no primeiro campo inválido', async () => {
+  const app = await readFile(new URL('src/App.tsx', root), 'utf8')
+
+  assert.match(app, /incomeInputRef\.current\?\.focus\(\)/)
+  assert.match(app, /householdInputRef\.current\?\.focus\(\)/)
+  assert.equal((app.match(/className="field-error"[^>]*role="alert"/g) ?? []).length, 2)
+})
+
+test('o marcador visual permanece contido sem limitar o percentil estatístico', async () => {
+  const app = await readFile(new URL('src/App.tsx', root), 'utf8')
+
+  assert.match(app, /clamp\(6\.5px, \$\{markerPercent\}%, calc\(100% - 6\.5px\)\)/)
+  assert.equal(app.includes('99.7'), false)
+})
+
+test('a home possui exatamente uma ocorrência de cada metadata canônica D073', async () => {
+  const html = await readFile(new URL('index.html', root), 'utf8')
+  const titles = [...html.matchAll(/<title\b[^>]*>([\s\S]*?)<\/title>/gi)]
+    .map((match) => match[1].trim())
+  const metaTags = html.match(/<meta\b[^>]*>/gi) ?? []
+
+  const expected = [
+    {
+      attribute: 'name',
+      key: 'description',
+      content: 'Descubra onde a renda da sua casa está na distribuição do Brasil e, de forma estimada, no mundo. Comparação de renda, não de patrimônio.',
+    },
+    {
+      attribute: 'property',
+      key: 'og:title',
+      content: 'Você é mais rico do que quantos brasileiros?',
+    },
+    {
+      attribute: 'property',
+      key: 'og:description',
+      content: 'Descubra onde a renda da sua casa está no Brasil e, de forma estimada, no mundo.',
+    },
+  ] as const
+
+  assert.deepEqual(titles, ['Você é mais rico do que quantos brasileiros? | Renda Comparada'])
+
+  for (const field of expected) {
+    const matches = metaTags.filter(
+      (tag) => attribute(tag, field.attribute)?.toLowerCase() === field.key,
+    )
+    assert.equal(matches.length, 1, `${field.attribute}=${field.key}`)
+    assert.equal(attribute(matches[0], 'content'), field.content, field.key)
+  }
 })

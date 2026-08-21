@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   calculateBrazilIncomePosition,
+  clampVisualMarkerPercent,
   formatBrazilPosition,
   parseBrazilianCurrency,
   parseHouseholdSize,
@@ -67,7 +68,12 @@ test('preserva empate, renda zero, máximo e acima do máximo', () => {
   const zero = calculateBrazilIncomePosition(runtime, 0, 1)
   assert.equal(zero.shareBelow, 0)
   assert.equal(zero.shareAtOrBelow, 0.2)
-  assert.equal(formatBrazilPosition(zero).kind, 'zero')
+  const zeroDisplay = formatBrazilPosition(zero)
+  assert.equal(zeroDisplay.kind, 'zero')
+  assert.equal(
+    zeroDisplay.interpretation,
+    'R$ 0 é o menor nível de renda por pessoa observado na distribuição utilizada e há outras pessoas empatadas nesse valor.',
+  )
 
   const maximum = calculateBrazilIncomePosition(runtime, 40, 1)
   assert.equal(maximum.comparableRdpc, 20)
@@ -79,18 +85,62 @@ test('preserva empate, renda zero, máximo e acima do máximo', () => {
   assert.equal(above.shareBelow, 1)
   assert.equal(above.shareAtOrBelow, 1)
   assert.equal(above.isAboveMaximum, true)
-  assert.equal(formatBrazilPosition(above).kind, 'above-maximum')
-  assert.equal(formatBrazilPosition(above).topLabel, null)
+  const aboveDisplay = formatBrazilPosition(above)
+  assert.equal(aboveDisplay.kind, 'above-maximum')
+  assert.equal(aboveDisplay.topLabel, null)
+  assert.equal(
+    aboveDisplay.interpretation,
+    'Sua renda por pessoa está acima do maior valor observado na distribuição da PNAD 2025 utilizada. A pesquisa não permite estimar com segurança uma posição mais fina nessa cauda.',
+  )
 })
 
-test('aplica as faixas visuais da D071 sem exibir TOP 0%', () => {
+test('aplica as fronteiras visuais da D071 sem arredondar a estatística interna', () => {
   const base = calculateBrazilIncomePosition(runtime, 40, 2)
-  assert.equal(formatBrazilPosition(base).topLabel, 'TOP 80%')
+  const cases = [
+    { topShare: 0.02, topLabel: 'TOP 2%', percentileLabel: 'Percentil 98' },
+    { topShare: 0.01, topLabel: 'TOP 1%', percentileLabel: 'Percentil 99' },
+    { topShare: 0.009999, topLabel: 'TOP 1,0%', percentileLabel: 'Percentil 99,0' },
+    { topShare: 0.006, topLabel: 'TOP 0,6%', percentileLabel: 'Percentil 99,4' },
+    { topShare: 0.001, topLabel: 'TOP 0,1%', percentileLabel: 'Percentil 99,9' },
+    {
+      topShare: 0.000999,
+      topLabel: 'TOP < 0,1%',
+      percentileLabel: 'Acima do percentil 99,9',
+      interpretation: 'Entre menos de 0,1% de maior renda na distribuição observada.',
+    },
+    {
+      topShare: 0.0005,
+      topLabel: 'TOP < 0,1%',
+      percentileLabel: 'Acima do percentil 99,9',
+      interpretation: 'Entre menos de 0,1% de maior renda na distribuição observada.',
+    },
+  ] as const
 
-  const upperTail = formatBrazilPosition({ ...base, shareBelow: 0.994, topShare: 0.006 })
-  assert.equal(upperTail.topLabel, 'TOP 0,6%')
+  for (const expected of cases) {
+    const display = formatBrazilPosition({
+      ...base,
+      shareBelow: 1 - expected.topShare,
+      topShare: expected.topShare,
+    })
+    assert.equal(display.topLabel, expected.topLabel, String(expected.topShare))
+    assert.equal(display.percentileLabel, expected.percentileLabel, String(expected.topShare))
+    if ('interpretation' in expected) {
+      assert.equal(display.interpretation, expected.interpretation, String(expected.topShare))
+    }
+    assert.doesNotMatch(display.topLabel ?? '', /TOP 0%/, String(expected.topShare))
+  }
+})
 
-  const extremeTail = formatBrazilPosition({ ...base, shareBelow: 0.9995, topShare: 0.0005 })
-  assert.equal(extremeTail.topLabel, 'TOP < 0,1%')
-  assert.doesNotMatch(extremeTail.topLabel ?? '', /TOP 0%/)
+test('a geometria preserva posições legítimas acima de 99,7% e limita somente a barra física', () => {
+  const base = calculateBrazilIncomePosition(runtime, 40, 2)
+  const position = { ...base, shareBelow: 0.9998, topShare: 0.0002 }
+  const display = formatBrazilPosition(position)
+
+  assert.equal(position.shareBelow, 0.9998)
+  assert.equal(position.topShare, 0.0002)
+  assert.equal(display.markerPercent, 99.98)
+  assert.equal(clampVisualMarkerPercent(display.markerPercent), 99.98)
+  assert.notEqual(clampVisualMarkerPercent(display.markerPercent), 99.7)
+  assert.equal(clampVisualMarkerPercent(-0.01), 0)
+  assert.equal(clampVisualMarkerPercent(100.01), 100)
 })

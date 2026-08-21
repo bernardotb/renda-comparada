@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import {
   calculateBrazilIncomePosition,
+  clampVisualMarkerPercent,
   formatBrazilPosition,
   parseBrazilianCurrency,
   parseHouseholdSize,
@@ -66,6 +67,10 @@ type FieldErrors = {
 
 function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
   const display = formatBrazilPosition(result)
+  const markerPercent = display.markerPercent === null
+    ? null
+    : clampVisualMarkerPercent(display.markerPercent)
+
   return (
     <article className="result-card brasil">
       <div className="result-head">
@@ -78,10 +83,10 @@ function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
       ) : (
         <p className="limit-headline">{display.percentileLabel}</p>
       )}
-      {display.markerPercent !== null && (
+      {markerPercent !== null && (
         <div className="result-ruler" aria-label={display.percentileLabel}>
-          <span style={{ width: `${Math.min(99.7, Math.max(0, display.markerPercent))}%` }} />
-          <i style={{ left: `${Math.min(99.7, Math.max(0, display.markerPercent))}%` }} />
+          <span style={{ width: `${markerPercent}%` }} />
+          <i style={{ left: `clamp(6.5px, ${markerPercent}%, calc(100% - 6.5px))` }} />
         </div>
       )}
       {display.topLabel && <p className="position-label">{display.percentileLabel}</p>}
@@ -163,6 +168,8 @@ function App() {
   const [includePosition, setIncludePosition] = useState(false)
   const [shareFeedback, setShareFeedback] = useState('')
   const calculationRequest = useRef(0)
+  const incomeInputRef = useRef<HTMLInputElement>(null)
+  const householdInputRef = useRef<HTMLInputElement>(null)
 
   const parsedIncome = parseBrazilianCurrency(incomeInput)
   const parsedHousehold = parseHouseholdSize(householdInput)
@@ -215,6 +222,8 @@ function App() {
     if (!income.ok || !household.ok) {
       setBrazilCalculation({ status: 'idle', result: null })
       setWorldCalculation({ status: 'idle', result: null })
+      if (!income.ok) incomeInputRef.current?.focus()
+      else householdInputRef.current?.focus()
       return
     }
 
@@ -336,6 +345,7 @@ function App() {
             <div className={`money-input-wrap ${fieldErrors.income ? 'invalid' : ''}`}>
               <span>R$</span>
               <input
+                ref={incomeInputRef}
                 id="income"
                 inputMode="decimal"
                 value={incomeInput}
@@ -349,7 +359,7 @@ function App() {
               />
             </div>
             <p className="field-help" id="income-help">Use a renda bruta mensal, antes de impostos e despesas.</p>
-            {fieldErrors.income && <p className="field-error" id="income-error">{fieldErrors.income}</p>}
+            {fieldErrors.income && <p className="field-error" id="income-error" role="alert">{fieldErrors.income}</p>}
 
             <div className="household-row">
               <div>
@@ -359,13 +369,14 @@ function App() {
                   <summary>Quem não entra no indicador brasileiro?</summary>
                   <p>Há exclusões técnicas do IBGE para empregado doméstico residente, parente de empregado doméstico e “pensionista” na classificação da condição no domicílio. Aqui, “pensionista” é uma categoria técnica e não significa automaticamente alguém que recebe pensão.</p>
                 </details>
-                {fieldErrors.household && <p className="field-error" id="household-error">{fieldErrors.household}</p>}
+                {fieldErrors.household && <p className="field-error" id="household-error" role="alert">{fieldErrors.household}</p>}
               </div>
               <div className={`stepper ${fieldErrors.household ? 'invalid' : ''}`}>
                 <button type="button" onClick={() => changeHousehold(-1)} aria-label="Diminuir número de pessoas">
                   <Minus size={18} />
                 </button>
                 <input
+                  ref={householdInputRef}
                   id="household"
                   type="text"
                   inputMode="numeric"
