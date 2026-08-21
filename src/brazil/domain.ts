@@ -206,13 +206,17 @@ function formatPt(value: number, maximumFractionDigits: number): string {
   }).format(value);
 }
 
+export function clampVisualMarkerPercent(markerPercent: number): number {
+  return Math.min(100, Math.max(0, markerPercent));
+}
+
 export function formatBrazilPosition(position: BrazilIncomePosition): BrazilPositionDisplay {
   if (position.isAboveMaximum) {
     return {
       kind: 'above-maximum',
       topLabel: null,
       percentileLabel: 'Acima do maior valor observado na amostra',
-      interpretation: 'A base não permite extrapolar uma posição numérica além desse ponto.',
+      interpretation: 'Sua renda por pessoa está acima do maior valor observado na distribuição da PNAD 2025 utilizada. A pesquisa não permite estimar com segurança uma posição mais fina nessa cauda.',
       markerPercent: null,
     };
   }
@@ -222,7 +226,7 @@ export function formatBrazilPosition(position: BrazilIncomePosition): BrazilPosi
       kind: 'zero',
       topLabel: null,
       percentileLabel: 'Renda per capita igual a zero',
-      interpretation: 'A posição é apresentada sem o rótulo “TOP 100%”, que seria enganoso.',
+      interpretation: 'R$ 0 é o menor nível de renda por pessoa observado na distribuição utilizada e há outras pessoas empatadas nesse valor.',
       markerPercent: 0,
     };
   }
@@ -235,8 +239,8 @@ export function formatBrazilPosition(position: BrazilIncomePosition): BrazilPosi
       kind: 'upper-tail',
       topLabel: 'TOP < 0,1%',
       percentileLabel: 'Acima do percentil 99,9',
-      interpretation: 'Sua renda está na cauda superior observada, sem sugerir precisão além da base.',
-      markerPercent: Math.min(100, percentile),
+      interpretation: 'Entre menos de 0,1% de maior renda na distribuição observada.',
+      markerPercent: percentile,
     };
   }
 
@@ -246,7 +250,7 @@ export function formatBrazilPosition(position: BrazilIncomePosition): BrazilPosi
       topLabel: `TOP ${formatPt(top, 1)}%`,
       percentileLabel: `Percentil ${formatPt(percentile, 1)}`,
       interpretation: `Sua renda é maior que a de aproximadamente ${formatPt(percentile, 1)}% das pessoas elegíveis.`,
-      markerPercent: Math.min(100, percentile),
+      markerPercent: percentile,
     };
   }
 
@@ -257,6 +261,6 @@ export function formatBrazilPosition(position: BrazilIncomePosition): BrazilPosi
     topLabel: `TOP ${roundedTop}%`,
     percentileLabel: `Percentil ${roundedPercentile}`,
     interpretation: `Sua renda é maior que a de aproximadamente ${roundedPercentile}% das pessoas elegíveis.`,
-    markerPercent: Math.min(100, percentile),
+    markerPercent: percentile,
   };
 }

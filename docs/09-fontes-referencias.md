@@ -348,6 +348,15 @@ renda_domiciliar_2025 = renda_domiciliar_corrente × IPCA_MEDIO_2025 / IPCA_mes_
 
 A V1 usa o índice nacional porque não coleta UF. O mês corrente deve vir de manifesto versionado e aprovado; não consultar `latest` silenciosamente e não projetar IPCA ainda não publicado.
 
+Para D069, a mesma série oficial possui contrato temporal Mundo separado:
+
+```text
+IPCA_AVG_2024 = média aritmética dos 12 números-índice mensais de janeiro a dezembro de 2024
+IPCA_CURRENT = número-índice do mês corrente explicitamente aprovado e versionado para o contrato Mundo
+```
+
+Essa perna alinha a entrada corrente a preços médios de 2024. Ela não reutiliza automaticamente o fator ou o manifesto Brasil de D065 e não deve ser interpretada como deflação executada pelo PIP.
+
 ---
 
 # 11. IPCA Não Substitui Distribuição
@@ -526,13 +535,13 @@ A API disponibiliza:
 - tabelas auxiliares;
 - curvas distributivas e parâmetros.
 
-### Rota para D068 — revisão após inspeção do cliente oficial
+### Fonte operacional canonizada por D068
 
 A hipótese de usar `popshare` diretamente no agregado mundial foi rejeitada.
 
 O wrapper oficial `worldbank/pip` documenta `popshare(#)` somente para `pip cl` e o código de `pip_wb.ado` rejeita explicitamente sua combinação com o subcomando `wb`.
 
-Portanto, a candidata operacional principal para construir a CDF mundial passa a ser:
+Portanto, D068 canoniza a seguinte fonte e construção para a CDF mundial:
 
 ```text
 1000 Binned Global Distribution
@@ -545,10 +554,10 @@ ordenar por welf
 ↓
 pesar por pop
 ↓
-CDF global experimental
+CDF global empírica em degraus
 ```
 
-A validação deve ser feita contra o endpoint agregado oficial:
+A validação é feita contra o endpoint agregado oficial:
 
 ```text
 /pip-grp
@@ -556,11 +565,11 @@ group_by = wb
 povline = <linha monetária>
 ```
 
-em múltiplos pontos de controle.
+em múltiplos pontos de controle. A evidência preservada contém 18 checkpoints entre US$ 1 e US$ 200 PPP 2021 por pessoa/dia; o erro absoluto máximo observado foi `0,022516991848920` ponto percentual.
 
-A base em faixas não é automaticamente canônica: só poderá ser usada se o erro contra `pip wb` for compatível com a precisão exibida ao usuário.
+A base em faixas foi aceita como fonte operacional de D068 com restrição de precisão. D070 rege a precisão visual com base no erro medido; nenhuma das duas decisões promove automaticamente o artefato candidato. A promoção posterior está registrada no pacote e no manifesto agregador de produção Mundo.
 
-### Rota preferencial para D069
+### Fontes operacionais de D069
 
 As tabelas auxiliares oficiais:
 
@@ -569,9 +578,32 @@ As tabelas auxiliares oficiais:
 /aux?table=cpi
 ```
 
-são as fontes preferenciais para os fatores PPP e CPI efetivamente usados nos cálculos do PIP.
+são as fontes operacionais canonizadas para os fatores PPP e CPI efetivamente usados nos cálculos do PIP.
 
-Não substituir silenciosamente esses fatores por série WDI semelhante sem validação.
+A aquisição válida usou a build completa:
+
+```text
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+PPP: https://api.worldbank.org/pip/v1/aux?table=ppp&version=20260324_2021_01_02_PROD&format=csv
+CPI: https://api.worldbank.org/pip/v1/aux?table=cpi&version=20260324_2021_01_02_PROD&format=csv
+```
+
+Evidência preservada:
+
+```text
+PPP raw = data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-ppp.raw.csv
+PPP SHA-256 = 792476948DA84A005CC9C61C359CB586B42866F850F55973EF7BDC2693347EB6
+PPP Brasil = BRA,national,2021,2.44986319541931
+
+CPI raw = data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-cpi.raw.csv
+CPI SHA-256 = E2F558A28FBBD91F69EDB5FEF4BC10DED19F17D315090CB70031F2C993408ABE
+CPI Brasil = BRA,national,2021,1
+             BRA,national,2024,1.192919586578344
+```
+
+A tentativa histórica com `version=20260324_2021` retornou HTTP 404 e permanece preservada. Ela não substitui a aquisição válida pela production build completa.
+
+Não substituir esses fatores por série WDI ou ICP. Para este contrato, essas fontes são apenas cross-checks.
 
 ---
 
@@ -604,7 +636,7 @@ sem registrar o identificador efetivamente processado.
 
 # 18A. Distribuição Global Em 1.000 Faixas
 
-**Classificação:** `OFICIAL-AUXILIAR / PLANO B`
+**Classificação:** `CANÔNICA OPERACIONAL PARA D068`
 
 Fonte:
 
@@ -624,11 +656,11 @@ O próprio Banco Mundial alerta que essa base:
 - não substitui as estatísticas estimadas diretamente pelo PIP;
 - perde desigualdade dentro de cada faixa.
 
-Consequência:
+Consequência de D068:
 
-> usar como candidata operacional principal para a CDF mundial, sempre com validação contra `pip wb` / `pip-grp` por `povline`; rejeitar se o erro medido for material para a precisão da V1.
+> usar como fonte operacional da CDF mundial, sempre com versão e SHA-256 fixados e validação contra `pip wb` / `pip-grp` por `povline`.
 
-Não canonizar automaticamente como CDF de produção.
+A perda de desigualdade intrabin permanece limitação material aceita com restrição de precisão. D070 resolveu apresentação, caudas e golden cases sem promover a candidata por si só; a promoção posterior preservou a proveniência e foi registrada no pacote de produção Mundo.
 
 ---
 
@@ -731,7 +763,7 @@ Referência oficial:
 
 ### Regra da V1
 
-Para D069, a prioridade é obter o PPP diretamente da tabela auxiliar da **mesma versão PIP congelada**:
+Para D069, o PPP operacional foi obtido diretamente da tabela auxiliar da **mesma build PIP congelada**:
 
 ```text
 PIP /aux → table=ppp
@@ -743,9 +775,9 @@ A série WDI `PA.NUS.PRVT.PP` deve ser utilizada como:
 CROSS-CHECK OFICIAL
 ```
 
-e não como substituto automático da tabela PIP.
+e não como substituto da tabela PIP.
 
-Se os valores divergirem, suspender a conversão mundial até explicar conceitualmente e numericamente a diferença.
+A divergência observada em cross-check não substitui nem invalida o valor operacional presente no raw da build congelada. Não atribuir causa à divergência sem demonstração oficial.
 
 ---
 
@@ -1912,7 +1944,7 @@ Antes do lançamento da V1:
 - PIP versionado;
 - ano global definido;
 - PPP definida;
-- manifestos brasileiros de fonte, CDF e alinhamento temporal gerados/versionados; manifestos globais permanecem pendentes;
+- manifestos brasileiros e mundiais de CDF, alinhamento temporal e motor gerados/versionados; manifesto agregador Mundo autorizado para integração;
 - URLs oficiais registradas;
 - metodologia pública atualizada;
 - fontes exibidas na interface;

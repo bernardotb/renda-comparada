@@ -1,13 +1,19 @@
-# Renda Comparada — Índice da Documentação
+---
+title: Renda Comparada — Índice Da Documentação
+created: 2026-08-15T12:57:18.000-03:00
+modified: 2026-08-20T11:12:06.617-03:00
+---
 
-**Última revisão:** 18/08/2026
-**Estado:** V1 em preparação; motor Brasil integrado ao frontend; Mundo parcialmente canonizado, com D068 validada apenas como candidata e integração numérica bloqueada.
+# Renda Comparada — Índice Da Documentação
+
+**Última revisão:** 20/08/2026
+**Estado:** V1 em preparação; motores Brasil e Mundo integrados ao frontend; D066–D070 canônicas; sem autorização de deploy.
 
 Este diretório contém a documentação de autoridade do projeto. Ele deve ser lido antes de alterações relevantes de produto, dados, UX ou implementação.
 
 ---
 
-## 1. Regra principal
+## 1. Regra Principal
 
 > **A fase determina o trabalho. O backlog não aumenta o escopo da V1.**
 
@@ -21,7 +27,7 @@ Quando uma regra metodológica não estiver fechada:
 
 ---
 
-## 2. Ordem de leitura
+## 2. Ordem De Leitura
 
 1. `01-visao-produto.md` — tese e limites do produto;
 2. `02-prd-v1.md` — escopo da V1;
@@ -70,7 +76,7 @@ Princípios:
 
 ---
 
-## 4. Brasil — estado
+## 4. Brasil — Estado
 
 **Status: pacote de dados integrado ao frontend.** Isso não declara a aplicação completa pronta para produção nem autoriza deploy.
 
@@ -142,7 +148,7 @@ config/schemas/brazil-price-alignment.schema.json
 config/schemas/brazil-income-engine-manifest.schema.json
 ```
 
-### D072 — entrega da CDF
+### D072 — Entrega Da CDF
 
 A CDF possui 3.955.036 bytes brutos e 1.788.882 bytes em gzip -9 local. O lookup é barato; o custo relevante é a primeira transferência. Por isso, D072 determina:
 
@@ -156,7 +162,7 @@ O frontend implementa esse contrato por um processo reproduzível que valida e c
 
 Os números de tamanho e o diagnóstico local de desempenho permanecem registrados em D072. Não existe relatório autônomo `brazil-cdf-delivery-performance` neste checkout; portanto, ele não é tratado como artefato de validação do Gate G0.
 
-### D073 — metadata e share genérico
+### D073 — Metadata E Share Genérico
 
 Também estão fechados para a home V1:
 
@@ -186,7 +192,7 @@ O manifesto canônico de preços está em:
 data/production/brazil/brazil-price-alignment.json
 ```
 
-### D071 — apresentação Brasil
+### D071 — Apresentação Brasil
 
 A precisão visual brasileira também está fechada:
 
@@ -200,7 +206,7 @@ RDPC zero: sem headline TOP 100%
 
 Essa regra pertence somente à apresentação. A CDF conserva precisão interna completa.
 
-### Proibido para produção Brasil
+### Proibido Para Produção Brasil
 
 - `VD5011 × CO1` como construção principal;
 - distribuição PIP usada como distribuição brasileira;
@@ -210,27 +216,31 @@ Essa regra pertence somente à apresentação. A CDF conserva precisão interna 
 
 ---
 
-## 5. Mundo — estado
+## 5. Mundo — Estado
 
-**Status: parcialmente canonizado; integração numérica bloqueada.** Pesquisa, scripts, testes e artefatos em `validation/world/` não equivalem a canonização, produção ou integração.
+**Status: metodologia e pacote/runtime canonizados; integração frontend autorizada pelo manifesto agregador e implementada.** A CDF e o alinhamento de preços preservam seus flags históricos bloqueados e seus hashes; a autorização posterior pertence ao manifesto do motor.
 
 | Item | Estado no checkout | Autoridade/evidência |
 |---|---|---|
 | D066 | **ATIVA / CANÔNICA** | `decisoes.md` |
 | D067 | **ATIVA / CANÔNICA** | `decisoes.md` |
-| D068 | **EXECUTADA E VALIDADA COMO CANDIDATA; NÃO CANÔNICA** | `research/fase-2a-d068-execucao-2026-08-17.md` e `../validation/world/world-cdf-validation.md` |
-| D069 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe protocolo, mas não relatório de execução; a proveniência dos raws oficiais PIP `aux/ppp` e `aux/cpi` permanece pendente |
-| D070 | **NÃO EXECUTADA; NÃO CANÔNICA** | existe molde/protocolo, sem relatório de execução ou decisão ativa |
-| Produção Mundo | **BLOQUEADA** | não existe pacote autorizado em `data/production/world/` |
-| Frontend Mundo | **BLOQUEADO / NÃO INTEGRADO** | nenhuma decisão ou manifesto autorizador permite resultado numérico |
+| D068 | **ATIVA / CANÔNICA** | `decisoes.md`; contrato e estatísticas estruturais verificados pelo pacote/teste de produção versionados |
+| D069 | **ATIVA / CANÔNICA** | `decisoes.md`; fatores PIP `aux/ppp` e `aux/cpi` preservados no alinhamento de preços versionado |
+| D070 | **ATIVA / CANÔNICA** | `decisoes.md`; o teste versionado espera 11 golden cases; o manifesto registra caminho, versão, SHA-256 e tamanho do artefato |
+| Produção Mundo | **MATERIALIZADA / VALIDADA / INCLUÍDA NO BUILD LOCAL** | `../data/production/world/`; manifesto agregador autorizado; nenhum deploy comprovado |
+| Frontend Mundo | **INTEGRADO** | bootstrap mínimo, carregamento sob demanda e falha independente do Brasil |
 
 D066 congela a versão/build PIP, o ano global de 2024 e a base PPP 2021. D067 define o resultado como **posição monetária global estimada**, baseada na distribuição harmonizada do PIP, que combina renda ou consumo domiciliar per capita conforme a fonte nacional.
 
-A execução D068 construiu uma CDF candidata reproduzível a partir da `1000 Binned Global Distribution` e mediu seu erro contra 18 checkpoints oficiais. A aceitação da aproximação intrabin ainda exige revisão humana e decisão explícita. Nenhum valor mundial provisório deve entrar no frontend.
+D069 canoniza a conversão da renda domiciliar nominal corrente para dólares internacionais PPP 2021 por pessoa por dia. Ela usa IPCA nacional para alinhar a entrada a preços médios de 2024 e os fatores completos observados no PIP aux: PPP `2.44986319541931` e CPI 2024/base 2021 `1.192919586578344`. O fator combinado é derivado. Isoladamente, D069 não autorizou integração; a autorização posterior está no manifesto agregador do motor Mundo.
+
+D068 canoniza a fonte e a construção da CDF mundial a partir da `1000 Binned Global Distribution`, com agrupamento de empates e acumulação populacional em degraus. A perda de desigualdade intrabin foi aceita com restrição de precisão. A autorização não veio de D068 isoladamente: o pacote posterior preserva todos os 216.790 pontos, e o manifesto agregador autoriza o valor mundial no frontend.
+
+D070 congela julho/2026 como referência operacional desta versão, o contrato de golden cases, a precisão visual e as regras de cauda. O teste versionado espera 11 casos, e o manifesto registra o artefato por caminho, versão, SHA-256 e tamanho; o conteúdo detalhado está versionado no HEAD atual. Na cauda extrema, “menos de 0,1%” só é permitido quando `topPercent + 0,022516991848920 < 0,1`; sem essa margem, usar “aproximadamente 0,1%”. O runtime integrado reproduz esse contrato.
 
 ---
 
-## 6. Frontend atual
+## 6. Frontend Atual
 
 O `src/App.tsx` preserva a direção visual do protótipo, mas o caminho ativo Brasil usa os módulos testáveis de domínio e carregamento em `src/brazil/`. O código continua subordinado à metodologia canônica.
 
@@ -243,7 +253,7 @@ PPP_2021_BRL
 BRAZIL_CPI_2024
 ```
 
-não participam mais do caminho ativo e não são usadas como fallback. Mundo aparece apenas em estado explícito de indisponibilidade, sem número provisório.
+não participam mais do caminho ativo e não são usadas como fallback. O navegador carrega somente manifesto, alinhamento de preços e CDF Mundo; golden cases permanecem como evidência de pipeline e regressão, fora de `public/data/world` e do tráfego runtime.
 
 ---
 
@@ -272,7 +282,7 @@ Não preencher esses campos por inferência.
 
 ---
 
-## 8. SEO e analytics
+## 8. SEO E Analytics
 
 A taxonomia e as restrições de analytics estão especificadas, mas o fornecedor ainda não foi canonizado.
 
@@ -286,7 +296,7 @@ Vercel Web Analytics foi estudado como candidato. A documentação oficial confi
 
 ---
 
-## 8A. Registro histórico externo — acesso do Google Drive
+## 8A. Registro Histórico Externo — Acesso Do Google Drive
 
 Em 14/08/2026, uma pesquisa externa registrou que os metadados da pasta então inspecionada e do arquivo `.env.local` indicavam:
 
@@ -298,7 +308,7 @@ allowFileDiscovery = false
 
 Esse achado não foi revalidado pelo Gate G0 e não descreve o checkout Git atual. Se ainda vigente no sistema externo, significaria que qualquer pessoa com o link poderia editar o material e que o `.env.local` herdaria esse acesso.
 
-### Regra de segurança
+### Regra De Segurança
 
 - tratar como **P0 operacional**;
 - restringir o acesso antes de usar o Drive como fonte canônica compartilhada em produção;
@@ -311,7 +321,7 @@ O agente não deve alterar permissões por conta própria sem decisão explícit
 
 ---
 
-## 9. Pesquisa e artefatos auxiliares
+## 9. Pesquisa E Artefatos Auxiliares
 
 `research/` contém investigações que podem ser não canônicas.
 
@@ -319,7 +329,7 @@ Um relatório de pesquisa **não altera** automaticamente metodologia ou decisõ
 
 `research/artifacts/` preserva evidências e manifestos de pesquisa.
 
-Documento de prontidão atual:
+Registro histórico de prontidão pré-Codex, não canônico e não utilizável como fotografia do estado atual:
 
 ```text
 research/gate-pre-codex-v1.md
@@ -327,13 +337,13 @@ research/gate-pre-codex-v1.md
 
 ---
 
-## 10. Regra para implementação futura
+## 10. Regra Para Implementação Futura
 
 Antes de usar o Codex ou outro agente de código:
 
 1. ler esta ordem documental;
 2. não reabrir D063/D065 sem evidência;
-3. não mostrar Mundo enquanto D068–D070 estiverem bloqueadas;
+3. mostrar Mundo somente quando o manifesto agregador autorizado e os três artefatos estáticos passarem por validação de integridade;
 4. manter Brasil e Mundo como pipelines metodologicamente distintos;
 5. preservar e ampliar os testes do contrato Brasil ao alterar a integração;
 6. preservar privacidade como requisito de domínio, não como detalhe de UI;
@@ -341,8 +351,10 @@ Antes de usar o Codex ou outro agente de código:
 
 ---
 
-## 11. Próximo gate
+## 11. Estado De Release Readiness
 
-O próximo gate recomendado é **fechar a execução e a proveniência de D069**. Depois disso, D068 e D069 candidatas devem passar por revisão humana e eventual canonização explícita antes da execução de D070. Este índice apenas identifica a sequência; não autoriza nenhuma dessas etapas.
+O gate metodológico D070 está fechado e canônico, e o pacote/runtime operacional foi materializado, validado e integrado por autorização explícita do manifesto agregador. O carregamento ocorre sob demanda, com cache em memória e falha fechada independente por motor.
 
-O motor Brasil está integrado. A experiência completa Brasil + Mundo continua bloqueada para produção enquanto as decisões e os manifests autorizadores do Mundo não existirem.
+Os motores Brasil e Mundo estão integrados. Falha no carregamento Mundo não remove o resultado Brasil, não aciona fallback numérico e não reutiliza resultado mundial anterior.
+
+O **V1 Frontend Completion** e o **V1 Pre-Release Gap Closure** estão concluídos no checkout. Não há no checkout ou no histórico Git evidência versionada de execução do **V1 Release Readiness Gate**. Até que essa evidência seja incorporada, a prontidão de release permanece não comprovada e o deploy continua não autorizado.

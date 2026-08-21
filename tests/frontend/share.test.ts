@@ -91,7 +91,7 @@ test('bloco de share vem após interpretação, inicia privado e mantém fallbac
   assert.match(app, /navigator\.share\(sharePayload\)/)
   assert.match(app, /navigator\.clipboard\.writeText\(shareUrl\)/)
   assert.match(app, /Compartilhamento nativo indisponível\. Link copiado\./)
-  assert.match(app, /brazilCalculation\.status === 'success' \|\| worldCalculation\.status === 'success'/)
+  assert.match(app, /shouldShowSharing\(brazilCalculation\.status, worldCalculation\.status\)/)
 })
 
 test('compartilhamento não introduz persistência, analytics ou dados na URL', async () => {

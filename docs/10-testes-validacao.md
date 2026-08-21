@@ -12,8 +12,8 @@ modified: 2026-08-14T16:12:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `10-testes-validacao.md`  
 **Status:** Canônico para qualidade, testes e validação  
-**Versão:** 1.2
-**Última revisão:** 14/08/2026
+**Versão:** 1.3
+**Última revisão:** 19/08/2026
 
 Documentos relacionados:
 
@@ -237,7 +237,7 @@ topShare = 0.3133089377166185
 
 Esse caso testa **alinhamento temporal + CDF**.
 
-O resultado mundial para a mesma entrada continua pendente até a metodologia global ser validada e canonizada.
+O contrato D070 referencia golden cases para o resultado mundial, e o runtime integrado calcula o resultado usando os artefatos Mundo autorizados. O conteúdo detalhado dos golden cases está versionado no HEAD atual. Sua exibição depende do manifesto agregador autorizado e da validação local dos três artefatos runtime.
 
 ---
 
@@ -389,6 +389,8 @@ engine.decisionIds contém D063, D065, D071 e D072
 engine.integration.brazilFrontendIntegrationAllowed = true
 engine.integration.worldFrontendIntegrationAllowed = false
 ```
+
+Esse campo pertence ao manifesto do motor Brasil e impede que ele autorize o Mundo por acidente. Ele não representa o estado global vigente: a autorização posterior do motor Mundo está exclusivamente em `data/production/world/world-income-engine-manifest.json`, cujo contrato exige `worldFrontendIntegrationAllowed = true`.
 
 ### Metadado histórico da CDF
 
@@ -624,7 +626,7 @@ Esperado:
 
 # 13. Teste de renda zero
 
-Se a metodologia permitir renda zero:
+RDPC zero é metodologicamente válido. A aceitação de renda zero como entrada do formulário é uma política de UX separada; quando aceita, testar:
 
 ```text
 renda = 0
@@ -637,7 +639,7 @@ Esperado:
 0
 ```
 
-O comportamento de percentil será definido separadamente.
+O comportamento de percentil e apresentação para RDPC zero deve seguir D071, preservando empates e sem usar `TOP 100%` como headline.
 
 ---
 
@@ -1264,7 +1266,7 @@ Uma nova observação não altera retrospectivamente a CDF 2025 nem deve ser pro
 
 # 49. Conversão temporal
 
-Se adotado:
+Conforme D069:
 
 ```text
 daily = monthly * 12 / 365
@@ -1307,7 +1309,7 @@ esperado conceitualmente:
 100 intl$
 ```
 
-A fórmula definitiva deve seguir a metodologia aprovada.
+Este exemplo artificial não substitui a fórmula canônica; o cálculo definitivo é regido por D069.
 
 ---
 
@@ -1365,9 +1367,9 @@ O manifesto deve distinguir explicitamente ano de referência de `nowcast`.
 
 ---
 
-# 54. CDF global — fonte candidata e trava de `popshare`
+# 54. CDF global — fonte canônica D068 e trava de `popshare`
 
-A candidata operacional principal para D068 é:
+A fonte operacional canonizada por D068 é:
 
 > **1000 Binned Global Distribution — March 2026 PIP vintage**
 
@@ -1380,16 +1382,18 @@ pip wb + popshare
 
 O wrapper oficial restringe `popshare` ao nível de país (`pip cl`) e rejeita sua combinação com `wb`.
 
-Antes de promover a CDF por bins:
+O contrato de construção e validação deve:
 
 1. filtrar `year = 2024`;
 2. validar chaves e cobertura;
 3. usar `welf` como valor monetário da faixa;
 4. usar `pop` como peso;
 5. ordenar globalmente por `welf`;
-6. construir a CDF experimental em degraus;
+6. construir a CDF empírica em degraus, agrupando empates;
 7. validar contra o agregado oficial `pip wb` por `povline`;
-8. medir o erro antes de escolher a tolerância ou a precisão visual.
+8. preservar `shareBelow`, `shareAtOrBelow` e `topShare = 1 - shareBelow`;
+9. proibir interpolação, extrapolação e fallback legado;
+10. medir o erro sem transformar a tolerância técnica em precisão visual de D070.
 
 ---
 
@@ -1452,62 +1456,131 @@ O WDI pode funcionar apenas como sanity check auxiliar.
 
 ---
 
-# 56A. Candidata principal — 1.000 faixas
+# 56A. Contrato validado D068 — 1.000 faixas
 
-Validar a candidata operacional oficial:
+Validar a fonte operacional oficial:
 
 > **1000 Binned Global Distribution — March 2026 PIP vintage**
 
-Antes de qualquer promoção:
+Em toda reprodução ou futura materialização:
 
 1. filtrar 2024;
 2. ponderar por `pop`;
 3. ordenar por `welf`;
-4. construir CDF experimental;
+4. agrupar empates e construir CDF empírica em degraus;
 5. comparar com os headcounts oficiais da mesma vintage;
 6. medir erro absoluto e relativo em múltiplas linhas;
 7. medir erro nos quantis;
-8. documentar o efeito da perda de desigualdade dentro das faixas.
+8. documentar o efeito da perda de desigualdade dentro das faixas;
+9. reproduzir os hashes e os checks estruturais canonizados por D068.
 
-O disclaimer oficial da base impede tratá-la automaticamente como equivalente às estatísticas PIP.
+Evidência de referência da canonização:
+
+```text
+sourceRows2024 = 218000
+economies2024 = 218
+uniqueWelfarePoints = 216790
+totalPopulationMillions = 8141.808945
+candidateSha256 = 56C53483744176A50090E16058A0CF4FC6221C83D1D80A60060B931110C54DC2
+maxAbsoluteErrorPp = 0.022516991848920
+```
+
+O disclaimer oficial continua aplicável: a base binned perde desigualdade intrabin e não equivale às estatísticas calculadas diretamente pelo PIP. D068 aceita a construção com restrição de precisão; D070 usa o erro medido para limitar apresentação e caudas, sem converter a posição estimada em ranking individual exato.
 
 ---
 
 # 56B. PPP/CPI exatos da versão PIP
 
-D069 só pode passar após obter as tabelas auxiliares da mesma versão:
+D069 está ativa. Seu contrato de validação usa as tabelas auxiliares da build congelada:
 
 ```text
-/aux?table=ppp
-/aux?table=cpi
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+BRAZIL_PIP_PPP_2021 = 2.44986319541931
+BRAZIL_PIP_CPI_2024_BASE_2021 = 1.192919586578344
+BRL_PER_INTL_2024 = 2.92248979025310406149724542264 (derivado)
 ```
 
-e identificar os registros brasileiros necessários.
+Raws de proveniência:
+
+```text
+data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-ppp.raw.csv
+SHA-256 792476948DA84A005CC9C61C359CB586B42866F850F55973EF7BDC2693347EB6
+
+data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-cpi.raw.csv
+SHA-256 E2F558A28FBBD91F69EDB5FEF4BC10DED19F17D315090CB70031F2C993408ABE
+```
 
 Testar:
 
-- país = Brasil;
-- versão/release corretas;
-- PPP base 2021;
-- CPI/período correto;
-- positividade e finitude;
+- hashes, schema e registros Brasil dos raws preservados;
+- versão/build, ano global 2024 e base PPP 2021;
+- positividade e finitude de PPP, CPI e fator combinado;
+- fator combinado recalculado a partir dos dois fatores exatos, nunca como terceira constante independente;
+- fórmula canônica `dailyPPP = (householdIncomeCurrent / residents) × (IPCA_AVG_2024 / IPCA_CURRENT) ÷ (PPP × CPI) × 12 / 365`;
+- ausência de arredondamento intermediário;
+- linearidade na renda e monotonicidade para entradas válidas;
+- resultado zero para renda zero;
+- proporcionalidade inversa pelo número de moradores;
+- referência temporal Mundo de 2024 separada do alinhamento Brasil de D065;
 - fórmula de ida e volta;
-- comparação com `PA.NUS.PRVT.PP` apenas como cross-check oficial.
+- comparação com ICP/WDI apenas como cross-check oficial.
 
-Se a tabela PIP e a série WDI divergirem:
+Uma divergência entre PIP aux e ICP/WDI deve ser registrada, mas o cross-check não pode substituir o valor operacional observado no raw da build PIP congelada. Não inventar explicação causal.
 
-> bloquear e investigar; não escolher o valor mais conveniente.
+Esses checks D069 não criam por si sós golden cases, política de caudas ou precisão visual. Esses contratos são definidos separadamente por D070.
 
 ---
 
-# 56C. Tolerância
+# 56C. D070 — golden cases e fronteiras de apresentação
 
-A tolerância mundial deve ser definida **depois** de medir empiricamente:
+O manifesto Mundo versionado referencia o artefato de golden cases do contrato D070 por caminho, versão, SHA-256 e tamanho:
 
-- erro da rota escolhida;
-- arredondamento da API;
-- eventual discretização;
-- erro do plano B, se usado.
+```text
+validation/world/world-income-golden-cases-d070-candidate.json
+SHA-256 6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779
+```
+
+O teste versionado espera 11 golden cases. O conteúdo detalhado do artefato e os 11 casos estão versionados no HEAD atual; essa contagem descreve a fixture de regressão presente no repositório, não, por si só, um resultado de execução. Golden cases não devem ser confundidos com testes executados.
+
+Usar:
+
+```text
+topPercent = 100 × topShare
+maxErrorPp = 0.022516991848920
+```
+
+Os testes de apresentação devem cobrir explicitamente:
+
+1. `TOP > 1%`;
+2. `TOP = 1%`;
+3. `TOP` imediatamente abaixo de `1%`;
+4. `TOP > 0,1%`;
+5. `TOP = 0,1%`;
+6. `TOP` imediatamente abaixo de `0,1%` sem margem suficiente para afirmar “menos de 0,1%”;
+7. `topPercent + maxErrorPp < 0,1`, permitindo “menos de 0,1%”;
+8. ausência de `TOP 0%`;
+9. ausência de `TOP 100%` como headline;
+10. valor acima do máximo sem extrapolação;
+11. valor abaixo do mínimo sem extrapolação;
+12. empate com `shareBelow < shareAtOrBelow`.
+
+O manifesto versionado comprova o contrato D070, a referência ao artefato de golden cases, sua versão, SHA-256 e tamanho, mas não a contagem detalhada da regressão local. Os checks executados devem passar sem alterar os golden cases, a CDF, D068 ou D069.
+
+O pacote operacional Mundo adiciona validações próprias de schema, hashes, tamanhos, referências cruzadas, monotonicidade, determinismo, falha fechada e runtime. A execução reproduzível é:
+
+```text
+python scripts/data/world/production_package.py
+python -m unittest discover -s tests/data/world -p "test_*.py" -v
+pnpm run test:frontend
+```
+
+Esses checks D070, isoladamente, não autorizaram publicação em `public/**` nem integração em `src/App.tsx`. A autorização e a integração posteriores são comprovadas pelo manifesto agregador do motor Mundo, pelo loader/runtime e pelos testes de contrato; integração continua sem equivaler a deploy.
+
+---
+
+# 56D. Erro Medido E Limite De Apresentação
+
+O contrato versionado preserva o limite operacional `maxAbsoluteErrorPp = 0.022516991848920`, associado a D068. D070 utiliza esse limite no contrato de apresentação e caudas. Não existe plano B ativo, e esta seção não introduz nova tolerância.
 
 Nunca usar:
 
@@ -1546,7 +1619,7 @@ source
 pip_version
 reference_year
 ppp_basis
-ppp_indicator
+proveniência operacional PIP `aux/ppp` e `aux/cpi`
 processed_at
 methodology_version
 checksum
@@ -1628,16 +1701,16 @@ moradores.
 
 ---
 
-# 64. Fixtures canônicas e pendentes
+# 64. Fixtures canônicas
 
-A parte brasileira já possui golden cases derivados da CDF validada. A parte global permanece pendente.
+A parte brasileira possui golden cases derivados da CDF validada. Para a parte global, o manifesto Mundo versionado referencia o artefato de golden cases D070 por caminho, versão, SHA-256 e tamanho.
 
 |Entrada|Referência da entrada|Moradores|RDPC comparável 2025|shareBelow BR|topShare BR|Global|
 |---:|---|--:|--:|--:|--:|---|
-|R$ 6.500|preços médios de 2025|3|R$ 2.166,6667|0,7015612591|0,2984387409|PENDENTE|
-|R$ 6.500|nominal corrente; manifesto 2026-07|3|R$ 2.065,6892|0,6866910623|0,3133089377|PENDENTE|
+|R$ 6.500|preços médios de 2025|3|R$ 2.166,6667|0,7015612591|0,2984387409|não aplicável a esta entrada Brasil|
+|R$ 6.500|nominal corrente; manifesto 2026-07|3|R$ 2.065,6892|0,6866910623|0,3133089377|referência ao contrato D070 no manifesto; fixture detalhada versionada no HEAD|
 
-Nunca preencher a coluna global por estimativa manual. Quando a metodologia Mundo for validada, os valores deverão vir do artefato global versionado e de seus golden cases.
+Nunca preencher a coluna global por estimativa manual. O documento deve referenciar somente o contrato D070 e os metadados versionados no manifesto Mundo; o conteúdo detalhado do artefato de golden cases está versionado no HEAD. Esta regra de fixture não concede autorização; o frontend e o pacote Mundo vigentes dependem da autorização separada do manifesto agregador e de sua validação de integridade.
 
 ---
 
@@ -1880,12 +1953,14 @@ Brasil deve permitir verificar:
 - referência de preços médios de 2025;
 - mês do IPCA usado por D065.
 
-Mundo, quando integrado, deve permitir verificar:
+Mundo, já integrado, deve permitir verificar:
 
 - PIP `20260324_2021`;
 - ano global 2024;
 - PPP 2021;
 - indicação de posição global estimada.
+
+Essa integração não equivale a publicação. Deploy e release continuam dependentes de gate e autorização específicos.
 
 Teste:
 
@@ -3405,7 +3480,7 @@ validation/brazil/brazil-income-golden-cases.json
 
 Ele deve permanecer pequeno, determinístico e derivado da mesma CDF cujo SHA-256 é registrado no manifesto.
 
-Um conjunto global separado deverá ser criado somente depois da validação da metodologia Mundo.
+O teste versionado espera 11 golden cases. O manifesto Mundo referencia o conjunto global D070 em `validation/world/world-income-golden-cases-d070-candidate.json`, versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado desse artefato está versionado no HEAD atual.
 
 ---
 
@@ -3429,7 +3504,7 @@ Para Brasil, os casos devem preservar ao menos:
 }
 ```
 
-Casos que dependem de renda **corrente** devem registrar também a versão/mês do manifesto de preços utilizado. Resultados globais permanecem ausentes até validação oficial da metodologia Mundo.
+Casos que dependem de renda **corrente** devem registrar também a versão/mês do manifesto de preços utilizado. Os resultados globais canônicos alimentam o runtime integrado somente após validação do manifesto, hashes, tamanhos e referências cruzadas. Os golden cases permanecem restritos à regressão e não são publicados no caminho do navegador.
 
 ---
 

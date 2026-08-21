@@ -1,16 +1,16 @@
 ---
-title: Registro de Decisões — Renda Comparada
+title: Registro De Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-14T17:40:00.000-03:00
+modified: 2026-08-20T11:56:02.296-03:00
 ---
 
-# Registro de Decisões — Renda Comparada
+# Registro De Decisões — Renda Comparada
 
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
-**Versão:** 1.5
-**Última revisão:** 14/08/2026
+**Versão:** 1.9
+**Última revisão:** 20/08/2026
 
 Documentos relacionados:
 
@@ -28,7 +28,7 @@ Documentos relacionados:
 
 ---
 
-# 1. Função deste documento
+# 1. Função Deste Documento
 
 Este documento registra decisões relevantes já tomadas no projeto.
 
@@ -44,7 +44,7 @@ Uma decisão pode ser revista, mas sua mudança deve ser explícita.
 
 ---
 
-# 2. Formato das decisões
+# 2. Formato Das Decisões
 
 Cada decisão possui:
 
@@ -457,7 +457,7 @@ A mensagem de transição será conceitualmente:
 
 ---
 
-# D019 — Não usar “O resultado te agradou?”
+# D019 — Não Usar “O resultado te agradou?”
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1182,7 +1182,9 @@ A cópia legada em `C:\Users\Usuario\OneDrive\Documentos\ChatGPT\3` permanece pr
 ## D052 — Repositório Git Remoto Privado
 
 **Data:** 13/08/2026
-**Status:** `EM REVISÃO`
+**Status:** `SUBSTITUÍDA POR D074`
+
+O texto abaixo preserva o registro histórico da pendência identificada em 13/08/2026. Ele não descreve o remoto vigente.
 
 ### Decisão Operacional Pendente
 
@@ -1576,8 +1578,7 @@ accessedAt = data de atualização do manifesto
 
 ---
 
-
-# Metodologia Mundial — Canonização Parcial Da Fase 2A
+# Metodologia Mundial — Decisões D066–D070
 
 ## D066 — Versão PIP E Ano Mundial De Referência
 
@@ -1605,7 +1606,7 @@ O ano 2024 continua sendo um agregado harmonizado do PIP e não deve ser descrit
 - nenhuma versão `latest` pode entrar automaticamente em produção;
 - atualização de versão PIP exige comparação, validação e nova aprovação;
 - 2025/2026 ficam fora da V1 mundial enquanto forem tratados como nowcasts na versão congelada;
-- a CDF mundial, conversão monetária e golden cases continuam bloqueados e não são resolvidos por esta decisão.
+- D066, isoladamente, não resolve a CDF mundial, a conversão monetária nem os golden cases.
 
 ---
 
@@ -1641,11 +1642,233 @@ sem nova decisão metodológica que demonstre que a simplificação é suportada
 
 - o resultado Mundo deve carregar linguagem de estimativa;
 - a interface deve diferenciar a força metodológica do resultado Brasil e Mundo;
-- `WORLD_CDF`, `WORLD_BRL_TO_2021_PPP` e golden cases permanecem pendentes;
+- a fonte e a construção de `WORLD_CDF` são regidas por D068, a conversão monetária por D069 e a apresentação e os golden cases por D070;
 - D067 não autoriza integração do vetor mundial antigo do `src/App.tsx`.
 
 ---
 
+## D068 — Fonte Operacional E Construção Da CDF Mundial
+
+**Data:** 19/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Para a comparação mundial da V1, construir a CDF a partir do dataset oficial do World Bank/Poverty and Inequality Platform **1000 Binned Global Distribution**, recurso `DR0094423`, usando:
+
+```text
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+GLOBAL_REFERENCE_YEAR = 2024
+PPP_BASE = 2021
+SOURCE_FILE = GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv
+```
+
+Para 2024, selecionar exatamente as 218 economias e seus 1.000 bins. Interpretar:
+
+```text
+welf = dólares internacionais PPP 2021 por pessoa por dia
+pop = milhões de pessoas representadas pelo bin
+```
+
+Ordenar globalmente por `welf`, agrupar valores empatados antes da acumulação e somar `pop` para formar uma CDF empírica em degraus. Missing, valores não numéricos ou não finitos, `welf` negativo e `pop` não positivo invalidam a construção; não há imputação, interpolação ou extrapolação.
+
+O lookup deve preservar separadamente:
+
+```text
+shareBelow(x) = peso com welf < x / peso total
+shareAtOrBelow(x) = peso com welf <= x / peso total
+topShare(x) = 1 - shareBelow(x)
+```
+
+### Limitação Aceita
+
+A representação usa a média de welfare de cada bin e perde desigualdade dentro do bin. Essa aproximação é aceita para a fonte e a construção da CDF mundial com restrição de precisão: não autoriza posição individual exata nem interpolação fina. A precisão visual, as caudas e os golden cases são regidos por D070.
+
+### Evidência
+
+O contrato versionado fixa 218.000 bins de origem, provenientes de 218 economias, 216.790 pontos únicos, população de `8.141,808945` milhões e suporte de `0,2799999999999999` a `3.822,84090639671` dólares internacionais PPP 2021 por pessoa/dia. Essas contagens e o total populacional são exigidos pelo pacote/teste de produção versionados.
+
+D068 prevê validação contra checkpoints oficiais PIP da mesma vintage. O pacote e o manifesto de produção versionados preservam o limite operacional abaixo, sem comprovar aqui a quantidade detalhada desses checkpoints:
+
+```text
+max_absolute_error = 0.022516991848920 ponto percentual
+```
+
+Artefatos de evidência:
+
+- raw `data/raw/world/pip-20260324-2021/GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv` — SHA-256 `99FC4B99BD6D77770DA78A5BFC90516F5FE35742C7A29968F2FD148B323B48A2`;
+- processado `data/processed/world/pip-20260324-2021/world-bins-2024.csv` — SHA-256 `2CA102013BDF9D3EA22C9642326544B32D45EF61407F81C6B71324BC5B072F52`;
+- candidata D068 referenciada como `validation/world/world-income-cdf-2024-candidate.json` — SHA-256 `56C53483744176A50090E16058A0CF4FC6221C83D1D80A60060B931110C54DC2`, hash exigido pelo script de produção versionado;
+- `validation/world/world-cdf-validation.json` está versionado no HEAD atual; `validation/world/world-cdf-validation.md` permanece como registro local fora do HEAD. Nenhum deles é usado aqui, isoladamente, como prova de execução.
+
+### Consequências
+
+- D068 deixa de ser bloqueio metodológico para a fonte e a construção da CDF mundial;
+- a candidata referenciada por SHA permanece como referência de evidência e não é promovida automaticamente a `data/production/world/`;
+- toda materialização de produção deve preservar versão, provenance, checksums, semântica de empates e ausência de fallback legado;
+- D068 não autorizou por si só precisão visual, caudas ou integração numérica; esses temas foram posteriormente tratados por D070, sem autorização automática de frontend ou produção Mundo.
+
+### Documentos Afetados
+
+- `04-metodologia-dados.md`;
+- `09-fontes-referencias.md`;
+- `10-testes-validacao.md`;
+- `README.md`;
+- `02-prd-v1.md`.
+
+---
+
+## D069 — Conversão De BRL Corrente Para PPP 2021 Compatível Com O PIP
+
+**Data:** 19/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Converter a renda domiciliar nominal corrente em BRL para **dólares internacionais de PPP 2021 por pessoa por dia**, compatíveis com a build PIP congelada, usando:
+
+```text
+PIP_VERSION = 20260324_2021
+PIP_PRODUCTION_BUILD = 20260324_2021_01_02_PROD
+GLOBAL_REFERENCE_YEAR = 2024
+PPP_BASE = 2021
+
+BRAZIL_PIP_PPP_2021 = 2.44986319541931
+BRAZIL_PIP_CPI_2024_BASE_2021 = 1.192919586578344
+BRL_PER_INTL_2024 = BRAZIL_PIP_PPP_2021 × BRAZIL_PIP_CPI_2024_BASE_2021
+                  = 2.92248979025310406149724542264
+```
+
+`BRL_PER_INTL_2024` é derivado dos dois fatores PIP observados, não uma terceira fonte independente. O CPI de 2024 está presente diretamente no raw (`CPI_DERIVATION = DIRECT`).
+
+Para a perna temporal brasileira do pipeline Mundo, usar o IPCA nacional do IBGE, SIDRA tabela 1737, variável 2266, número-índice:
+
+```text
+IPCA_AVG_2024 = média aritmética dos 12 números-índice mensais de janeiro a dezembro de 2024
+IPCA_CURRENT = número-índice do mês corrente explicitamente aprovado e versionado para o contrato Mundo
+```
+
+A fórmula canônica é:
+
+```text
+dailyPPP = (householdIncomeCurrent / residents)
+         × (IPCA_AVG_2024 / IPCA_CURRENT)
+         ÷ (BRAZIL_PIP_PPP_2021 × BRAZIL_PIP_CPI_2024_BASE_2021)
+         × 12 / 365
+```
+
+Ordem obrigatória: dividir a renda domiciliar pelos moradores; alinhar BRL corrente a preços médios de 2024 pelo IPCA; dividir pelo fator PIP compatível com 2024 e PPP 2021; converter o valor mensal para diário por `× 12 / 365`. Não há arredondamento intermediário.
+
+Os fatores PPP e CPI são os valores completos dos raws `aux/ppp` e `aux/cpi` da build `20260324_2021_01_02_PROD`. Esses raws constituem a fonte operacional de D069. ICP/WDI servem apenas como cross-check; eventual divergência não autoriza substituir os fatores PIP nem sustenta explicação causal não demonstrada.
+
+### Separação De D065
+
+D065 alinha a entrada corrente à CDF brasileira em preços médios de 2025. D069 possui pipeline temporal próprio para Mundo, alinhado ao ano global de 2024. Uma decisão não reutiliza automaticamente a referência, o manifesto ou o fator temporal da outra.
+
+### Consequências
+
+- D069 deixa de ser bloqueio metodológico e passa a reger a futura conversão `WORLD_BRL_TO_2021_PPP`;
+- `IPCA_CURRENT` deve ser materializado futuramente em artefato ou manifesto Mundo versionado; esta decisão não cria nem autoriza uma constante corrente eterna;
+- câmbio comercial, constantes legadas, WDI/ICP como substitutos e arredondamento intermediário permanecem proibidos;
+- D069 não autoriza, isoladamente ou em conjunto com a canonização documental de D070, integração numérica do frontend Mundo nem artefato de produção Mundo.
+
+### Evidência
+
+- `data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-ppp.raw.csv` — SHA-256 `792476948DA84A005CC9C61C359CB586B42866F850F55973EF7BDC2693347EB6` — `BRA,national,2021,2.44986319541931`;
+- `data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-cpi.raw.csv` — SHA-256 `E2F558A28FBBD91F69EDB5FEF4BC10DED19F17D315090CB70031F2C993408ABE` — `BRA,national,2021,1` e `BRA,national,2024,1.192919586578344`;
+- `validation/world/d069-pip-aux-provenance-production-build-retry.json` — registro da aquisição versionado no HEAD atual; os fatores operacionais e sua proveniência exigida permanecem preservados no alinhamento de preços e no pacote de produção versionados.
+
+### Documentos Afetados
+
+- `04-metodologia-dados.md`;
+- `09-fontes-referencias.md`;
+- `10-testes-validacao.md`;
+- `README.md`.
+
+---
+
+## D070 — Golden Cases, Precisão E Caudas Do Mundo
+
+**Data:** 19/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Congelar para esta versão do contrato Mundo:
+
+```text
+CURRENT_PRICE_REFERENCE_MONTH = 2026-07
+IPCA_CURRENT = 7657.7300000000000
+IPCA_AVG_2024 = 6952.07333333333333333333333333333333333333333333333333333333
+MAX_ABSOLUTE_ERROR_PP = 0.022516991848920
+```
+
+O índice corrente provém do IPCA nacional, SIDRA tabela 1737, variável 2266, número-índice. Julho/2026 é referência operacional versionada desta decisão, não constante corrente eterna. Uma atualização exige nova evidência oficial preservada, atualização explícita do mês e do manifesto aplicável, regeneração dos golden cases, testes e promoção autorizada; a publicação de mês posterior não altera o contrato automaticamente.
+
+O teste versionado espera 11 golden cases. O manifesto registra o artefato `validation/world/world-income-golden-cases-d070-candidate.json` por versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado dos casos está versionado no HEAD atual.
+
+O contrato preserva a fórmula e os fatores exatos de D069, a CDF em degraus de D068, precisão interna integral e ausência de arredondamento intermediário.
+
+### Empates E Posição
+
+Preservar:
+
+```text
+shareBelow(x) = população com welf < x / população total
+shareAtOrBelow(x) = população com welf <= x / população total
+topShare(x) = 1 - shareBelow(x)
+topPercent(x) = 100 × topShare(x)
+```
+
+O resultado deve permanecer subordinado a D067 e ser descrito como **posição monetária global estimada**, nunca como ranking exato de salário, renda bruta homogênea, patrimônio ou riqueza.
+
+### Precisão Visual
+
+Dentro do suporte observado:
+
+1. para `topShare >= 0,01`, exibir percentil inteiro e `TOP` inteiro complementar, derivando um do outro para preservar soma visual de 100;
+2. para `0,001 <= topShare < 0,01`, exibir `TOP` com uma casa decimal;
+3. para `topPercent < 0,1`, não arredondar os valores usados na decisão e aplicar:
+
+```text
+se topPercent + MAX_ABSOLUTE_ERROR_PP < 0,1:
+    exibir "menos de 0,1%"
+senão:
+    exibir "aproximadamente 0,1%"
+```
+
+A condição estrita incorpora o erro máximo medido em D068. Não se pode usar automaticamente “menos de 0,1%” apenas porque a estimativa pontual ficou abaixo desse limite.
+
+### Limites Do Suporte
+
+- no mínimo observado, preservar o primeiro degrau e os empates; não usar `TOP 100%` como headline;
+- abaixo do mínimo, informar que o valor está fora do suporte inferior observado, sem extrapolar;
+- no máximo observado, preservar o último degrau real;
+- acima do máximo, informar que o valor está fora do suporte superior observado, sem extrapolar;
+- nunca exibir `TOP 0%`;
+- nunca criar pisos, tetos ou posições por interpolação/extrapolação arbitrária.
+
+### Evidência E Consequências
+
+O contrato D070 é coberto pelos testes versionados, que esperam 11 golden cases. `validation/world/world-d070-validation.json` está versionado no HEAD atual; `validation/world/world-d070-validation.md` permanece como registro local fora do HEAD. A presença do JSON versionado não deve ser confundida com nova execução de testes nesta reconciliação.
+
+D070 deixa de ser bloqueio metodológico para golden cases, precisão, empates e caudas. Esta canonização não cria artefato de produção Mundo, não integra resultado Mundo ao frontend, não altera Brasil e não autoriza reativar `WORLD_CURVE` ou qualquer fallback legado. Produção e integração exigem tarefa e auditoria posteriores explícitas.
+
+### Estado Posterior Comprovado No Checkout
+
+O limite acima descreve o alcance da decisão D070 no momento de sua canonização. A autorização posterior foi materializada sem reescrever os artefatos históricos: `data/production/world/world-income-engine-manifest.json` registra `status = CANONICAL_APPROVED_FOR_INTEGRATION`, inclui D066–D070 e define `worldFrontendIntegrationAllowed = true`. A CDF e o alinhamento de preços preservam seus flags históricos bloqueados; o loader valida a autorização agregadora antes de calcular.
+
+O histórico Git registra separadamente a validação do pacote (`50efadb`), a integração do resultado Mundo (`74d0117`), a conclusão do frontend V1 (`a63535d`) e o fechamento das lacunas pré-release (`d5b893a`). Esses estados comprovam `VALIDADO` e `INTEGRADO`, não `PUBLICADO`; nenhum deles autoriza deploy.
+
+### Documentos Afetados
+
+- `04-metodologia-dados.md`;
+- `10-testes-validacao.md`;
+- `README.md`;
+- `02-prd-v1.md`.
+
+---
 
 # Apresentação Brasileira — Precisão E Caudas
 
@@ -1779,10 +2002,9 @@ Não utilizar:
 - a política de exibição da cauda brasileira deixa de estar pendente;
 - a CDF e seus golden cases não são alterados;
 - D071 vale somente para Brasil;
-- a precisão e as caudas do Mundo continuam bloqueadas para D070.
+- a precisão e as caudas do Mundo são regidas separadamente por D070.
 
 ---
-
 
 ## D072 — Entrega E Carregamento Da CDF Brasileira
 
@@ -1847,7 +2069,6 @@ Não utilizar como fallback:
 
 ---
 
-
 ## D073 — Metadata Pública E Compartilhamento Genérico Da Home
 
 **Data:** 14/08/2026
@@ -1896,6 +2117,26 @@ A metadata não deve descrever o resultado mundial como ranking exato. A express
 - nenhuma informação individual entra em `og:title`, `og:description`, `og:image` ou `og:url`;
 - a imagem OG padrão pode ser criada depois, mas deve respeitar o texto e a privacidade já aprovados;
 - alterações futuras nesses textos exigem decisão explícita ou revisão documentada de produto/SEO.
+
+---
+
+## D074 — Estado Factual Do Remoto GitHub
+
+**Data:** 20/08/2026
+**Status:** `ATIVA`
+
+### Evidência
+
+- o remoto `origin` aponta para `https://github.com/bernardotb/renda-comparada.git`;
+- o repositório GitHub está público no momento da inspeção;
+- a branch padrão remota é `main`;
+- o checkout local pode conter commits e alterações ainda não incorporados à branch padrão remota.
+
+### Consequências
+
+- D052 fica substituída quanto ao estado vigente do remoto, mas permanece preservada como registro histórico;
+- a visibilidade pública do repositório não autoriza `push`, merge, release ou deploy;
+- o checkout local continua sendo a fonte do estado real das alterações ainda não publicadas no GitHub.
 
 ---
 
