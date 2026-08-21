@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "1.0.0",
+  "audit": "D069 PIP auxiliary tables provenance",
+  "attempt": "production-build-retry",
+  "requestedPipVersion": "20260324_2021",
+  "requestedProductionBuild": "20260324_2021_01_02_PROD",
+  "pppBase": 2021,
+  "globalReferenceYear": 2024,
+  "previousEvidence": {
+    "evidenceRetrieval": "BLOCKED",
+    "manifestPath": "validation/world/d069-pip-aux-provenance.json",
+    "pppErrorEvidencePath": "data/raw/world/pip/20260324_2021/pip-20260324_2021-ppp.error-response.json",
+    "cpiErrorEvidencePath": "data/raw/world/pip/20260324_2021/pip-20260324_2021-cpi.error-response.json",
+    "errorEvidenceSha256": "78916C6B22D70E0C2E3CECFD2D1CC97B1B502B2DD2BD332DE0DA73A7048E36A2",
+    "preservedUnchanged": true
+  },
+  "evidenceRetrieval": "PASS",
+  "ppp": {
+    "retrieval": "PASS",
+    "requestedUrl": "https://api.worldbank.org/pip/v1/aux?table=ppp&version=20260324_2021_01_02_PROD&format=csv",
+    "finalUrl": "https://api.worldbank.org/pip/v1/aux?table=ppp&version=20260324_2021_01_02_PROD&format=csv",
+    "redirectChain": [],
+    "accessedAtUtc": "2026-08-19T13:37:16.1377011Z",
+    "httpStatus": 200,
+    "contentType": "text/csv; charset=UTF-8",
+    "etag": null,
+    "lastModified": null,
+    "contentLength": null,
+    "rawPath": "data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-ppp.raw.csv",
+    "errorEvidencePath": null,
+    "sizeBytes": 7500,
+    "sha256": "792476948DA84A005CC9C61C359CB586B42866F850F55973EF7BDC2693347EB6",
+    "schema": {
+      "parseableAsCsv": true,
+      "delimiter": ",",
+      "columnsInOrder": [
+        "country_code",
+        "data_level",
+        "year",
+        "value"
+      ],
+      "rowCount": 217,
+      "countryIdentifierField": "country_code",
+      "countryNameField": null,
+      "yearOrBaseFields": [
+        "year"
+      ],
+      "versionFields": [],
+      "pppValueFields": [
+        "value"
+      ],
+      "unitField": null,
+      "otherInterpretiveFields": [
+        "data_level"
+      ]
+    },
+    "brazilEvidence": {
+      "countryCode": "BRA",
+      "countryName": null,
+      "recordCount": 1,
+      "rawRecord": "BRA,national,2021,2.44986319541931",
+      "record": {
+        "country_code": "BRA",
+        "data_level": "national",
+        "year": "2021",
+        "value": "2.44986319541931"
+      }
+    },
+    "observedValues": {
+      "field": "value",
+      "rawTextValue": "2.44986319541931",
+      "parsedNumericValue": 2.44986319541931,
+      "baseOrYear": 2021,
+      "unit": null
+    },
+    "comparisonWithCandidate": {
+      "candidate": 2.4499,
+      "observed": 2.44986319541931,
+      "difference": -0.00003680458069,
+      "absoluteDifference": 0.00003680458069,
+      "relativeDifference": -0.0000150228910118780358381975,
+      "sameWhenRoundedTo4Decimals": true,
+      "consistency": "CONSISTENT"
+    },
+    "diagnosticNotes": [
+      "The response was a non-empty CSV with one header block and no Location header; no redirect was observed.",
+      "The request-start timestamp was not emitted because the orchestration window ended after PPP completed and while CPI was still pending. accessedAtUtc records the raw file completion timestamp in UTC."
+    ]
+  },
+  "cpi": {
+    "retrieval": "PASS",
+    "requestedUrl": "https://api.worldbank.org/pip/v1/aux?table=cpi&version=20260324_2021_01_02_PROD&format=csv",
+    "finalUrl": "https://api.worldbank.org/pip/v1/aux?table=cpi&version=20260324_2021_01_02_PROD&format=csv",
+    "redirectChain": [],
+    "accessedAtUtc": "2026-08-19T13:39:33.4079192Z",
+    "httpStatus": 200,
+    "contentType": "text/csv; charset=UTF-8",
+    "etag": null,
+    "lastModified": null,
+    "contentLength": null,
+    "rawPath": "data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-cpi.raw.csv",
+    "errorEvidencePath": null,
+    "sizeBytes": 204060,
+    "sha256": "E2F558A28FBBD91F69EDB5FEF4BC10DED19F17D315090CB70031F2C993408ABE",
+    "schema": {
+      "parseableAsCsv": true,
+      "delimiter": ",",
+      "columnsInOrder": [
+        "country_code",
+        "data_level",
+        "year",
+        "value"
+      ],
+      "rowCount": 8477,
+      "countryIdentifierField": "country_code",
+      "countryNameField": null,
+      "timeFields": [
+        "year"
+      ],
+      "versionFields": [],
+      "cpiValueFields": [
+        "value"
+      ],
+      "baseOrReferenceFields": [],
+      "unitField": null,
+      "otherInterpretiveFields": [
+        "data_level"
+      ]
+    },
+    "brazilEvidence": {
+      "countryCode": "BRA",
+      "countryName": null,
+      "recordCount": 49,
+      "rawRecord2021": "BRA,national,2021,1",
+      "rawRecord2024": "BRA,national,2024,1.192919586578344",
+      "record2021": {
+        "country_code": "BRA",
+        "data_level": "national",
+        "year": "2021",
+        "value": "1"
+      },
+      "record2024": {
+        "country_code": "BRA",
+        "data_level": "national",
+        "year": "2024",
+        "value": "1.192919586578344"
+      }
+    },
+    "observedValues": {
+      "field": "value",
+      "rawTextValue2021": "1",
+      "parsedNumericValue2021": 1,
+      "rawTextValue2024": "1.192919586578344",
+      "parsedNumericValue2024": 1.192919586578344,
+      "unit": null
+    },
+    "derivation": {
+      "state": "DIRECT",
+      "inputFields": [
+        "country_code",
+        "data_level",
+        "year",
+        "value"
+      ],
+      "rawInputValues": {
+        "year2021": "1",
+        "year2024": "1.192919586578344"
+      },
+      "formulaOrTransformation": null,
+      "derivedValue": null,
+      "observedOperationalValue": 1.192919586578344,
+      "basis": "The 2024 value is directly present in the Brazil national row; the same series contains value 1 for 2021."
+    },
+    "comparisonWithCandidate": {
+      "candidate": 1.1929,
+      "observedOrDerived": 1.192919586578344,
+      "difference": 0.000019586578344,
+      "absoluteDifference": 0.000019586578344,
+      "relativeDifference": 0.0000164192961220554950121553,
+      "sameWhenRoundedTo4Decimals": true,
+      "consistency": "CONSISTENT"
+    },
+    "diagnosticNotes": [
+      "The first curl process for CPI remained pending without headers or body and was stopped after its command line was verified; only its empty temporary header file was removed.",
+      "A 25-second retry timed out with zero bytes and no headers.",
+      "The final bounded retry succeeded with HTTP 200 and the raw preserved directly by curl.exe.",
+      "The successful response had one header block, no Location header, and curl reported zero redirects."
+    ]
+  },
+  "d069Status": "REMAINS_BLOCKED",
+  "d070Started": false,
+  "canonicalFilesChanged": false,
+  "productionFilesChanged": false,
+  "notes": [
+    "The production build was used only as the operational value of the aux endpoint version parameter; PIP_VERSION and PIP_PRODUCTION_BUILD remain distinct identifiers.",
+    "PASS means that both primary evidence files were acquired and audited. It does not canonize D069 or authorize D070, production, runtime, or frontend integration."
+  ]
+}

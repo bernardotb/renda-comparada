@@ -1,0 +1,178 @@
+{
+  "status": "CANDIDATE_RESEARCH",
+  "provider": "World Bank",
+  "dataset": "1000 Binned Global Distribution",
+  "catalogUrl": "https://datacatalog.worldbank.org/search/dataset/0064304/1000-binned-global-distribution",
+  "resourceId": "DR0094423",
+  "sourceFileName": "GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv",
+  "sourceUrl": "https://datacatalogfiles.worldbank.org/ddh-published/0064304/DR0094423/GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv",
+  "sourceContentLength": 994875992,
+  "sourceSha256": "99FC4B99BD6D77770DA78A5BFC90516F5FE35742C7A29968F2FD148B323B48A2",
+  "sourceLastUpdated": "2026-03-30",
+  "accessedAt": "2026-08-17",
+  "license": "CC0",
+  "pipVersion": "20260324_2021",
+  "productionBuild": "20260324_2021_01_02_PROD",
+  "referenceYear": 2024,
+  "pppBase": 2021,
+  "unit": "2021 PPP international dollars per person per day",
+  "populationUnit": "millions of people",
+  "sourceColumns": [
+    "year",
+    "code",
+    "region_name",
+    "region_code",
+    "regionpcn_name",
+    "regionpcn_code",
+    "quantile",
+    "welf",
+    "pop",
+    "pipvintage"
+  ],
+  "validationLines": [1, 2, 3, 4.2, 5, 6, 8.3, 10, 12, 15, 20, 30, 40, 50, 70, 100, 150, 200],
+  "citationEndpoint": "https://api.worldbank.org/pip/v1/citation?ppp_version=2021",
+  "checkpointEndpointTemplate": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline={poverty_line}&ppp_version=2021",
+  "officialEvidence": {
+    "citation": {
+      "path": "data/raw/world/pip-20260324-2021/official-checkpoints/citation-ppp-2021.json",
+      "url": "https://api.worldbank.org/pip/v1/citation?ppp_version=2021",
+      "sizeBytes": 229,
+      "sha256": "5FA601B664FB2B5FFF1235947BC55FFA11D881116DFF5E50EA91B496C93E8653"
+    },
+    "checkpoints": [
+      {
+        "povertyLine": 1,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-1.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=1&ppp_version=2021",
+        "sizeBytes": 113740,
+        "sha256": "AEE2129BF987FDC99192BE17575DD416CF28BA1F228CE7478FD85E8E8F7C083F"
+      },
+      {
+        "povertyLine": 2,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-2.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=2&ppp_version=2021",
+        "sizeBytes": 114003,
+        "sha256": "9C521EFB15319A784B2D16B25014F6E1BE95D5E9D6A622270809CCE68BFF0D75"
+      },
+      {
+        "povertyLine": 3,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-3.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=3&ppp_version=2021",
+        "sizeBytes": 114128,
+        "sha256": "924F2400A8D096628CE53229C14BA3DAEFA653829B7A3C761BEE35E7EA5160DC"
+      },
+      {
+        "povertyLine": 4.2,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-4_2.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=4.2&ppp_version=2021",
+        "sizeBytes": 114960,
+        "sha256": "36992EA72670EF701CD155437E2CE31D7ED51A4AF9F444EFE363B6CD4A516B22"
+      },
+      {
+        "povertyLine": 5,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-5.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=5&ppp_version=2021",
+        "sizeBytes": 114226,
+        "sha256": "77E4F4EA18C617FC4D732D8B4FF1EB96D172A67E4B65A2CA06A86FA073893109"
+      },
+      {
+        "povertyLine": 6,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-6.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=6&ppp_version=2021",
+        "sizeBytes": 114256,
+        "sha256": "C4713254FAC574883D7C747BA6A83C9625BA77692DBF6F4EAD0EE89FC686C81E"
+      },
+      {
+        "povertyLine": 8.3,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-8_3.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=8.3&ppp_version=2021",
+        "sizeBytes": 115048,
+        "sha256": "EE17C68388B2338F305EB7881F3B02D487DB17BF781ABF792B2E0D31802F2F6A"
+      },
+      {
+        "povertyLine": 10,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-10.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=10&ppp_version=2021",
+        "sizeBytes": 114671,
+        "sha256": "6C571B2F1EBCE9C4C4810F0BAFC20D1BA89755A3D0A1D1A3FE92AE96893C9821"
+      },
+      {
+        "povertyLine": 12,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-12.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=12&ppp_version=2021",
+        "sizeBytes": 114717,
+        "sha256": "2656DF1BF8E37D6FE1ECAE8D9535908976A7544CE3E1CDA4C4F8BBDA9E236FFE"
+      },
+      {
+        "povertyLine": 15,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-15.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=15&ppp_version=2021",
+        "sizeBytes": 114728,
+        "sha256": "07EFCF79EF89348060B1123F98A9313CB7E4256B11AD96D1A08361CD755C50A3"
+      },
+      {
+        "povertyLine": 20,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-20.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=20&ppp_version=2021",
+        "sizeBytes": 114722,
+        "sha256": "802C3D5A1C0AD04DE6F686980E17375F4B597D2BF200B90AC10EDD29CEF2E8F9"
+      },
+      {
+        "povertyLine": 30,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-30.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=30&ppp_version=2021",
+        "sizeBytes": 114705,
+        "sha256": "0FFE8F78A8F0AA09CC5A0F5AA578819FFBAE4BB3C09A9EB36541894E2DC1692B"
+      },
+      {
+        "povertyLine": 40,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-40.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=40&ppp_version=2021",
+        "sizeBytes": 114714,
+        "sha256": "49681EF64B2DA1B05917CE8902A38B905BC66733EFBE6D3828F2E881E36E6D29"
+      },
+      {
+        "povertyLine": 50,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-50.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=50&ppp_version=2021",
+        "sizeBytes": 114723,
+        "sha256": "D73BE1D2174232263B767986D1FD71BED1894679778CCB7F36EBE23DBF9EF9EF"
+      },
+      {
+        "povertyLine": 70,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-70.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=70&ppp_version=2021",
+        "sizeBytes": 114735,
+        "sha256": "1DE82FCCDF3A132554F41BCE1C93C2D0FEC76A8B898E2425F4FB7991FF4D0A78"
+      },
+      {
+        "povertyLine": 100,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-100.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=100&ppp_version=2021",
+        "sizeBytes": 115089,
+        "sha256": "9BE498887CD79A3AC404CDACCA6C28CE742C7473CF1A1768727391F34B05327E"
+      },
+      {
+        "povertyLine": 150,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-150.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=150&ppp_version=2021",
+        "sizeBytes": 114941,
+        "sha256": "206B03983EA34CB6C540193F8454415ECA702BABA28956CBBB10ED7B3EAA8792"
+      },
+      {
+        "povertyLine": 200,
+        "path": "data/raw/world/pip-20260324-2021/official-checkpoints/pc-regional-aggregates-200.json",
+        "url": "https://api.worldbank.org/pip/v1/pc-regional-aggregates?country=all&year=all&povline=200&ppp_version=2021",
+        "sizeBytes": 114752,
+        "sha256": "A42B359F82F33063F0A034E34F2B52A9B27FA543B0717077EAD9C45D0B885CAB"
+      }
+    ]
+  },
+  "rawSourcePath": "data/raw/world/pip-20260324-2021/GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv",
+  "rawOfficialDirectory": "data/raw/world/pip-20260324-2021/official-checkpoints",
+  "processedPath": "data/processed/world/pip-20260324-2021/world-bins-2024.csv",
+  "candidatePath": "validation/world/world-income-cdf-2024-candidate.json",
+  "validationJsonPath": "validation/world/world-cdf-validation.json",
+  "validationMarkdownPath": "validation/world/world-cdf-validation.md",
+  "checkpointCsvPath": "validation/world/world-cdf-checkpoints.csv"
+}
