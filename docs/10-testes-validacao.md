@@ -12,8 +12,8 @@ modified: 2026-08-14T16:12:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `10-testes-validacao.md`  
 **Status:** Canônico para qualidade, testes e validação  
-**Versão:** 1.2
-**Última revisão:** 14/08/2026
+**Versão:** 1.3
+**Última revisão:** 19/08/2026
 
 Documentos relacionados:
 
@@ -237,7 +237,7 @@ topShare = 0.3133089377166185
 
 Esse caso testa **alinhamento temporal + CDF**.
 
-O contrato D070 referencia golden cases para o resultado mundial, e o runtime integrado calcula o resultado usando os artefatos Mundo autorizados. O conteúdo detalhado dos golden cases permanece fora do HEAD atual. Sua exibição depende do manifesto agregador autorizado e da validação local dos três artefatos runtime.
+O contrato D070 referencia golden cases para o resultado mundial, e o runtime integrado calcula o resultado usando os artefatos Mundo autorizados. O conteúdo detalhado dos golden cases está versionado no HEAD atual. Sua exibição depende do manifesto agregador autorizado e da validação local dos três artefatos runtime.
 
 ---
 
@@ -1540,7 +1540,7 @@ validation/world/world-income-golden-cases-d070-candidate.json
 SHA-256 6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779
 ```
 
-O teste versionado espera 11 golden cases. O conteúdo detalhado do artefato permanece fora do HEAD atual; portanto, essa contagem descreve o contrato esperado, não a presença dos 11 casos no repositório nem um resultado de execução. Golden cases não devem ser confundidos com testes executados.
+O teste versionado espera 11 golden cases. O conteúdo detalhado do artefato e os 11 casos estão versionados no HEAD atual; essa contagem descreve a fixture de regressão presente no repositório, não, por si só, um resultado de execução. Golden cases não devem ser confundidos com testes executados.
 
 Usar:
 
@@ -1708,9 +1708,9 @@ A parte brasileira possui golden cases derivados da CDF validada. Para a parte g
 |Entrada|Referência da entrada|Moradores|RDPC comparável 2025|shareBelow BR|topShare BR|Global|
 |---:|---|--:|--:|--:|--:|---|
 |R$ 6.500|preços médios de 2025|3|R$ 2.166,6667|0,7015612591|0,2984387409|não aplicável a esta entrada Brasil|
-|R$ 6.500|nominal corrente; manifesto 2026-07|3|R$ 2.065,6892|0,6866910623|0,3133089377|referência ao contrato D070 no manifesto; conteúdo detalhado fora do HEAD|
+|R$ 6.500|nominal corrente; manifesto 2026-07|3|R$ 2.065,6892|0,6866910623|0,3133089377|referência ao contrato D070 no manifesto; fixture detalhada versionada no HEAD|
 
-Nunca preencher a coluna global por estimativa manual. O documento deve referenciar somente o contrato D070 e os metadados versionados no manifesto Mundo; o conteúdo detalhado do artefato de golden cases permanece fora do HEAD. Esta regra de fixture não concede autorização; o frontend e o pacote Mundo vigentes dependem da autorização separada do manifesto agregador e de sua validação de integridade.
+Nunca preencher a coluna global por estimativa manual. O documento deve referenciar somente o contrato D070 e os metadados versionados no manifesto Mundo; o conteúdo detalhado do artefato de golden cases está versionado no HEAD. Esta regra de fixture não concede autorização; o frontend e o pacote Mundo vigentes dependem da autorização separada do manifesto agregador e de sua validação de integridade.
 
 ---
 
@@ -3480,7 +3480,7 @@ validation/brazil/brazil-income-golden-cases.json
 
 Ele deve permanecer pequeno, determinístico e derivado da mesma CDF cujo SHA-256 é registrado no manifesto.
 
-O teste versionado espera 11 golden cases. O manifesto Mundo referencia o conjunto global D070 em `validation/world/world-income-golden-cases-d070-candidate.json`, versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado desse artefato permanece fora do HEAD atual.
+O teste versionado espera 11 golden cases. O manifesto Mundo referencia o conjunto global D070 em `validation/world/world-income-golden-cases-d070-candidate.json`, versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado desse artefato está versionado no HEAD atual.
 
 ---
 

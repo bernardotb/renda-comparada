@@ -1,15 +1,15 @@
 ---
 title: 04-metodologia-dados
 created: 2026-08-12T17:07:15.000-03:00
-modified: 2026-08-14T16:49:00.000-03:00
+modified: 2026-08-20T11:18:48.264-03:00
 ---
 
 # 04-metodologia-dados
 
 **Produto:** Renda Comparada  
-**Versão do documento:** 1.4
+**Versão do documento:** 1.5
 **Status:** Canônico — motores Brasil e Mundo validados e integrados; deploy não autorizado
-**Última revisão:** 14/08/2026
+**Última revisão:** 20/08/2026
 
 **Documentos relacionados:**
 
@@ -1141,7 +1141,7 @@ Valores empatados de `welf` são agrupados em um único degrau. A CDF não inter
 
 # 46A. Precisão, Caudas E Golden Cases Mundiais — D070
 
-D070 congela o contrato de golden cases reproduzíveis. O teste versionado espera 11 casos, e o manifesto Mundo registra `validation/world/world-income-golden-cases-d070-candidate.json` por caminho, versão, SHA-256 e tamanho; o conteúdo detalhado do artefato permanece fora do HEAD atual. O contrato usa a CDF D068 e a conversão D069 sem arredondamento intermediário.
+D070 congela o contrato de golden cases reproduzíveis. O teste versionado espera 11 casos, e o manifesto Mundo registra `validation/world/world-income-golden-cases-d070-candidate.json` por caminho, versão, SHA-256 e tamanho; o conteúdo detalhado do artefato está versionado no HEAD atual. O contrato usa a CDF D068 e a conversão D069 sem arredondamento intermediário.
 
 Definir:
 
@@ -1867,7 +1867,7 @@ Antes do deploy definitivo da V1, resolver:
 - validar PPP utilizada — **feito e canonizado por D069**;
 - validar conversão BRL → PPP — **feito e canonizado por D069; fator IPCA Mundo materializado em artefato versionado**;
 - construir CDF/representação mundial — **contrato definido por D068; artefato de produção posteriormente materializado e integração habilitada pelo manifesto agregador**;
-- reproduzir headcounts em múltiplas linhas na mesma release PIP — **contrato definido por D068; o HEAD versionado preserva o limite operacional de erro, enquanto a evidência detalhada de execução permanece fora do HEAD**;
+- reproduzir headcounts em múltiplas linhas na mesma release PIP — **contrato definido por D068; o HEAD versionado preserva o limite operacional de erro e a evidência estruturada de execução em JSON/CSV, enquanto o relatório `.md` correspondente permanece fora do HEAD**;
 - definir limites, empates e precisão do Mundo — **feito por D070**;
 - gerar manifestos/checksums de produção — **Brasil e Mundo materializados; manifesto agregador Mundo autorizado para integração, com CDF e price alignment históricos preservados**;
 - executar testes de regressão metodológicos — **Brasil definido; contrato D070 referenciado pelo manifesto Mundo e pacote/runtime integrado com regressões próprias**.

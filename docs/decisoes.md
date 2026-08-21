@@ -1,16 +1,16 @@
 ---
-title: Registro de Decisões — Renda Comparada
+title: Registro De Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-14T17:40:00.000-03:00
+modified: 2026-08-20T11:56:02.296-03:00
 ---
 
-# Registro de Decisões — Renda Comparada
+# Registro De Decisões — Renda Comparada
 
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
-**Versão:** 1.5
-**Última revisão:** 14/08/2026
+**Versão:** 1.9
+**Última revisão:** 20/08/2026
 
 Documentos relacionados:
 
@@ -28,7 +28,7 @@ Documentos relacionados:
 
 ---
 
-# 1. Função deste documento
+# 1. Função Deste Documento
 
 Este documento registra decisões relevantes já tomadas no projeto.
 
@@ -44,7 +44,7 @@ Uma decisão pode ser revista, mas sua mudança deve ser explícita.
 
 ---
 
-# 2. Formato das decisões
+# 2. Formato Das Decisões
 
 Cada decisão possui:
 
@@ -457,7 +457,7 @@ A mensagem de transição será conceitualmente:
 
 ---
 
-# D019 — Não usar “O resultado te agradou?”
+# D019 — Não Usar “O resultado te agradou?”
 
 **Data:** 12/08/2026  
 **Status:** `ATIVA`
@@ -1182,7 +1182,9 @@ A cópia legada em `C:\Users\Usuario\OneDrive\Documentos\ChatGPT\3` permanece pr
 ## D052 — Repositório Git Remoto Privado
 
 **Data:** 13/08/2026
-**Status:** `EM REVISÃO`
+**Status:** `SUBSTITUÍDA POR D074`
+
+O texto abaixo preserva o registro histórico da pendência identificada em 13/08/2026. Ele não descreve o remoto vigente.
 
 ### Decisão Operacional Pendente
 
@@ -1576,7 +1578,6 @@ accessedAt = data de atualização do manifesto
 
 ---
 
-
 # Metodologia Mundial — Decisões D066–D070
 
 ## D066 — Versão PIP E Ano Mundial De Referência
@@ -1699,7 +1700,7 @@ Artefatos de evidência:
 - raw `data/raw/world/pip-20260324-2021/GlobalDist1000bins_1990_2026_20260324_2021_01_02_PROD.csv` — SHA-256 `99FC4B99BD6D77770DA78A5BFC90516F5FE35742C7A29968F2FD148B323B48A2`;
 - processado `data/processed/world/pip-20260324-2021/world-bins-2024.csv` — SHA-256 `2CA102013BDF9D3EA22C9642326544B32D45EF61407F81C6B71324BC5B072F52`;
 - candidata D068 referenciada como `validation/world/world-income-cdf-2024-candidate.json` — SHA-256 `56C53483744176A50090E16058A0CF4FC6221C83D1D80A60060B931110C54DC2`, hash exigido pelo script de produção versionado;
-- `validation/world/world-cdf-validation.json` e `validation/world/world-cdf-validation.md` permanecem registros locais fora do HEAD atual e não são usados aqui como prova versionada de execução.
+- `validation/world/world-cdf-validation.json` está versionado no HEAD atual; `validation/world/world-cdf-validation.md` permanece como registro local fora do HEAD. Nenhum deles é usado aqui, isoladamente, como prova de execução.
 
 ### Consequências
 
@@ -1776,7 +1777,7 @@ D065 alinha a entrada corrente à CDF brasileira em preços médios de 2025. D06
 
 - `data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-ppp.raw.csv` — SHA-256 `792476948DA84A005CC9C61C359CB586B42866F850F55973EF7BDC2693347EB6` — `BRA,national,2021,2.44986319541931`;
 - `data/raw/world/pip/20260324_2021/pip-20260324_2021_01_02_PROD-cpi.raw.csv` — SHA-256 `E2F558A28FBBD91F69EDB5FEF4BC10DED19F17D315090CB70031F2C993408ABE` — `BRA,national,2021,1` e `BRA,national,2024,1.192919586578344`;
-- `validation/world/d069-pip-aux-provenance-production-build-retry.json` — registro local da aquisição, fora do HEAD atual; os fatores operacionais e sua proveniência exigida permanecem preservados no alinhamento de preços e no pacote de produção versionados.
+- `validation/world/d069-pip-aux-provenance-production-build-retry.json` — registro da aquisição versionado no HEAD atual; os fatores operacionais e sua proveniência exigida permanecem preservados no alinhamento de preços e no pacote de produção versionados.
 
 ### Documentos Afetados
 
@@ -1805,7 +1806,7 @@ MAX_ABSOLUTE_ERROR_PP = 0.022516991848920
 
 O índice corrente provém do IPCA nacional, SIDRA tabela 1737, variável 2266, número-índice. Julho/2026 é referência operacional versionada desta decisão, não constante corrente eterna. Uma atualização exige nova evidência oficial preservada, atualização explícita do mês e do manifesto aplicável, regeneração dos golden cases, testes e promoção autorizada; a publicação de mês posterior não altera o contrato automaticamente.
 
-O teste versionado espera 11 golden cases. O manifesto registra o artefato `validation/world/world-income-golden-cases-d070-candidate.json` por versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado dos casos permanece fora do HEAD atual.
+O teste versionado espera 11 golden cases. O manifesto registra o artefato `validation/world/world-income-golden-cases-d070-candidate.json` por versão `D070-v1`, SHA-256 `6EA8FB10D9BCE16380E5F311EFA789AC22EEA44BEFF119C33C61B1B0578FF779` e tamanho de 6.956 bytes; o conteúdo detalhado dos casos está versionado no HEAD atual.
 
 O contrato preserva a fórmula e os fatores exatos de D069, a CDF em degraus de D068, precisão interna integral e ausência de arredondamento intermediário.
 
@@ -1850,7 +1851,7 @@ A condição estrita incorpora o erro máximo medido em D068. Não se pode usar 
 
 ### Evidência E Consequências
 
-O contrato D070 é coberto pelos testes versionados, que esperam 11 golden cases. Os registros locais `validation/world/world-d070-validation.json` e `validation/world/world-d070-validation.md` permanecem fora do HEAD atual e não comprovam, no estado versionado, uma contagem de testes executados ou resultado PASS.
+O contrato D070 é coberto pelos testes versionados, que esperam 11 golden cases. `validation/world/world-d070-validation.json` está versionado no HEAD atual; `validation/world/world-d070-validation.md` permanece como registro local fora do HEAD. A presença do JSON versionado não deve ser confundida com nova execução de testes nesta reconciliação.
 
 D070 deixa de ser bloqueio metodológico para golden cases, precisão, empates e caudas. Esta canonização não cria artefato de produção Mundo, não integra resultado Mundo ao frontend, não altera Brasil e não autoriza reativar `WORLD_CURVE` ou qualquer fallback legado. Produção e integração exigem tarefa e auditoria posteriores explícitas.
 
@@ -2005,7 +2006,6 @@ Não utilizar:
 
 ---
 
-
 ## D072 — Entrega E Carregamento Da CDF Brasileira
 
 **Data:** 14/08/2026
@@ -2069,7 +2069,6 @@ Não utilizar como fallback:
 
 ---
 
-
 ## D073 — Metadata Pública E Compartilhamento Genérico Da Home
 
 **Data:** 14/08/2026
@@ -2118,6 +2117,26 @@ A metadata não deve descrever o resultado mundial como ranking exato. A express
 - nenhuma informação individual entra em `og:title`, `og:description`, `og:image` ou `og:url`;
 - a imagem OG padrão pode ser criada depois, mas deve respeitar o texto e a privacidade já aprovados;
 - alterações futuras nesses textos exigem decisão explícita ou revisão documentada de produto/SEO.
+
+---
+
+## D074 — Estado Factual Do Remoto GitHub
+
+**Data:** 20/08/2026
+**Status:** `ATIVA`
+
+### Evidência
+
+- o remoto `origin` aponta para `https://github.com/bernardotb/renda-comparada.git`;
+- o repositório GitHub está público no momento da inspeção;
+- a branch padrão remota é `main`;
+- o checkout local pode conter commits e alterações ainda não incorporados à branch padrão remota.
+
+### Consequências
+
+- D052 fica substituída quanto ao estado vigente do remoto, mas permanece preservada como registro histórico;
+- a visibilidade pública do repositório não autoriza `push`, merge, release ou deploy;
+- o checkout local continua sendo a fonte do estado real das alterações ainda não publicadas no GitHub.
 
 ---
 
