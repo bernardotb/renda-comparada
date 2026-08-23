@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "1.0.0",
+  "audit": "D069 PIP auxiliary tables provenance",
+  "evidenceRetrieval": "BLOCKED",
+  "requestedPipVersion": "20260324_2021",
+  "requestedProductionBuild": "20260324_2021_01_02_PROD",
+  "pppBase": 2021,
+  "globalReferenceYear": 2024,
+  "ppp": {
+    "retrieval": "BLOCKED",
+    "requestedUrl": "https://api.worldbank.org/pip/v1/aux?table=ppp&version=20260324_2021&format=csv",
+    "finalUrl": "https://api.worldbank.org/pip/v1/aux?table=ppp&version=20260324_2021&format=csv",
+    "redirectChain": [],
+    "accessedAtUtc": "2026-08-19T13:10:58.2368543Z",
+    "httpStatus": 404,
+    "contentType": "application/json",
+    "etag": null,
+    "lastModified": null,
+    "contentLengthReceived": null,
+    "rawPath": null,
+    "errorEvidencePath": "data/raw/world/pip/20260324_2021/pip-20260324_2021-ppp.error-response.json",
+    "sizeBytes": 1903,
+    "sha256": "78916C6B22D70E0C2E3CECFD2D1CC97B1B502B2DD2BD332DE0DA73A7048E36A2",
+    "requestedPipVersion": "20260324_2021",
+    "responseVersionEvidence": {
+      "requestedVersionAccepted": false,
+      "errorMessage": "Invalid query arguments have been submitted.",
+      "detailMessage": "The selected value is not available. Please select one of the valid values",
+      "acceptedProductionBuildObserved": "20260324_2021_01_02_PROD",
+      "evidenceLocation": "error.details.valid",
+      "interpretation": "The response lists the frozen production build as a valid version value, but it rejected the exact requested version parameter required by this task. No alternative request was made."
+    },
+    "schema": {
+      "status": "unavailable",
+      "columns": null,
+      "reason": "The endpoint returned JSON error content rather than CSV."
+    },
+    "brazilEvidence": {
+      "status": "unavailable",
+      "countryCode": null,
+      "countryName": null,
+      "records": null
+    },
+    "observedValues": {
+      "rawTextValue": null,
+      "parsedNumericValue": null,
+      "baseOrYear": null,
+      "unit": null
+    },
+    "comparisonWithCandidate": {
+      "candidate": 2.4499,
+      "observed": null,
+      "absoluteDifference": null,
+      "relativeDifference": null,
+      "sameWhenRoundedTo4Decimals": null,
+      "consistency": "NOT_DERIVABLE"
+    }
+  },
+  "cpi": {
+    "retrieval": "BLOCKED",
+    "requestedUrl": "https://api.worldbank.org/pip/v1/aux?table=cpi&version=20260324_2021&format=csv",
+    "finalUrl": "https://api.worldbank.org/pip/v1/aux?table=cpi&version=20260324_2021&format=csv",
+    "redirectChain": [],
+    "accessedAtUtc": "2026-08-19T13:11:23.4880699Z",
+    "httpStatus": 404,
+    "contentType": "application/json",
+    "etag": null,
+    "lastModified": null,
+    "contentLengthReceived": null,
+    "rawPath": null,
+    "errorEvidencePath": "data/raw/world/pip/20260324_2021/pip-20260324_2021-cpi.error-response.json",
+    "sizeBytes": 1903,
+    "sha256": "78916C6B22D70E0C2E3CECFD2D1CC97B1B502B2DD2BD332DE0DA73A7048E36A2",
+    "requestedPipVersion": "20260324_2021",
+    "responseVersionEvidence": {
+      "requestedVersionAccepted": false,
+      "errorMessage": "Invalid query arguments have been submitted.",
+      "detailMessage": "The selected value is not available. Please select one of the valid values",
+      "acceptedProductionBuildObserved": "20260324_2021_01_02_PROD",
+      "evidenceLocation": "error.details.valid",
+      "interpretation": "The response lists the frozen production build as a valid version value, but it rejected the exact requested version parameter required by this task. No alternative request was made."
+    },
+    "schema": {
+      "status": "unavailable",
+      "columns": null,
+      "reason": "The endpoint returned JSON error content rather than CSV."
+    },
+    "brazilEvidence": {
+      "status": "unavailable",
+      "countryCode": null,
+      "countryName": null,
+      "records2021": null,
+      "records2024": null
+    },
+    "observedValues": {
+      "rawCpiValues": null,
+      "parsedNumericValues": null,
+      "baseOrReferenceFields": null
+    },
+    "derivation": {
+      "state": "NOT_DERIVABLE",
+      "inputFields": null,
+      "rawInputValues": null,
+      "formulaOrTransformation": null,
+      "derivedValue": null
+    },
+    "comparisonWithCandidate": {
+      "candidate": 1.1929,
+      "observedOrDerived": null,
+      "absoluteDifference": null,
+      "relativeDifference": null,
+      "sameWhenRoundedTo4Decimals": null,
+      "consistency": "NOT_DERIVABLE"
+    }
+  },
+  "d069Status": "REMAINS_BLOCKED",
+  "d070Started": false,
+  "canonicalFilesChanged": false,
+  "productionFilesChanged": false,
+  "notes": [
+    "Each mandatory endpoint was requested independently and exactly as specified.",
+    "No redirects were observed.",
+    "The error bodies were preserved byte for byte as error evidence and were not represented as valid CSV raws.",
+    "No request using latest, current, another release, or the production build as the version parameter was made."
+  ]
+}

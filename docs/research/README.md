@@ -1,3 +1,9 @@
+---
+title: Research — Renda Comparada
+created: 2026-08-15T15:45:00.000-03:00
+modified: 2026-08-23T09:19:53.583-03:00
+---
+
 # Research — Renda Comparada
 
 Este diretório contém materiais de pesquisa, evidências, protocolos, propostas, experimentos, rascunhos e artefatos auxiliares do projeto Renda Comparada.
@@ -26,24 +32,27 @@ Canonização exige decisão explícita e atualização das fontes de autoridade
 
 Para a fotografia resumida do estado corrente, consulte `../README.md`. Para o fluxo permanente ChatGPT ↔ Codex, consulte `../operacao-chatgpt-codex.md`.
 
-## Pesquisa Mundo atual
+## Histórico Da Pesquisa Mundo
 
-- `fase-2a-metodologia-mundo.md` — investigação e canonização parcial já refletida em D066/D067;
-- `fase-2a-api-reproducao.md` — procedimento de reprodução e critérios para D068–D070;
-- `fase-2a-d068-execucao-2026-08-17.md` — execução e evidência da candidata D068, não canônica;
+- `fase-2a-metodologia-mundo.md` — investigação e canonização parcial então refletida em D066/D067;
+- `fase-2a-api-reproducao.md` — procedimento histórico de reprodução e critérios para D068–D070;
+- `fase-2a-d068-execucao-2026-08-17.md` — execução e evidência da candidata D068 antes da canonização;
 - `fase-2b-protocolo-validacao-cdf-mundo.md` — protocolo de validação da CDF;
-- `fase-2c-protocolo-conversao-brl-ppp2021.md` — protocolo ainda não executado para D069;
-- `moldes-decisoes-d068-d070.md` — moldes não ativos para eventual revisão humana.
+- `fase-2c-d069-auditoria-proveniencia-chatgpt-2026-08-19.md` — auditoria histórica de proveniência anterior à canonização de D069;
+- `fase-2c-protocolo-conversao-brl-ppp2021.md` — protocolo anterior à execução de D069;
 
-Não há, neste checkout, relatório de execução D069, relatório de execução D070 nem contrato candidato Fase 2E. A ausência desses arquivos não deve ser preenchida por inferência.
+Esses arquivos preservam o estado das fases em que foram escritos e podem conter bloqueios já superados. O estado vigente não deve ser inferido deles: D066–D070 estão registradas em `../decisoes.md`, e o pacote autorizado está em `../../data/production/world/`.
 
-## Histórico
+## Outras Pesquisas E Registros Históricos
 
+- `avaliacao-analytics-v1.md` — avaliação não canônica de alternativa para analytics;
+- `decisao-preparada-analytics-v1.md` — proposta sujeita a decisão humana e canonização explícita;
+- `fase-3-contrato-interface-v1.md` — proposta histórica do contrato de interface;
+- `gate-pre-codex-v1.md` — fotografia histórica de prontidão, não utilizável como estado atual;
+- `higiene-repositorio-pre-codex.md` — auditoria histórica de higiene do repositório;
 - `historico-operacional-codex-renda-comparada.md` — registro histórico de execução; não é fotografia do estado corrente;
-- `NOTAS-ATUALIZADAS-CONSOLIDADAS.md` — consolidação histórica extensa; pode conter estados superados;
-- `MANIFESTO.md` — manifestação de origem do material, sem autoridade metodológica ou decisória.
 
-## Fontes de autoridade
+## Fontes De Autoridade
 
 Para o estado e as regras atuais do projeto, consultar:
 
