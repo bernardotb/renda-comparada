@@ -1,7 +1,7 @@
 ---
 title: Registro De Decisões — Renda Comparada
 created: 2026-08-12T18:04:56.000-03:00
-modified: 2026-08-20T11:56:02.296-03:00
+modified: 2026-08-22T11:51:41.324-03:00
 ---
 
 # Registro De Decisões — Renda Comparada
@@ -9,8 +9,8 @@ modified: 2026-08-20T11:56:02.296-03:00
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
-**Versão:** 1.9
-**Última revisão:** 20/08/2026
+**Versão:** 1.10
+**Última revisão:** 22/08/2026
 
 Documentos relacionados:
 
@@ -2140,18 +2140,96 @@ A metadata não deve descrever o resultado mundial como ranking exato. A express
 
 ---
 
+## D075 — Controlador E Canais Oficiais
+
+**Data:** 22/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Canonizar para a V1:
+
+```text
+CONTROLADOR = Frederico Wiermann Barroso
+CONTROLLER_TYPE = pessoa física
+
+PRIVACY_CONTACT = privacidade@rendacomparada.com.br
+SECURITY_CONTACT = seguranca@rendacomparada.com.br
+
+PRIMARY_EMAIL_MAILBOX = contato@rendacomparada.com.br
+EMAIL_PROVIDER = Hostinger Email
+```
+
+Os canais de privacidade e segurança funcionam como aliases da caixa principal. Segundo confirmação operacional do responsável, MX, SPF, DKIM e DMARC foram reconhecidos como válidos pela Hostinger, e o recebimento por ambos os aliases foi testado com sucesso.
+
+### Limites
+
+Esta decisão:
+
+- não publica a Política de Privacidade;
+- não define localização física de dados, retenção ou condições contratuais não verificadas;
+- não conclui auditoria de acessos, MFA, fornecedores, logs, headers ou resposta a incidentes;
+- não autoriza lançamento público.
+
+---
+
+## D076 — Domínio Público Canônico Da V1
+
+**Data:** 22/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Canonizar:
+
+```text
+PRODUCTION_DOMAIN = rendacomparada.com.br
+CANONICAL_URL = https://rendacomparada.com.br
+DOMAIN_REGISTRAR_AND_DNS = Registro.br
+```
+
+### Limites
+
+Esta decisão documental não:
+
+- implementa `rel="canonical"`, redirecionamentos, sitemap, `robots.txt` ou Open Graph;
+- configura Search Console, analytics, DNS ou Vercel;
+- comprova HTTPS, security headers ou comportamento de deploy;
+- autoriza deploy, release ou lançamento público.
+
+---
+
 # Pendências De Segurança
 
 ## SEC-001 — Remover `.env.local` Da Cópia Sincronizada
 
-**Status:** `PENDENTE`
+**Status:** `CONCLUÍDA EM 22/08/2026`
 
-Remover o arquivo da cópia sincronizada quando o caminho local exato do backup for fornecido. Seu conteúdo não deve ser aberto, exibido, copiado ou registrado.
+Segundo confirmação operacional do responsável:
 
-## SEC-002 — Revogar E Renovar O Token Vercel Sincronizado
+- `.env.local` foi removido manualmente da cópia legada/sincronizada;
+- a lixeira foi esvaziada;
+- o conteúdo do arquivo não foi aberto, exibido ou copiado durante a operação.
 
-**Status:** `PENDENTE`
+Esta conclusão se limita à remoção informada e não comprova auditoria de outras cópias, permissões ou acessos externos.
 
-Qualquer token ou segredo anteriormente sincronizado deve ser considerado potencialmente exposto. A revogação e a renovação deverão ocorrer quando a autenticação da Vercel for refeita. O token antigo não deve ser reutilizado ou testado.
+## SEC-002 — Remover O Token Vercel CLI Expirado
+
+**Status:** `MITIGAÇÃO OPERACIONAL CONCLUÍDA EM 22/08/2026`
+
+Segundo confirmação operacional do responsável:
+
+- foi identificado na conta Vercel um token antigo de Vercel CLI;
+- esse token já estava expirado;
+- seu registro foi removido manualmente da conta Vercel;
+- ele não foi reutilizado nem testado;
+- nenhum token substituto foi criado, pois não existe necessidade operacional atual de autenticação por CLI;
+- qualquer futura autenticação por Vercel CLI deverá usar uma credencial nova.
+
+Como `.env.local` foi removido sem que seu conteúdo fosse aberto, exibido ou copiado, não foi possível comprovar que o token Vercel CLI removido correspondia exatamente ao valor anteriormente armazenado naquele arquivo.
+
+SEC-002 registra, portanto, uma mitigação operacional concluída com essa limitação de evidência; não comprova a identidade do segredo anteriormente sincronizado.
+
+Esta conclusão não resolve nem comprova MFA, revisão de acessos, permissões externas, configuração de deploy ou outros controles de produção.
 
 ---

@@ -1,7 +1,7 @@
 ---
 title: 07-seo-analytics-crescimento
 created: 2026-08-12T17:39:01.000-03:00
-modified: 2026-08-14T16:31:00.000-03:00
+modified: 2026-08-22T11:51:41.324-03:00
 ---
 
 # 07-seo-analytics-crescimento
@@ -11,8 +11,8 @@ modified: 2026-08-14T16:31:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `07-seo-analytics-crescimento.md`  
 **Status:** Canônico para aquisição, mensuração e crescimento  
-**Versão:** 1.1
-**Última revisão:** 14/08/2026
+**Versão:** 1.2
+**Última revisão:** 22/08/2026
 
 Documentos relacionados:
 
@@ -2196,13 +2196,18 @@ Ao trabalhar em SEO ou crescimento, o Codex deve:
 
 ---
 
-# 102. Questões Abertas
+# 102. Decisões Operacionais E Questões Abertas
 
-Antes da divulgação ampla ainda devem ser definidos:
+Para a V1, ficam canonizados:
 
 ```text
-PRODUCTION_DOMAIN = [DEFINIR]
+PRODUCTION_DOMAIN = rendacomparada.com.br
+CANONICAL_URL = https://rendacomparada.com.br
 ```
+
+Esta decisão documental não implementa `rel="canonical"`, redirecionamentos, sitemap, `robots.txt`, Open Graph nem configuração de deploy.
+
+Antes da divulgação ampla ainda devem ser definidos ou configurados:
 
 ```text
 ANALYTICS_PROVIDER = [DEFINIR]

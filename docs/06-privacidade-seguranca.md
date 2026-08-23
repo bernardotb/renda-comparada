@@ -1,7 +1,7 @@
 ---
 title: 06-privacidade-seguranca
 created: 2026-08-12T17:28:31.000-03:00
-modified: 2026-08-14T16:31:00.000-03:00
+modified: 2026-08-22T11:51:41.324-03:00
 ---
 
 # 06-privacidade-seguranca
@@ -11,8 +11,8 @@ modified: 2026-08-14T16:31:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `06-privacidade-seguranca.md`  
 **Status:** Canônico para privacidade e segurança  
-**Versão:** 1.1
-**Última revisão:** 14/08/2026
+**Versão:** 1.2
+**Última revisão:** 22/08/2026
 
 Documentos relacionados:
 
@@ -902,11 +902,17 @@ Manter documento ou tabela contendo, por exemplo:
 
 |Serviço|Finalidade|Dados tratados|Necessário?|Produção|
 |---|---|---|---|---|
-|Vercel|hospedagem|técnico|sim|sim|
+|Vercel|hospedagem e infraestrutura|dados técnicos|sim|sim|
+|Registro.br|registro e DNS do domínio|dados cadastrais e configuração DNS conforme a operação do serviço|sim|sim|
+|Hostinger Email|caixa principal e canais de privacidade e segurança|mensagens e metadados de e-mail|sim|sim|
 |Analytics|métricas|eventos mínimos|avaliar|definir|
 |Error tracking|erros|metadados sanitizados|avaliar|definir|
 
 Não adicionar serviço sem atualizar o inventário.
+
+A caixa principal `contato@rendacomparada.com.br` utiliza Hostinger Email. Os canais `privacidade@rendacomparada.com.br` e `seguranca@rendacomparada.com.br` estão configurados como aliases; MX, SPF, DKIM e DMARC foram reconhecidos como válidos pelo provedor, e o recebimento pelos aliases foi testado com sucesso pelo responsável.
+
+A localização física do processamento, os prazos de retenção e as condições contratuais específicas de Registro.br e Hostinger Email não foram verificados neste gate e não devem ser inferidos deste inventário.
 
 ---
 
@@ -922,10 +928,11 @@ Não presumir localização física de dados sem verificar o fornecedor contrata
 
 # 53. Controlador
 
-Antes do lançamento definitivo, definir:
+Para a V1, fica definido:
 
 ```text
-CONTROLADOR = [DEFINIR]
+CONTROLADOR = Frederico Wiermann Barroso
+CONTROLLER_TYPE = pessoa física
 ```
 
 O controlador é quem tomará as decisões sobre o tratamento dos dados pessoais no contexto do produto.
@@ -944,11 +951,13 @@ A ANPD mantém orientação específica sobre controlador, operador e encarregad
 
 # 55. Canal De Privacidade
 
-Antes do lançamento, definir:
+O canal oficial definido e operacional é:
 
 ```text
-PRIVACY_CONTACT = [DEFINIR]
+PRIVACY_CONTACT = privacidade@rendacomparada.com.br
 ```
+
+O endereço funciona como alias da caixa principal e teve o recebimento testado com sucesso pelo responsável.
 
 O usuário deve possuir forma clara de:
 
@@ -1393,11 +1402,13 @@ Por isso, o Renda Comparada deve tratar informações financeiras com nível int
 
 # 85. Reporte Interno
 
-Definir antes da produção:
+O canal oficial definido e operacional é:
 
 ```text
-SECURITY_CONTACT = [DEFINIR]
+SECURITY_CONTACT = seguranca@rendacomparada.com.br
 ```
+
+O endereço funciona como alias da caixa principal e teve o recebimento testado com sucesso pelo responsável.
 
 Toda pessoa com acesso ao projeto deve saber:
 
