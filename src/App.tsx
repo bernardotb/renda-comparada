@@ -1,6 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react'
 import {
-  ArrowDown,
   ArrowUpRight,
   Check,
   CircleHelp,
@@ -120,6 +119,12 @@ function WorldResultCard({ result, runtime }: { result: WorldIncomePosition; run
         <p className="limit-headline">{headline}</p>
       )}
       {positionLabel && <p className="position-label">{positionLabel}</p>}
+      {presentation.kind === 'main' && (
+        <p className="world-interpretation">
+          Sua posição estimada está aproximadamente no percentil {presentation.percentileDisplay} da distribuição monetária mundial utilizada.
+        </p>
+      )}
+      <p className="world-disclosure">A comparação global combina dados de renda ou consumo por pessoa de diferentes países, ajustados por poder de compra. Por isso, é mais aproximada que a comparação brasileira.</p>
       <p className="rank-note">
         {runtime
           ? `Referência global ${runtime.referenceYear}, PPP ${runtime.pppBase}. `
@@ -314,11 +319,11 @@ function App() {
   return (
     <div className="site-shell">
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="Renda Comparada — início">
+        <a className="brand" href="/" aria-label="Renda Comparada — início">
           <span className="brand-mark"><i /><i /></span>
           <span>RENDA<br />COMPARADA</span>
         </a>
-        <a className="method-link" href="#metodologia">Como calculamos <ArrowDown size={15} /></a>
+        <a className="method-link" href="/metodologia">Como calculamos <ArrowUpRight size={15} /></a>
       </header>
 
       <main id="top">
@@ -341,7 +346,7 @@ function App() {
               <small>Renda mensal atual</small>
             </div>
 
-            <label className="field-label income-label" htmlFor="income">Renda mensal da casa</label>
+            <label className="field-label income-label" htmlFor="income">Qual é a renda mensal total da sua casa?</label>
             <div className={`money-input-wrap ${fieldErrors.income ? 'invalid' : ''}`}>
               <span>R$</span>
               <input
@@ -354,11 +359,15 @@ function App() {
                   const income = parseBrazilianCurrency(incomeInput)
                   if (income.ok) setIncomeInput(formatCurrencyInput(income.value))
                 }}
-                aria-describedby={fieldErrors.income ? 'income-help income-error' : 'income-help'}
+                aria-describedby={fieldErrors.income ? 'income-help income-inclusion-help income-error' : 'income-help income-inclusion-help'}
                 aria-invalid={Boolean(fieldErrors.income)}
               />
             </div>
             <p className="field-help" id="income-help">Use a renda bruta mensal, antes de impostos e despesas.</p>
+            <details className="income-inclusion-help" id="income-inclusion-help">
+              <summary>O que devo incluir?</summary>
+              <p>Some os rendimentos mensais da casa antes de impostos e despesas, como salários e trabalho por conta própria, aposentadorias, pensões, aluguéis recebidos e outras rendas abrangidas pela metodologia. Não desconte aluguel, financiamento, cartão, plano de saúde ou gastos do mês.</p>
+            </details>
             {fieldErrors.income && <p className="field-error" id="income-error" role="alert">{fieldErrors.income}</p>}
 
             <div className="household-row">
@@ -398,7 +407,7 @@ function App() {
             <button className="calculate-button" type="submit" disabled={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
               {brazilCalculation.status === 'loading' || worldCalculation.status === 'loading' ? 'Calculando sua posição…' : 'Descobrir minha posição'}
             </button>
-            <div className="privacy-note"><ShieldCheck size={15} /><span>O cálculo acontece no seu navegador. Renda, moradores e resultado não são enviados.</span></div>
+            <div className="privacy-note"><ShieldCheck size={15} /><span>Sua renda e o número de moradores são usados temporariamente no navegador para calcular o resultado. Esses valores não são enviados aos servidores nem armazenados de forma persistente pelo produto.</span></div>
           </form>
 
           <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
@@ -422,10 +431,21 @@ function App() {
                   {worldCalculation.status === 'loading' && <EngineLoadingCard engine="Mundo" />}
                   {worldCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Mundo" />}
                 </div>
+                <p className="result-relationship">Brasil e Mundo podem mostrar posições diferentes porque usam distribuições, referências de preços e metodologias diferentes.</p>
                 <div className="interpretation">
                   <CircleHelp size={18} />
                   <p><strong>Como ler:</strong> o percentil usa a parcela com renda estritamente menor; o TOP é seu complemento. Empates permanecem no mesmo degrau da distribuição.</p>
                 </div>
+                <section className="result-metadata" aria-labelledby="result-metadata-title">
+                  <div className="result-metadata-heading">
+                    <p className="eyebrow" id="result-metadata-title">FONTES E VERSÕES</p>
+                    <a href="/metodologia">Como calculamos isso? <ArrowUpRight size={15} aria-hidden="true" /></a>
+                  </div>
+                  <div className="result-metadata-grid">
+                    <p><strong>Brasil</strong><span>IBGE · PNAD Contínua{brazilDatasetYear ? ` ${brazilDatasetYear}` : ''}{brazilRuntime ? ` · ${brazilRuntime.priceReference}` : ''}{brazilReferenceMonth ? ` · IPCA de ${brazilReferenceMonth}` : ''}</span></p>
+                    <p><strong>Mundo</strong><span>World Bank PIP{worldRuntime ? ` · ano global ${worldRuntime.referenceYear} · PPP ${worldRuntime.pppBase} · versão ${worldRuntime.pipVersion}` : ''}</span></p>
+                  </div>
+                </section>
                 {showSharing && (
                   <section className="sharing" aria-labelledby="sharing-title">
                     <div className="sharing-heading">
@@ -547,6 +567,36 @@ function App() {
             </a>
           </div>
         </section>
+
+        <section className="editorial-content" id="como-funciona" aria-labelledby="como-funciona-title">
+          <div className="editorial-intro">
+            <div className="section-label">ENTENDA O RESULTADO</div>
+            <h2 id="como-funciona-title">Como funciona?</h2>
+            <p>Você informa a renda bruta mensal total da casa e quantas pessoas fazem parte do domicílio. A ferramenta calcula a renda por pessoa e faz os ajustes metodológicos necessários antes de compará-la com as distribuições utilizadas para Brasil e Mundo.</p>
+          </div>
+          <div className="editorial-list">
+            <article>
+              <h3>O que é percentil?</h3>
+              <p><strong>Exemplo:</strong> percentil 68 significa que sua renda está aproximadamente acima da observada para 68% da distribuição considerada. Esse número é apenas didático, não o seu resultado.</p>
+            </article>
+            <article>
+              <h3>Por que crianças entram no cálculo?</h3>
+              <p>Porque a comparação considera a renda do domicílio por pessoa. Adultos, crianças e pessoas sem renda própria entram quando pertencem à população considerada pela metodologia. <a href="/metodologia#moradores">Veja também as exclusões técnicas.</a></p>
+            </article>
+            <article>
+              <h3>Renda é a mesma coisa que patrimônio?</h3>
+              <p>Não. O Renda Comparada mede posição relativa de renda. Não mede imóveis, investimentos, dívidas, riqueza líquida ou patrimônio acumulado.</p>
+            </article>
+            <article>
+              <h3>Por que Brasil e Mundo podem apresentar posições diferentes?</h3>
+              <p>As duas comparações utilizam fontes, referências e metodologias diferentes. O resultado brasileiro é construído sobre a distribuição da PNAD; o mundial harmoniza dados de renda ou consumo de diferentes países e os ajusta por poder de compra.</p>
+            </article>
+            <article>
+              <h3>O resultado é exato?</h3>
+              <p>Não é uma posição individual exata. É uma estimativa estatística baseada nas distribuições e versões de dados utilizadas. A comparação mundial possui incerteza metodológica maior que a brasileira.</p>
+            </article>
+          </div>
+        </section>
       </main>
 
       <footer>
@@ -555,7 +605,11 @@ function App() {
           <span>RENDA<br />COMPARADA</span>
         </div>
         <p>Ferramenta educativa. Não é aconselhamento financeiro, econômico ou tributário.</p>
-        <a href="#top">Voltar ao topo <ArrowUpRight size={15} /></a>
+        <nav className="footer-links" aria-label="Links institucionais">
+          <a href="/metodologia">Metodologia</a>
+          <a href="/privacidade">Privacidade</a>
+          <a href="#top">Voltar ao topo <ArrowUpRight size={15} /></a>
+        </nav>
       </footer>
     </div>
   )

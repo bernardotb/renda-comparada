@@ -60,7 +60,7 @@ test('metodologia pública cobre o mínimo sem implementar fórmula no domínio'
   assert.equal(domains.includes('shouldShowSharing'), false)
 })
 
-test('Open Graph padrão permanece genérico e card pendente não recebe valor fictício', async () => {
+test('Open Graph padrão preserva a copy canônica e publica apenas a URL disponível', async () => {
   const html = await readFile(new URL('index.html', root), 'utf8')
   const source = `${html}\n${await readFile(new URL('src/App.tsx', root), 'utf8')}`
   const ogTags = (html.match(/<meta\b[^>]*property=["']og:[^>]*>/gi) ?? []).join('\n')
@@ -69,7 +69,7 @@ test('Open Graph padrão permanece genérico e card pendente não recebe valor f
     assert.equal(ogTags.includes(forbidden), false)
   }
   assert.equal(/property=["']og:image["']/i.test(html), false)
-  assert.equal(/property=["']og:url["']/i.test(html), false)
+  assert.match(html, /<meta property="og:url" content="https:\/\/rendacomparada\.com\.br\/" \/>/)
   assert.equal(source.includes('DEFAULT_OG_IMAGE'), false)
   assert.equal(source.includes('PRODUCTION_DOMAIN'), false)
 })

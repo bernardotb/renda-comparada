@@ -905,6 +905,7 @@ Manter documento ou tabela contendo, por exemplo:
 |Vercel|hospedagem e infraestrutura|dados técnicos|sim|sim|
 |Registro.br|registro e DNS do domínio|dados cadastrais e configuração DNS conforme a operação do serviço|sim|sim|
 |Hostinger Email|caixa principal e canais de privacidade e segurança|mensagens e metadados de e-mail|sim|sim|
+|Google Fonts|carregamento das fontes públicas utilizadas pela interface|requisição técnica das fontes; renda, moradores e resultado individual não são enviados explicitamente pela aplicação|sim|sim|
 |Analytics|métricas|eventos mínimos|avaliar|definir|
 |Error tracking|erros|metadados sanitizados|avaliar|definir|
 
@@ -912,7 +913,7 @@ Não adicionar serviço sem atualizar o inventário.
 
 A caixa principal `contato@rendacomparada.com.br` utiliza Hostinger Email. Os canais `privacidade@rendacomparada.com.br` e `seguranca@rendacomparada.com.br` estão configurados como aliases; MX, SPF, DKIM e DMARC foram reconhecidos como válidos pelo provedor, e o recebimento pelos aliases foi testado com sucesso pelo responsável.
 
-A localização física do processamento, os prazos de retenção e as condições contratuais específicas de Registro.br e Hostinger Email não foram verificados neste gate e não devem ser inferidos deste inventário.
+A localização física do processamento, os prazos de retenção e as condições contratuais específicas de Registro.br, Hostinger Email e Google Fonts não foram verificados neste gate e não devem ser inferidos deste inventário.
 
 ---
 
