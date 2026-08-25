@@ -69,13 +69,14 @@ function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
   const markerPercent = display.markerPercent === null
     ? null
     : clampVisualMarkerPercent(display.markerPercent)
+  const percentileForPeople = display.percentileLabel.match(/percentil\s+([\d,.]+)/i)?.[1] ?? null
 
   return (
     <article className="result-card brasil">
-      <div className="result-head">
+      <h2 className="result-head">
         <span className="result-icon"><Sparkles size={20} strokeWidth={1.8} /></span>
-        <span>No Brasil</span>
-      </div>
+        <span>NO BRASIL</span>
+      </h2>
       <p className="eyebrow">Posição estimada na distribuição</p>
       {display.topLabel ? (
         <div className="position-number"><strong>{display.topLabel}</strong></div>
@@ -83,13 +84,22 @@ function BrazilResultCard({ result }: { result: BrazilIncomePosition }) {
         <p className="limit-headline">{display.percentileLabel}</p>
       )}
       {markerPercent !== null && (
-        <div className="result-ruler" aria-label={display.percentileLabel}>
-          <span style={{ width: `${markerPercent}%` }} />
-          <i style={{ left: `clamp(6.5px, ${markerPercent}%, calc(100% - 6.5px))` }} />
+        <div className="result-ruler-wrap">
+          <div className="result-ruler-labels" aria-hidden="true">
+            <span>0</span><span>posição na distribuição</span><span>100</span>
+          </div>
+          <div className="result-ruler" role="img" aria-label={`Escala de posição de 0 a 100. ${display.percentileLabel}.`}>
+            <span style={{ width: `${markerPercent}%` }} />
+            <i style={{ left: `clamp(6.5px, ${markerPercent}%, calc(100% - 6.5px))` }} />
+          </div>
         </div>
       )}
       {display.topLabel && <p className="position-label">{display.percentileLabel}</p>}
-      <p className="rank-note">{display.interpretation}</p>
+      {percentileForPeople ? (
+        <p className="hundred-comparison"><strong>Em cada 100 pessoas,</strong> aproximadamente {percentileForPeople} estão abaixo da sua posição de renda.</p>
+      ) : (
+        <p className="rank-note">{display.interpretation}</p>
+      )}
     </article>
   )
 }
@@ -108,10 +118,10 @@ function WorldResultCard({ result, runtime }: { result: WorldIncomePosition; run
 
   return (
     <article className="result-card mundo">
-      <div className="result-head">
+      <h2 className="result-head">
         <span className="result-icon"><Globe2 size={20} strokeWidth={1.8} /></span>
-        <span>No mundo</span>
-      </div>
+        <span>NO MUNDO</span>
+      </h2>
       <p className="eyebrow">Posição monetária global estimada</p>
       {topLabel ? (
         <div className="position-number"><strong>{topLabel}</strong></div>
@@ -138,10 +148,10 @@ function WorldResultCard({ result, runtime }: { result: WorldIncomePosition; run
 function EngineLoadingCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
   return (
     <article className={`result-card ${engine === 'Brasil' ? 'brasil' : 'mundo'} unavailable`}>
-      <div className="result-head">
+      <h2 className="result-head">
         <span className="result-icon">{engine === 'Brasil' ? <Sparkles size={20} /> : <Globe2 size={20} />}</span>
         <span>No {engine === 'Brasil' ? 'Brasil' : 'mundo'}</span>
-      </div>
+      </h2>
       <p className="eyebrow">Carregando base</p>
       <p className="limit-headline">Calculando…</p>
       <p className="rank-note">O artefato estático é validado antes do cálculo.</p>
@@ -152,10 +162,10 @@ function EngineLoadingCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
 function EngineUnavailableCard({ engine }: { engine: 'Brasil' | 'Mundo' }) {
   return (
     <article className={`result-card ${engine === 'Brasil' ? 'brasil' : 'mundo'} unavailable`} role="alert">
-      <div className="result-head">
+      <h2 className="result-head">
         <span className="result-icon"><CircleHelp size={20} /></span>
         <span>No {engine === 'Brasil' ? 'Brasil' : 'mundo'}</span>
-      </div>
+      </h2>
       <p className="eyebrow">Base indisponível</p>
       <p className="limit-headline">Não foi possível calcular</p>
       <p className="rank-note">Nenhum número provisório ou fallback legado é exibido. Tente novamente.</p>
@@ -284,6 +294,7 @@ function App() {
   const shareUrl = buildShareUrl(window.location.origin)
   const sharePayload = buildSharePayload(shareUrl, includePosition, positionShareMessage)
   const showSharing = shouldShowSharing(brazilCalculation.status, worldCalculation.status)
+  const hasCalculationStarted = brazilCalculation.status !== 'idle' || worldCalculation.status !== 'idle'
   const brazilRuntime = brazilEngineLoader.getCached()
   const worldRuntime = worldEngineLoader.getCached()
   const brazilDatasetYear = brazilRuntime
@@ -343,13 +354,14 @@ function App() {
           </aside>
         </section>
 
-        <section className="calculator" aria-label="Calculadora de posição de renda">
+        <section className={`calculator ${hasCalculationStarted ? 'has-results' : 'is-entry'}`} aria-label="Calculadora de posição de renda">
           <form className="form-panel" onSubmit={handleSubmit} noValidate>
             <div className="panel-heading">
               <span>SEUS DADOS</span>
               <small>Renda mensal atual</small>
             </div>
 
+            <div className="privacy-promise"><ShieldCheck size={17} aria-hidden="true" /><span>Seu cálculo acontece no navegador. Sua renda não é armazenada.</span></div>
             <label className="field-label income-label" htmlFor="income">Qual é a renda mensal total da sua casa?</label>
             <div className={`money-input-wrap ${fieldErrors.income ? 'invalid' : ''}`}>
               <span>R$</span>
@@ -404,99 +416,108 @@ function App() {
               </div>
             </div>
 
-            <div className="per-capita-strip">
-              <span>Renda nominal por pessoa</span>
-              <strong>{nominalPerPerson === null ? '—' : money(nominalPerPerson)}</strong>
-            </div>
             <button className="calculate-button" type="submit" disabled={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
               {brazilCalculation.status === 'loading' || worldCalculation.status === 'loading' ? 'Calculando sua posição…' : 'Descobrir minha posição'}
             </button>
             <div className="privacy-note"><ShieldCheck size={15} /><span>Sua renda e o número de moradores são usados temporariamente no navegador para calcular o resultado. Esses valores não são enviados aos servidores nem armazenados de forma persistente pelo produto.</span></div>
           </form>
 
-          <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
+          {hasCalculationStarted && <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
             <div className="panel-heading light">
               <span>SUA POSIÇÃO ESTIMADA</span>
               <small>{brazilRuntime ? `Brasil: ${brazilRuntime.priceReference}` : 'Brasil: referência validada no cálculo'}</small>
             </div>
-            {brazilCalculation.status === 'idle' && worldCalculation.status === 'idle' && (
-              <div className="results-state">
-                <Sparkles size={28} />
-                <p>Preencha os dados e selecione “Descobrir minha posição”.</p>
-              </div>
-            )}
-            {(brazilCalculation.status !== 'idle' || worldCalculation.status !== 'idle') && (
+            {hasCalculationStarted && (
               <>
-                <div className="results-grid">
+                <div className="discovery-flow">
                   {brazilCalculation.status === 'success' && <BrazilResultCard result={brazilCalculation.result} />}
                   {brazilCalculation.status === 'loading' && <EngineLoadingCard engine="Brasil" />}
                   {brazilCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Brasil" />}
+
+                  <section className="perspective-shift" aria-labelledby="perspective-title">
+                    <p className="eyebrow">VOCÊ → BRASIL → MUNDO</p>
+                    <h2 id="perspective-title">Agora mude a perspectiva.</h2>
+                    <p>O número não mudou. O contexto mudou.</p>
+                    <small>Brasil e Mundo podem mostrar posições diferentes porque usam distribuições, referências de preços e metodologias diferentes.</small>
+                  </section>
+
                   {worldCalculation.status === 'success' && <WorldResultCard result={worldCalculation.result} runtime={worldRuntime} />}
                   {worldCalculation.status === 'loading' && <EngineLoadingCard engine="Mundo" />}
                   {worldCalculation.status === 'unavailable' && <EngineUnavailableCard engine="Mundo" />}
                 </div>
-                <p className="result-relationship">Brasil e Mundo podem mostrar posições diferentes porque usam distribuições, referências de preços e metodologias diferentes.</p>
-                <div className="interpretation">
-                  <CircleHelp size={18} />
-                  <p><strong>Como ler:</strong> o percentil usa a parcela com renda estritamente menor; o TOP é seu complemento. Empates permanecem no mesmo degrau da distribuição.</p>
-                </div>
-                <section className="result-metadata" aria-labelledby="result-metadata-title">
-                  <div className="result-metadata-heading">
-                    <p className="eyebrow" id="result-metadata-title">FONTES E VERSÕES</p>
-                    <a href="/metodologia">Como calculamos isso? <ArrowUpRight size={15} aria-hidden="true" /></a>
-                  </div>
-                  <div className="result-metadata-grid">
-                    <p><strong>Brasil</strong><span>IBGE · PNAD Contínua{brazilDatasetYear ? ` ${brazilDatasetYear}` : ''}{brazilRuntime ? ` · ${brazilRuntime.priceReference}` : ''}{brazilReferenceMonth ? ` · IPCA de ${brazilReferenceMonth}` : ''}</span></p>
-                    <p><strong>Mundo</strong><span>World Bank PIP{worldRuntime ? ` · ano global ${worldRuntime.referenceYear} · PPP ${worldRuntime.pppBase} · versão ${worldRuntime.pipVersion}` : ''}</span></p>
-                  </div>
-                </section>
                 {showSharing && (
-                  <button className="recalculate-button" type="button" onClick={handleRecalculate}>
-                    Simular outra renda
-                  </button>
-                )}
-                {showSharing && (
-                  <section className="sharing" aria-labelledby="sharing-title">
-                    <div className="sharing-heading">
-                      <div>
-                        <p className="eyebrow">PRIVADO POR PADRÃO</p>
-                        <h2 id="sharing-title">Compartilhar</h2>
+                  <>
+                    <section className="human-interpretation" aria-labelledby="interpretation-title">
+                      <p className="eyebrow">O QUE ESTE RESULTADO DIZ</p>
+                      <h2 id="interpretation-title">Sua posição conta uma parte da história.</h2>
+                      <p>Esta é uma comparação relativa de renda, não de patrimônio. Estar em uma posição alta não significa necessariamente “sentir-se rico”: custo de vida, moradia, dívidas, patrimônio e contexto pessoal não estão todos representados por este ranking.</p>
+                      {nominalPerPerson !== null && (
+                        <p className="per-capita-result"><span>Sua renda mensal atual por pessoa</span><strong>{money(nominalPerPerson)}</strong></p>
+                      )}
+                    </section>
+
+                    <section className="sharing" aria-labelledby="sharing-title">
+                      <div className="sharing-heading">
+                        <div>
+                          <p className="eyebrow">PRIVADO POR PADRÃO</p>
+                          <h2 id="sharing-title">E onde seus amigos estariam?</h2>
+                        </div>
+                        <ShieldCheck size={24} aria-hidden="true" />
                       </div>
-                      <ShieldCheck size={24} aria-hidden="true" />
+                      <p>Compartilhe a pergunta sem mostrar sua renda. Sua renda e o número de moradores não serão mostrados.</p>
+                      <label className={`share-position-toggle ${positionShareMessage ? '' : 'disabled'}`}>
+                        <input
+                          type="checkbox"
+                          checked={includePosition}
+                          disabled={!positionShareMessage}
+                          onChange={(event) => {
+                            setIncludePosition(event.target.checked)
+                            setShareFeedback('')
+                          }}
+                        />
+                        <span>Incluir minha posição — sem mostrar minha renda</span>
+                      </label>
+                      {!positionShareMessage && brazilCalculation.status === 'success' && (
+                        <p className="share-limit-note">Esta posição está em um limite da pesquisa e será compartilhada sem número.</p>
+                      )}
+                      <div className="share-actions">
+                        <button type="button" onClick={handleNativeShare}>
+                          <Share2 size={18} aria-hidden="true" /> Compartilhar
+                        </button>
+                        <a href={buildWhatsAppUrl(sharePayload)} target="_blank" rel="noopener noreferrer">
+                          <MessageCircle size={18} aria-hidden="true" /> WhatsApp
+                        </a>
+                        <button type="button" onClick={() => void copyShareLink()}>
+                          <Link2 size={18} aria-hidden="true" /> Copiar link
+                        </button>
+                      </div>
+                      <p className="share-feedback" role="status" aria-live="polite">{shareFeedback}</p>
+                    </section>
+
+                    <button className="recalculate-button" type="button" onClick={handleRecalculate}>
+                      Simular outra renda
+                    </button>
+
+                    <section className="result-metadata" aria-labelledby="result-metadata-title">
+                      <div className="result-metadata-heading">
+                        <p className="eyebrow" id="result-metadata-title">FONTES E VERSÕES</p>
+                        <a href="/metodologia">Como calculamos isso? <ArrowUpRight size={15} aria-hidden="true" /></a>
+                      </div>
+                      <div className="result-metadata-grid">
+                        <p><strong>Brasil</strong><span>IBGE · PNAD Contínua{brazilDatasetYear ? ` ${brazilDatasetYear}` : ''}{brazilRuntime ? ` · ${brazilRuntime.priceReference}` : ''}{brazilReferenceMonth ? ` · IPCA de ${brazilReferenceMonth}` : ''}</span></p>
+                        <p><strong>Mundo</strong><span>World Bank PIP{worldRuntime ? ` · ano global ${worldRuntime.referenceYear} · PPP ${worldRuntime.pppBase} · versão ${worldRuntime.pipVersion}` : ''}</span></p>
+                      </div>
+                    </section>
+
+                    <div className="interpretation">
+                      <CircleHelp size={18} aria-hidden="true" />
+                      <p><strong>Como ler:</strong> o percentil usa a parcela com renda estritamente menor; o TOP é seu complemento. Empates permanecem no mesmo degrau da distribuição.</p>
                     </div>
-                    <p>Sua renda e o número de moradores não serão mostrados.</p>
-                    <label className={`share-position-toggle ${positionShareMessage ? '' : 'disabled'}`}>
-                      <input
-                        type="checkbox"
-                        checked={includePosition}
-                        disabled={!positionShareMessage}
-                        onChange={(event) => {
-                          setIncludePosition(event.target.checked)
-                          setShareFeedback('')
-                        }}
-                      />
-                      <span>Incluir minha posição — sem mostrar minha renda</span>
-                    </label>
-                    {!positionShareMessage && brazilCalculation.status === 'success' && (
-                      <p className="share-limit-note">Esta posição está em um limite da pesquisa e será compartilhada sem número.</p>
-                    )}
-                    <div className="share-actions">
-                      <button type="button" onClick={handleNativeShare}>
-                        <Share2 size={18} aria-hidden="true" /> Compartilhar
-                      </button>
-                      <a href={buildWhatsAppUrl(sharePayload)} target="_blank" rel="noopener noreferrer">
-                        <MessageCircle size={18} aria-hidden="true" /> WhatsApp
-                      </a>
-                      <button type="button" onClick={() => void copyShareLink()}>
-                        <Link2 size={18} aria-hidden="true" /> Copiar link
-                      </button>
-                    </div>
-                    <p className="share-feedback" role="status" aria-live="polite">{shareFeedback}</p>
-                  </section>
+                  </>
                 )}
               </>
             )}
-          </div>
+          </div>}
         </section>
 
         <section className="benchmarks" aria-labelledby="benchmarks-title">

@@ -22,6 +22,22 @@ test('campo de renda oferece definição progressiva e microcopy de privacidade 
   assert.equal(app.includes('Renda, moradores e resultado não são enviados.'), false)
 })
 
+test('jornada H3 prioriza entrada, descoberta Brasil, mudança de perspectiva e Mundo', async () => {
+  const app = await source('src/App.tsx')
+  const privacy = app.indexOf('Seu cálculo acontece no navegador. Sua renda não é armazenada.')
+  const income = app.indexOf('Qual é a renda mensal total da sua casa?')
+  const results = app.indexOf('className="results-panel"')
+  const brazil = app.lastIndexOf('<BrazilResultCard')
+  const perspective = app.indexOf('Agora mude a perspectiva.')
+  const world = app.lastIndexOf('<WorldResultCard')
+
+  assert.equal(privacy >= 0 && privacy < income, true)
+  assert.match(app, /hasCalculationStarted && <div className="results-panel"/)
+  assert.equal(brazil > results && perspective > brazil && world > perspective, true)
+  assert.equal(app.includes('className="per-capita-strip"'), false)
+  assert.match(app, /<strong>Em cada 100 pessoas,<\/strong> aproximadamente \{percentileForPeople\} estão abaixo da sua posição de renda\./)
+})
+
 test('resultado Mundo explica percentil, maior aproximação e relação com o Brasil sem novo cálculo', async () => {
   const app = await source('src/App.tsx')
 

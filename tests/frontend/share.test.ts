@@ -79,9 +79,9 @@ test('WhatsApp contém somente texto visível e URL genérica', () => {
   assert.equal(visible.includes('moradores'), false)
 })
 
-test('bloco de share vem após interpretação, inicia privado e mantém fallback', async () => {
+test('bloco de share vem após interpretação essencial, inicia privado e mantém fallback', async () => {
   const app = await readFile(new URL('src/App.tsx', root), 'utf8')
-  const interpretation = app.indexOf('className="interpretation"')
+  const interpretation = app.indexOf('className="human-interpretation"')
   const sharing = app.indexOf('className="sharing"')
 
   assert.equal(interpretation >= 0 && sharing > interpretation, true)
@@ -92,6 +92,15 @@ test('bloco de share vem após interpretação, inicia privado e mantém fallbac
   assert.match(app, /navigator\.clipboard\.writeText\(shareUrl\)/)
   assert.match(app, /Compartilhamento nativo indisponível\. Link copiado\./)
   assert.match(app, /shouldShowSharing\(brazilCalculation\.status, worldCalculation\.status\)/)
+})
+
+test('fluxo H3 mantém share antes da nova simulação e dos detalhes técnicos', async () => {
+  const app = await readFile(new URL('src/App.tsx', root), 'utf8')
+  const sharing = app.indexOf('className="sharing"')
+  const recalculate = app.indexOf('className="recalculate-button"')
+  const metadata = app.indexOf('className="result-metadata"')
+
+  assert.equal(sharing >= 0 && recalculate > sharing && metadata > recalculate, true)
 })
 
 test('compartilhamento não introduz persistência, analytics ou dados na URL', async () => {
