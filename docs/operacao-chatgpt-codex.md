@@ -469,7 +469,23 @@ Quando uma fase terminar, primeiro analisar seu resultado. Depois recomendar o p
 
 ---
 
-## 14. Princípio final
+## 14. Modo de fechamento econômico da V1
+
+Durante o fechamento da V1, o fluxo ChatGPT ↔ Codex deve otimizar por segurança material e conclusão, não por perfeição documental infinita.
+
+- O ChatGPT reduz incertezas conceituais antes de encaminhar trabalho e consulta os contratos canônicos aplicáveis.
+- O Codex recebe prompts curtos, executáveis e proporcionais ao risco e ao alcance da tarefa.
+- Evitar ciclos ChatGPT → Codex → auditoria → nova auditoria quando não houver mudança relevante ou evidência nova.
+- Um item validado só deve ser reaberto por mudança posterior relevante, bug reproduzível, regressão concreta, violação de contrato canônico ou evidência nova material.
+- Prompts, handoffs, relatórios intermediários e memória não criam contrato de produto por si sós.
+- Se uma instrução intermediária divergir de documento canônico, registrar a divergência antes de editar; não corrigir silenciosamente.
+- Pequenas correções locais recebem validação suficiente para seu risco e alcance, sem exigir automaticamente uma nova cadeia completa de gates.
+
+Esse modo não reduz segurança, privacidade, áreas protegidas, disciplina de estado ou necessidade de autorização. Staging, commit, push, merge, deploy e publicação permanecem etapas distintas e não avançam automaticamente.
+
+---
+
+## 15. Princípio final
 
 A relação entre este Projeto do ChatGPT e o Codex deve funcionar assim:
 
