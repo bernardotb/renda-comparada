@@ -151,6 +151,22 @@ test('CSS declara override de smooth scroll para reduced motion', async () => {
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\) \{\s+html \{ scroll-behavior: auto; \}/)
 })
 
+test('fontes declaram nova simulação, foco de duas cores e alvos mínimos de 48px', async () => {
+  const [app, styles] = await Promise.all([
+    source('src/App.tsx'),
+    source('src/styles.css'),
+  ])
+
+  assert.match(app, /function handleRecalculate\(\) \{\s+incomeInputRef\.current\?\.focus\(\)/)
+  assert.match(app, /className="recalculate-button"[^>]*onClick=\{handleRecalculate\}[\s\S]*?Simular outra renda/)
+  assert.match(styles, /\.money-input-wrap:focus-within,[\s\S]*?outline: 2px solid var\(--lime\);[\s\S]*?outline-offset: 0;[\s\S]*?box-shadow: 0 0 0 4px var\(--ink\);/)
+  assert.match(styles, /\.stepper:focus-within \{[\s\S]*?outline: 2px solid var\(--lime\);/)
+  assert.match(styles, /\.stepper\.invalid:focus-within \{ box-shadow: 0 0 0 4px var\(--ink\); \}/)
+  assert.match(styles, /\.stepper button:focus-visible, \.stepper input:focus-visible \{ outline: 0; box-shadow: none; \}/)
+  assert.match(styles, /\.stepper button \{ width: 48px; height: 48px;/)
+  assert.match(styles, /\.share-actions button, \.share-actions a \{ min-height: 48px;/)
+})
+
 test('inventário canônico registra o Google Fonts conforme a implementação atual', async () => {
   const [styles, privacy] = await Promise.all([
     source('src/styles.css'),

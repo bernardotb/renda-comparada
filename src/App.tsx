@@ -206,6 +206,10 @@ function App() {
     updateHousehold(String(Math.max(1, (current.ok ? current.value : 1) + delta)))
   }
 
+  function handleRecalculate() {
+    incomeInputRef.current?.focus()
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const request = ++calculationRequest.current
@@ -446,6 +450,11 @@ function App() {
                     <p><strong>Mundo</strong><span>World Bank PIP{worldRuntime ? ` · ano global ${worldRuntime.referenceYear} · PPP ${worldRuntime.pppBase} · versão ${worldRuntime.pipVersion}` : ''}</span></p>
                   </div>
                 </section>
+                {showSharing && (
+                  <button className="recalculate-button" type="button" onClick={handleRecalculate}>
+                    Simular outra renda
+                  </button>
+                )}
                 {showSharing && (
                   <section className="sharing" aria-labelledby="sharing-title">
                     <div className="sharing-heading">
