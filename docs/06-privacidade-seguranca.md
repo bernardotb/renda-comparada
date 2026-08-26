@@ -11,8 +11,8 @@ modified: 2026-08-22T11:51:41.324-03:00
 **Produto:** Renda Comparada  
 **Documento:** `06-privacidade-seguranca.md`  
 **Status:** Canônico para privacidade e segurança  
-**Versão:** 1.2
-**Última revisão:** 22/08/2026
+**Versão:** 1.5
+**Última revisão:** 26/08/2026
 
 Documentos relacionados:
 
@@ -372,31 +372,40 @@ e não necessariamente:
 
 # 17. Analytics Permitido
 
-Eventos permitidos incluem:
+Para a instrumentação mínima da Fase 2, o fornecedor aprovado é:
 
 ```text
-calculator_view
+ANALYTICS_PROVIDER = Plausible Analytics
+STATUS = DECIDIDO
+IMPLEMENTAÇÃO = LOCAL
+PRODUÇÃO = NÃO ATIVA
+```
+
+Essa distinção significa que a escolha foi feita e o código foi preparado no checkout, mas a integração ainda não está deployed nem ativa em produção enquanto não houver configuração e deploy aprovados separadamente.
+
+Pageviews normais podem medir:
+
+```text
+/
+/metodologia
+/privacidade
+```
+
+Os únicos eventos customizados implementados nesta etapa são:
+
+```text
 calculation_started
 calculation_completed
 result_viewed
 share_clicked
-share_whatsapp
-share_native
-copy_link
-methodology_opened
 recalculate_clicked
-financial_checkup_interest
 ```
 
-Parâmetros categóricos estritamente necessários podem incluir:
+Os cinco eventos são enviados sem custom properties. O canal que originou uma nova visita por compartilhamento é medido exclusivamente pelas UTMs genéricas permitidas na URL compartilhada, nunca por propriedades do evento `share_clicked`.
 
-```text
-share_channel
-share_mode
-app_version
-```
+A integração usa o snippet individual fornecido pelo Plausible para o site e aplica sanitização da URL antes do envio. Somente UTMs genéricas do compartilhamento podem ser preservadas.
 
-onde `share_mode` admite apenas categorias como `generic` ou `position`, sem carregar o valor da posição.
+A decisão canônica correspondente está registrada em D077. A configuração externa do snippet individual e o deploy pertencem a gates posteriores e não foram executados nesta etapa.
 
 ---
 
@@ -906,14 +915,14 @@ Manter documento ou tabela contendo, por exemplo:
 |Registro.br|registro e DNS do domínio|dados cadastrais e configuração DNS conforme a operação do serviço|sim|sim|
 |Hostinger Email|caixa principal e canais de privacidade e segurança|mensagens e metadados de e-mail|sim|sim|
 |Google Fonts|carregamento das fontes públicas utilizadas pela interface|requisição técnica das fontes; renda, moradores e resultado individual não são enviados explicitamente pela aplicação|sim|sim|
-|Analytics|métricas|eventos mínimos|avaliar|definir|
+|Plausible Analytics|pageviews e métricas agregadas de uso/funil|caminho sanitizado da página, atribuição genérica exclusivamente por UTMs de campanha e nomes dos cinco eventos sem custom properties; sem envio intencional de renda, moradores ou resultado individual|decidido para mensuração no plano Starter; não necessário ao cálculo|implementado localmente; ainda não deployed nem ativo em produção|
 |Error tracking|erros|metadados sanitizados|avaliar|definir|
 
 Não adicionar serviço sem atualizar o inventário.
 
 A caixa principal `contato@rendacomparada.com.br` utiliza Hostinger Email. Os canais `privacidade@rendacomparada.com.br` e `seguranca@rendacomparada.com.br` estão configurados como aliases; MX, SPF, DKIM e DMARC foram reconhecidos como válidos pelo provedor, e o recebimento pelos aliases foi testado com sucesso pelo responsável.
 
-A localização física do processamento, os prazos de retenção e as condições contratuais específicas de Registro.br, Hostinger Email e Google Fonts não foram verificados neste gate e não devem ser inferidos deste inventário.
+A localização física do processamento, os prazos de retenção e as condições contratuais específicas de Registro.br, Hostinger Email, Google Fonts e Plausible Analytics não foram verificados neste gate e não devem ser inferidos deste inventário. A documentação oficial consultada informa que o Plausible opera sem cookies de analytics; isso não substitui verificação contratual antes da ativação externa.
 
 ---
 

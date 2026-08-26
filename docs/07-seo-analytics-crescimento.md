@@ -11,8 +11,8 @@ modified: 2026-08-22T11:51:41.324-03:00
 **Produto:** Renda Comparada  
 **Documento:** `07-seo-analytics-crescimento.md`  
 **Status:** Canônico para aquisição, mensuração e crescimento  
-**Versão:** 1.2
-**Última revisão:** 22/08/2026
+**Versão:** 1.5
+**Última revisão:** 26/08/2026
 
 Documentos relacionados:
 
@@ -257,15 +257,11 @@ calculation_completed → share_clicked
 ```
 
 ```text
-calculation_completed → methodology_opened
+calculation_completed → pageview de /metodologia
 ```
 
 ```text
 calculation_completed → recalculate_clicked
-```
-
-```text
-calculation_completed → financial_checkup_interest
 ```
 
 Além de:
@@ -311,13 +307,36 @@ Primeiro:
 
 A V1 deve utilizar somente uma ferramenta de analytics que passe pela auditoria definida em `06-privacidade-seguranca.md`.
 
-O fornecedor permanece uma decisão separada:
+O fornecedor foi decidido para a instrumentação mínima da Fase 2:
 
 ```text
-ANALYTICS_PROVIDER = [DEFINIR]
+ANALYTICS_PROVIDER = Plausible Analytics
+PLANO OPERACIONAL PRETENDIDO = Starter
+STATUS = DECIDIDO
+IMPLEMENTAÇÃO = LOCAL
+DEPLOYED = NÃO
+ATIVO EM PRODUÇÃO = NÃO
 ```
 
-A escolha deve considerar, no mínimo:
+O código local usa o snippet individual atualmente recomendado pelo fornecedor, configurável apenas quando existir a URL específica do site. Sem essa configuração, a integração falha como `no-op` e não afeta o produto.
+
+O ponto de configuração local é:
+
+```text
+VITE_PLAUSIBLE_SCRIPT_SRC = URL individual pa-...js fornecida pelo painel do Plausible
+```
+
+O valor real não foi inventado nem configurado neste gate.
+
+Fontes oficiais consultadas em 25/08/2026:
+
+- https://plausible.io/docs/script-update-guide
+- https://plausible.io/docs/custom-event-goals
+- https://plausible.io/docs/custom-props/for-custom-events
+- https://plausible.io/docs/custom-query-params
+- https://plausible.io/docs/stop-tracking-utm-tags
+
+A ativação externa continua dependente de decisão operacional separada e deve verificar, no mínimo:
 
 - cookies e identificadores;
 - coleta automática;
@@ -327,9 +346,9 @@ A escolha deve considerar, no mínimo:
 - eventos personalizados;
 - impacto de performance.
 
-A ausência de fornecedor aprovado não autoriza o código a adicionar tracking por iniciativa própria.
+A decisão não autoriza compra de plano, cadastro, deploy, configuração Vercel ou ativação externa por iniciativa própria.
 
-## Avaliação atual — Vercel Web Analytics
+## Avaliação histórica — Vercel Web Analytics
 
 A pesquisa oficial realizada em 14/08/2026 registra:
 
@@ -346,17 +365,12 @@ Fontes oficiais:
 - https://vercel.com/docs/analytics/limits-and-pricing
 - https://vercel.com/docs/plans/hobby
 
-Consequências:
+Consequências após a decisão pelo Plausible:
 
-1. Vercel Web Analytics continua **candidato**, não fornecedor canonizado;
-2. a taxonomia completa definida abaixo exige custom events e, portanto, não pode ser prometida em Hobby;
-3. se o projeto estiver em Hobby, pode lançar com mensuração reduzida a pageviews/tráfego em vez de ampliar coleta;
-4. é proibido transformar rotas, query strings ou fragmentos em eventos artificiais para contornar a limitação de plano;
-5. antes da implementação deve ser verificado:
-
-```text
-VERCEL_PLAN = [VERIFICAR]
-```
+1. Vercel Web Analytics não é o fornecedor selecionado para esta implementação;
+2. não adicionar Vercel Analytics em paralelo;
+3. é proibido transformar rotas, query strings ou fragmentos em eventos artificiais;
+4. a pesquisa histórica permanece como registro, não como autorização de integração.
 
 ---
 
@@ -393,15 +407,13 @@ As regras completas estão em:
 
 Usar nomes consistentes em inglês técnico no código.
 
-## Entrada
+Pageviews normais medem a entrada em:
 
 ```text
-calculator_view
+/
+/metodologia
+/privacidade
 ```
-
-Quando a calculadora é visualizada.
-
----
 
 ## Início
 
@@ -409,7 +421,7 @@ Quando a calculadora é visualizada.
 calculation_started
 ```
 
-Registrar apenas uma vez por tentativa relevante.
+Registrar uma vez quando o formulário é efetivamente submetido pelo CTA de cálculo. Uma tentativa que falhe na validação pode ter início sem produzir `calculation_completed`.
 
 Não disparar a cada tecla digitada.
 
@@ -421,7 +433,7 @@ Não disparar a cada tecla digitada.
 calculation_completed
 ```
 
-Quando um resultado válido é calculado.
+Quando os dois motores terminam a tentativa e ao menos um resultado válido está disponível. Não registrar para tentativa interrompida apenas pela validação dos campos.
 
 ---
 
@@ -437,17 +449,11 @@ Quando o resultado efetivamente entra na área visível ou é apresentado.
 
 ## Metodologia
 
-```text
-methodology_opened
-```
-
-Quando o usuário abre a explicação metodológica.
+O acesso é medido pelo pageview normal de `/metodologia`, sem evento customizado adicional.
 
 ---
 
 ## Compartilhamento
-
-Evento genérico:
 
 ```text
 share_clicked
@@ -455,19 +461,7 @@ share_clicked
 
 Quando o usuário inicia a intenção de compartilhar.
 
-Eventos específicos:
-
-```text
-share_native
-```
-
-```text
-share_whatsapp
-```
-
-```text
-copy_link
-```
+O evento é enviado sem custom properties. Não criar eventos derivados por canal.
 
 ---
 
@@ -479,31 +473,11 @@ recalculate_clicked
 
 ---
 
-## Continuação
+# 14. Custom Properties
 
-```text
-financial_checkup_interest
-```
+Os cinco custom events são enviados sem custom properties. O plano operacional pretendido é o Plausible Starter, e a atribuição do canal de aquisição por compartilhamento ocorre exclusivamente pelas UTMs genéricas da visita recebida.
 
-Quando o usuário manifesta interesse em continuar para a segunda experiência.
-
----
-
-# 14. Parâmetros Permitidos
-
-Utilizar somente parâmetros que não revelem informações financeiras.
-
-Exemplos possíveis:
-
-```text
-page
-device_context
-share_channel
-share_mode
-app_version
-```
-
-Somente quando realmente necessários.
+Não codificar canal, modo, posição ou qualquer informação individual em propriedades de evento.
 
 ---
 
@@ -1423,10 +1397,11 @@ Para compartilhamento:
 
 ```text
 utm_source=share
-utm_medium=whatsapp
+utm_medium=whatsapp | native | copy
+utm_campaign=organic_share
 ```
 
-quando houver valor analítico real.
+Esses valores são estáveis e categóricos. O destinatário chega à calculadora sem renda, moradores, resultado, ID individual ou preenchimento prévio.
 
 ---
 
@@ -1989,11 +1964,11 @@ Não misturar ranking de busca com métricas de produto.
 
 # 91. Métricas De Confiança
 
-Abertura de metodologia pode ser acompanhada.
+Acesso a `/metodologia` pode ser acompanhado por pageview.
 
 Mas:
 
-> methodology_opened alto
+> muitos pageviews de metodologia
 
 não significa necessariamente problema.
 
@@ -2024,15 +1999,7 @@ Não tratá-lo automaticamente como erro de UX.
 
 # 93. Métrica De Continuidade
 
-```text
-financial_checkup_interest
-/
-calculation_completed
-```
-
-pode revelar a demanda pela segunda grande etapa do produto.
-
-Essa métrica ajudará a decidir quando priorizar o check-up.
+Nenhum evento de continuidade é implementado na instrumentação mínima desta fase. Uma futura medição de interesse no check-up exige nova decisão de escopo e revisão da taxonomia antes de entrar no código.
 
 ---
 
@@ -2122,22 +2089,22 @@ Antes de produção:
 
 # 98. Checklist Analytics V1
 
-- ferramenta definida;
-- `calculator_view`;
+- fornecedor decidido: Plausible Analytics;
+- implementação local distinguida de deploy e ativação em produção;
+- pageviews de `/`, `/metodologia` e `/privacidade`;
 - `calculation_started`;
 - `calculation_completed`;
 - `result_viewed`;
-- `methodology_opened`;
 - `share_clicked`;
-- `share_native`;
-- `share_whatsapp`;
-- `copy_link`;
 - `recalculate_clicked`;
-- `financial_checkup_interest`;
+- cinco custom events sem propriedades;
+- canal de aquisição por compartilhamento medido somente pelas UTMs genéricas;
 - renda não enviada;
 - moradores não enviados;
+- renda por pessoa e posição individual não enviadas;
 - percentis individuais não enviados;
 - falha do analytics não quebra o produto;
+- nenhum cookie, storage, session replay, heatmap ou pixel introduzido pela integração;
 - eventos testados em produção.
 
 ---
@@ -2207,10 +2174,11 @@ CANONICAL_URL = https://rendacomparada.com.br
 
 Esta decisão documental não implementa `rel="canonical"`, redirecionamentos, sitemap, `robots.txt`, Open Graph nem configuração de deploy.
 
-Antes da divulgação ampla ainda devem ser definidos ou configurados:
+Antes da divulgação ampla ainda devem ser configurados:
 
 ```text
-ANALYTICS_PROVIDER = [DEFINIR]
+PLAUSIBLE_SITE_SCRIPT = [CONFIGURAR EXTERNAMENTE]
+PLAUSIBLE_PRODUCTION_ACTIVATION = [APROVAR]
 ```
 
 ```text
@@ -2264,11 +2232,9 @@ Analytics V1 estará pronto quando for possível responder:
 
 > Quantas compartilharam?
 
-> Qual canal de share escolheram?
+> Quais canais de compartilhamento trouxeram novas visitas?
 
 > Quantas recalcularam?
-
-> Quantas demonstraram interesse em continuar?
 
 Sem saber:
 

@@ -37,7 +37,8 @@ test('o caminho ativo não contém motor legado nem fallback mundial', async () 
 test('o frontend não persiste nem transmite entradas ou resultados', async () => {
   const app = await readFile(new URL('src/App.tsx', root), 'utf8')
   const loader = await readFile(new URL('src/brazil/loader.ts', root), 'utf8')
-  const activeSource = `${app}\n${loader}`
+  const analytics = await readFile(new URL('src/analytics.ts', root), 'utf8')
+  const activeSource = `${app}\n${loader}\n${analytics}`
 
   for (const forbidden of [
     'localStorage',
@@ -45,10 +46,13 @@ test('o frontend não persiste nem transmite entradas ou resultados', async () =
     'indexedDB',
     'document.cookie',
     'navigator.sendBeacon',
-    'analytics',
     'console.log',
   ]) {
     assert.equal(activeSource.includes(forbidden), false, forbidden)
+  }
+
+  for (const forbidden of ['household_size', 'per_capita', 'percentile', 'top_percent', 'RDPC']) {
+    assert.equal(analytics.includes(forbidden), false, forbidden)
   }
 })
 

@@ -32,7 +32,7 @@ test('jornada H3 prioriza entrada, descoberta Brasil, mudança de perspectiva e 
   const world = app.lastIndexOf('<WorldResultCard')
 
   assert.equal(privacy >= 0 && privacy < income, true)
-  assert.match(app, /hasCalculationStarted && <div className="results-panel"/)
+  assert.match(app, /hasCalculationStarted && <div ref=\{resultPanelRef\} className="results-panel"/)
   assert.equal(brazil > results && perspective > brazil && world > perspective, true)
   assert.equal(app.includes('className="per-capita-strip"'), false)
   assert.match(app, /<strong>Em cada 100 pessoas,<\/strong> aproximadamente \{percentileForPeople\} estão abaixo da sua posição de renda\./)
@@ -106,7 +106,7 @@ test('configuração MPA e fontes HTML declaram as rotas públicas sem router', 
 
   assert.match(privacy, /rel="canonical" href="https:\/\/rendacomparada\.com\.br\/privacidade"/)
   assert.match(privacy, /property="og:url" content="https:\/\/rendacomparada\.com\.br\/privacidade"/)
-  for (const fact of ['Frederico Wiermann Barroso', 'privacidade@rendacomparada.com.br', 'temporariamente no seu navegador', 'genérico por padrão', 'não utiliza ferramenta de analytics']) {
+  for (const fact of ['Frederico Wiermann Barroso', 'privacidade@rendacomparada.com.br', 'temporariamente no seu navegador', 'genérico por padrão', 'Plausible Analytics']) {
     assert.match(privacy, new RegExp(fact, 'i'))
   }
   assert.match(privacy, /O cálculo não envia esses valores aos servidores, não os persiste nos sistemas do produto e não os inclui na URL\./)
@@ -139,7 +139,7 @@ test('SEO técnico usa D076 sem criar imagem OG fictícia', async () => {
   assert.equal(publicHtml.includes('DEFAULT_OG_IMAGE'), false)
 })
 
-test('fontes do patch não referenciam APIs conhecidas de tracking ou persistência nem novas dependências', async () => {
+test('integração Plausible não adiciona persistência, pixels ou novas dependências', async () => {
   const [app, main, share, packageJson] = await Promise.all([
     source('src/App.tsx'),
     source('src/main.tsx'),
@@ -148,7 +148,7 @@ test('fontes do patch não referenciam APIs conhecidas de tracking ou persistên
   ])
   const active = `${app}\n${main}\n${share}`
 
-  for (const forbidden of ['localStorage', 'sessionStorage', 'indexedDB', 'document.cookie', 'sendBeacon', 'analytics', 'gtag', 'dataLayer']) {
+  for (const forbidden of ['localStorage', 'sessionStorage', 'indexedDB', 'document.cookie', 'sendBeacon', 'gtag', 'dataLayer']) {
     assert.equal(active.includes(forbidden), false, forbidden)
   }
   assert.deepEqual(Object.keys(JSON.parse(packageJson).dependencies).sort(), [
@@ -173,7 +173,7 @@ test('fontes declaram nova simulação, foco de duas cores e alvos mínimos de 4
     source('src/styles.css'),
   ])
 
-  assert.match(app, /function handleRecalculate\(\) \{\s+incomeInputRef\.current\?\.focus\(\)/)
+  assert.match(app, /function handleRecalculate\(\) \{\s+trackAnalyticsEvent\('recalculate_clicked'\)\s+incomeInputRef\.current\?\.focus\(\)/)
   assert.match(app, /className="recalculate-button"[^>]*onClick=\{handleRecalculate\}[\s\S]*?Simular outra renda/)
   assert.match(styles, /\.money-input-wrap:focus-within,[\s\S]*?outline: 2px solid var\(--lime\);[\s\S]*?outline-offset: 0;[\s\S]*?box-shadow: 0 0 0 4px var\(--ink\);/)
   assert.match(styles, /\.stepper:focus-within \{[\s\S]*?outline: 2px solid var\(--lime\);/)

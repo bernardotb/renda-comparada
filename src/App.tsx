@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import {
   ArrowUpRight,
   Check,
@@ -33,7 +33,9 @@ import {
   buildSharePayload,
   buildShareUrl,
   buildWhatsAppUrl,
+  type ShareChannel,
 } from './share.ts'
+import { trackAnalyticsEvent } from './analytics.ts'
 
 function money(value: number, maximumFractionDigits = 2) {
   return new Intl.NumberFormat('pt-BR', {
@@ -182,9 +184,13 @@ function App() {
   const [showMethod, setShowMethod] = useState(false)
   const [includePosition, setIncludePosition] = useState(false)
   const [shareFeedback, setShareFeedback] = useState('')
+  const [activeCalculationRequest, setActiveCalculationRequest] = useState(0)
   const calculationRequest = useRef(0)
+  const completedCalculationRequest = useRef(0)
+  const viewedCalculationRequest = useRef(0)
   const incomeInputRef = useRef<HTMLInputElement>(null)
   const householdInputRef = useRef<HTMLInputElement>(null)
+  const resultPanelRef = useRef<HTMLDivElement>(null)
 
   const parsedIncome = parseBrazilianCurrency(incomeInput)
   const parsedHousehold = parseHouseholdSize(householdInput)
@@ -217,11 +223,13 @@ function App() {
   }
 
   function handleRecalculate() {
+    trackAnalyticsEvent('recalculate_clicked')
     incomeInputRef.current?.focus()
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    trackAnalyticsEvent('calculation_started')
     const request = ++calculationRequest.current
     const income = parseBrazilianCurrency(incomeInput)
     const household = parseHouseholdSize(householdInput)
@@ -245,6 +253,8 @@ function App() {
       else householdInputRef.current?.focus()
       return
     }
+
+    setActiveCalculationRequest(request)
 
     const cachedBrazilRuntime = brazilEngineLoader.getCached()
     if (cachedBrazilRuntime) {
@@ -291,10 +301,13 @@ function App() {
     ? formatBrazilPosition(brazilCalculation.result)
     : null
   const positionShareMessage = buildPositionShareMessage(brazilDisplay)
-  const shareUrl = buildShareUrl(window.location.origin)
-  const sharePayload = buildSharePayload(shareUrl, includePosition, positionShareMessage)
   const showSharing = shouldShowSharing(brazilCalculation.status, worldCalculation.status)
   const hasCalculationStarted = brazilCalculation.status !== 'idle' || worldCalculation.status !== 'idle'
+  const sharePayloadFor = (channel: ShareChannel) => buildSharePayload(
+    buildShareUrl(window.location.origin, channel),
+    includePosition,
+    positionShareMessage,
+  )
   const brazilRuntime = brazilEngineLoader.getCached()
   const worldRuntime = worldEngineLoader.getCached()
   const brazilDatasetYear = brazilRuntime
@@ -304,13 +317,49 @@ function App() {
     ? formatReferenceMonth(brazilRuntime.referenceMonth)
     : null
 
+  useEffect(() => {
+    if (!showSharing) return
+    const request = activeCalculationRequest
+    if (completedCalculationRequest.current === request) return
+    completedCalculationRequest.current = request
+    trackAnalyticsEvent('calculation_completed')
+  }, [activeCalculationRequest, showSharing])
+
+  useEffect(() => {
+    if (!showSharing || !resultPanelRef.current) return
+    const request = activeCalculationRequest
+    const trackResultViewed = () => {
+      if (viewedCalculationRequest.current === request) return
+      viewedCalculationRequest.current = request
+      trackAnalyticsEvent('result_viewed')
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      trackResultViewed()
+      return
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return
+      trackResultViewed()
+      observer.disconnect()
+    }, { threshold: 0.1 })
+    observer.observe(resultPanelRef.current)
+    return () => observer.disconnect()
+  }, [activeCalculationRequest, showSharing])
+
+  function trackShareClick() {
+    trackAnalyticsEvent('share_clicked')
+  }
+
   async function copyShareLink(fallbackMessage = 'Link copiado') {
+    trackShareClick()
     if (!navigator.clipboard?.writeText) {
       setShareFeedback('Não foi possível copiar automaticamente. Use o endereço desta página.')
       return
     }
     try {
-      await navigator.clipboard.writeText(shareUrl)
+      await navigator.clipboard.writeText(buildShareUrl(window.location.origin, 'copy'))
       setShareFeedback(fallbackMessage)
     } catch {
       setShareFeedback('Não foi possível copiar automaticamente. Use o endereço desta página.')
@@ -323,7 +372,8 @@ function App() {
       return
     }
     try {
-      await navigator.share(sharePayload)
+      trackShareClick()
+      await navigator.share(sharePayloadFor('native'))
       setShareFeedback('Compartilhamento aberto')
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError') return
@@ -422,7 +472,7 @@ function App() {
             <div className="privacy-note"><ShieldCheck size={15} /><span>Sua renda e o número de moradores são usados temporariamente no navegador para calcular o resultado. Esses valores não são enviados aos servidores nem armazenados de forma persistente pelo produto.</span></div>
           </form>
 
-          {hasCalculationStarted && <div className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
+          {hasCalculationStarted && <div ref={resultPanelRef} className="results-panel" aria-live="polite" aria-busy={brazilCalculation.status === 'loading' || worldCalculation.status === 'loading'}>
             <div className="panel-heading light">
               <span>SUA POSIÇÃO ESTIMADA</span>
               <small>{brazilRuntime ? `Brasil: ${brazilRuntime.priceReference}` : 'Brasil: referência validada no cálculo'}</small>
@@ -484,7 +534,7 @@ function App() {
                         <button type="button" onClick={handleNativeShare}>
                           <Share2 size={18} aria-hidden="true" /> Compartilhar
                         </button>
-                        <a href={buildWhatsAppUrl(sharePayload)} target="_blank" rel="noopener noreferrer">
+                        <a href={buildWhatsAppUrl(sharePayloadFor('whatsapp'))} onClick={trackShareClick} target="_blank" rel="noopener noreferrer">
                           <MessageCircle size={18} aria-hidden="true" /> WhatsApp
                         </a>
                         <button type="button" onClick={() => void copyShareLink()}>

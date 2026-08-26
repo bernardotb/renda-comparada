@@ -10,6 +10,7 @@
     <meta property="og:url" content="https://rendacomparada.com.br/privacidade" />
     <meta name="theme-color" content="#f2efe6" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="module" src="/src/analytics-entry.ts"></script>
     <link rel="stylesheet" href="/src/styles.css" />
     <title>Privacidade | Renda Comparada</title>
   </head>
@@ -52,13 +53,16 @@
             <li><strong>Registro.br:</strong> registro e DNS do domínio público.</li>
             <li><strong>Hostinger Email:</strong> recebimento das mensagens enviadas aos canais institucionais.</li>
             <li><strong>Google Fonts:</strong> carregamento das fontes públicas usadas pela interface.</li>
+            <li><strong>Plausible Analytics:</strong> pageviews e eventos agregados do funil, quando a integração estiver ativada na versão publicada.</li>
           </ul>
           <p>Os fornecedores de infraestrutura podem tratar dados técnicos necessários à operação e à entrega pública da aplicação. Este aviso não afirma localização física, prazos contratuais de retenção ou mecanismos de transferência internacional que não tenham sido verificados.</p>
         </section>
 
         <section>
           <h2>Cookies e medição de uso</h2>
-          <p>A versão atual não utiliza ferramenta de analytics, pixels ou cookies analíticos. O projeto não escolheu um provedor de analytics. Uma adoção futura exige decisão própria e atualização deste aviso antes da ativação.</p>
+          <p>O provedor aprovado para medição de uso é o Plausible Analytics. Quando ativada na versão publicada, a integração registra pageviews e somente os eventos agregados de início e conclusão do cálculo, visualização do resultado, início de compartilhamento e nova simulação.</p>
+          <p>A integração foi desenhada para enviar os cinco eventos comportamentais sem propriedades e para não enviar intencionalmente renda, número de moradores, renda por pessoa, percentis, TOP ou outros valores do resultado. A origem de novas visitas por compartilhamento é atribuída somente por UTMs genéricas de campanha e canal.</p>
+          <p>O Plausible não utiliza cookies de analytics nessa integração. O produto não ativa session replay, heatmaps, pixels publicitários ou outros fornecedores de analytics. A preparação local desta integração não significa que ela já esteja ativa na versão pública: isso depende de configuração e deploy aprovados separadamente.</p>
         </section>
 
         <section>

@@ -9,8 +9,8 @@ modified: 2026-08-22T11:51:41.324-03:00
 **Produto:** Renda Comparada  
 **Documento:** `decisoes.md`  
 **Status:** Canônico para decisões de produto e metodologia  
-**Versão:** 1.10
-**Última revisão:** 22/08/2026
+**Versão:** 1.12
+**Última revisão:** 26/08/2026
 
 Documentos relacionados:
 
@@ -2196,6 +2196,55 @@ Esta decisão documental não:
 - configura Search Console, analytics, DNS ou Vercel;
 - comprova HTTPS, security headers ou comportamento de deploy;
 - autoriza deploy, release ou lançamento público.
+
+---
+
+## D077 — Analytics Mínimo Da Fase 2
+
+**Data:** 26/08/2026
+**Status:** `ATIVA`
+
+### Decisão
+
+Canonizar para a instrumentação mínima da Fase 2:
+
+```text
+ANALYTICS_PROVIDER = Plausible Analytics
+PLANO OPERACIONAL PRETENDIDO = Starter
+IMPLEMENTADO LOCALMENTE = SIM
+DEPLOYED = NÃO
+ATIVO EM PRODUÇÃO = NÃO
+```
+
+Pageviews normais medem `/`, `/metodologia` e `/privacidade`. Os únicos eventos customizados autorizados são:
+
+```text
+calculation_started
+calculation_completed
+result_viewed
+share_clicked
+recalculate_clicked
+```
+
+Os cinco custom events são enviados sem custom properties. O canal de aquisição de uma nova visita por compartilhamento é medido exclusivamente pelas UTMs genéricas da URL compartilhada, e não pelo payload de `share_clicked`.
+
+Links de compartilhamento podem usar apenas `utm_source=share`, `utm_medium` igual ao canal e `utm_campaign=organic_share`. Nenhum identificador, entrada financeira ou resultado individual pode entrar no evento, propriedade, URL, query string, fragmento, UTM, log ou persistência criada pelo produto.
+
+### Limites
+
+Esta decisão:
+
+- não autoriza conta, plano, configuração externa, segredo, Vercel ou deploy;
+- não autoriza session replay, heatmaps, pixels adicionais, Google Tag Manager ou outro fornecedor de analytics;
+- não define base jurídica, retenção, localização física, DPA ou subprocessadores;
+- não altera Brasil, Mundo, CDFs, pesos, PPP/PPC, alinhamento temporal, golden cases, manifests, schemas ou contratos estatísticos;
+- exige que a indisponibilidade do analytics nunca bloqueie cálculo, resultado ou compartilhamento.
+
+### Estado Local
+
+O checkout contém uma abstração fechada para os cinco eventos, sanitização de URL antes do envio, atribuição genérica de compartilhamento e inicialização opcional pelo snippet individual `pa-...js` fornecido pelo Plausible. Sem a configuração externa desse snippet, a integração permanece `no-op`.
+
+Ativação em produção continua dependente de gate separado.
 
 ---
 

@@ -40,11 +40,11 @@ test('identidade, headline, campos vazios e microcopy seguem o contrato canônic
 test('URL e mensagem genéricas não carregam a sentinela nem dados individuais', () => {
   const sentinelIncome = '12345678'
   const sentinelResidents = '7'
-  const url = buildShareUrl('https://renda.example/path?income=12345678#top-7')
+  const url = buildShareUrl('https://renda.example/path?income=12345678#top-7', 'copy')
   const payload = buildSharePayload(url, false, 'TOP 12% — posição')
   const serialized = JSON.stringify(payload)
 
-  assert.equal(url, 'https://renda.example/')
+  assert.equal(url, 'https://renda.example/?utm_source=share&utm_medium=copy&utm_campaign=organic_share')
   assert.equal(payload.text, GENERIC_SHARE_MESSAGE)
   for (const forbidden of [sentinelIncome, sentinelResidents, 'TOP 12%', 'Percentil']) {
     assert.equal(serialized.includes(forbidden), false, forbidden)
@@ -69,12 +69,13 @@ test('limites não inventam TOP 0%, TOP 100% ou posição fora do suporte', () =
 })
 
 test('WhatsApp contém somente texto visível e URL genérica', () => {
-  const payload = buildSharePayload('https://renda.example/', false, null)
+  const shareUrl = buildShareUrl('https://renda.example/', 'whatsapp')
+  const payload = buildSharePayload(shareUrl, false, null)
   const whatsapp = new URL(buildWhatsAppUrl(payload))
   const visible = whatsapp.searchParams.get('text') ?? ''
 
   assert.equal(whatsapp.origin, 'https://wa.me')
-  assert.equal(visible, `${GENERIC_SHARE_MESSAGE}\nhttps://renda.example/`)
+  assert.equal(visible, `${GENERIC_SHARE_MESSAGE}\n${shareUrl}`)
   assert.equal(visible.includes('12345678'), false)
   assert.equal(visible.includes('moradores'), false)
 })
@@ -88,8 +89,8 @@ test('bloco de share vem após interpretação essencial, inicia privado e mant�
   assert.match(app, /const \[includePosition, setIncludePosition\] = useState\(false\)/)
   assert.match(app, /disabled=\{!positionShareMessage\}/)
   assert.match(app, /typeof navigator\.share !== 'function'/)
-  assert.match(app, /navigator\.share\(sharePayload\)/)
-  assert.match(app, /navigator\.clipboard\.writeText\(shareUrl\)/)
+  assert.match(app, /navigator\.share\(sharePayloadFor\('native'\)\)/)
+  assert.match(app, /navigator\.clipboard\.writeText\(buildShareUrl\(window\.location\.origin, 'copy'\)\)/)
   assert.match(app, /Compartilhamento nativo indisponível\. Link copiado\./)
   assert.match(app, /shouldShowSharing\(brazilCalculation\.status, worldCalculation\.status\)/)
 })
@@ -103,7 +104,7 @@ test('fluxo H3 mantém share antes da nova simulação e dos detalhes técnicos'
   assert.equal(sharing >= 0 && recalculate > sharing && metadata > recalculate, true)
 })
 
-test('compartilhamento não introduz persistência, analytics ou dados na URL', async () => {
+test('compartilhamento não introduz persistência nem dados financeiros na URL', async () => {
   const app = await readFile(new URL('src/App.tsx', root), 'utf8')
   const share = await readFile(new URL('src/share.ts', root), 'utf8')
   const active = `${app}\n${share}`
@@ -114,10 +115,12 @@ test('compartilhamento não introduz persistência, analytics ou dados na URL', 
     'indexedDB',
     'document.cookie',
     'sendBeacon',
-    'analytics',
     'console.',
-    'URLSearchParams',
   ]) {
     assert.equal(active.includes(forbidden), false, forbidden)
   }
+
+  assert.match(share, /utm_source', 'share'/)
+  assert.match(share, /utm_medium', channel/)
+  assert.match(share, /utm_campaign', 'organic_share'/)
 })

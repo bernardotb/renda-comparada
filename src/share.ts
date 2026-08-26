@@ -2,6 +2,9 @@ import type { BrazilPositionDisplay } from './brazil/domain.ts'
 
 export const GENERIC_SHARE_MESSAGE = 'Descobri onde minha renda está na distribuição brasileira. E você?'
 export const SHARE_TITLE = 'Renda Comparada'
+export const SHARE_CHANNELS = ['native', 'whatsapp', 'copy'] as const
+
+export type ShareChannel = typeof SHARE_CHANNELS[number]
 
 export type SharePayload = {
   title: string
@@ -9,9 +12,11 @@ export type SharePayload = {
   url: string
 }
 
-export function buildShareUrl(origin: string): string {
+export function buildShareUrl(origin: string, channel: ShareChannel): string {
   const url = new URL('/', origin)
-  url.search = ''
+  url.searchParams.set('utm_source', 'share')
+  url.searchParams.set('utm_medium', channel)
+  url.searchParams.set('utm_campaign', 'organic_share')
   url.hash = ''
   return url.toString()
 }

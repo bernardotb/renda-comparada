@@ -12,8 +12,8 @@ modified: 2026-08-14T16:12:00.000-03:00
 **Produto:** Renda Comparada  
 **Documento:** `10-testes-validacao.md`  
 **Status:** Canônico para qualidade, testes e validação  
-**Versão:** 1.3
-**Última revisão:** 19/08/2026
+**Versão:** 1.5
+**Última revisão:** 26/08/2026
 
 Documentos relacionados:
 
@@ -2026,7 +2026,7 @@ Testar que:
 
 - a opção começa desativada;
 - ativá-la altera apenas o texto/card visível;
-- `share_mode = position` pode ser registrado sem o valor da posição;
+- nenhum modo ou valor da posição é enviado como propriedade de analytics;
 - renda, moradores e renda per capita permanecem ausentes;
 - a URL compartilhada continua genérica e não codifica o resultado.
 
@@ -2209,19 +2209,17 @@ Nenhum cookie deve conter:
 
 Inspecionar payloads dos eventos.
 
-Esperado:
+Eventos customizados esperados:
 
 ```text
+calculation_started
 calculation_completed
+result_viewed
+share_clicked
+recalculate_clicked
 ```
 
-Parâmetros categóricos permitidos quando necessários:
-
-```text
-share_channel
-share_mode
-app_version
-```
+Todos os cinco eventos devem ser enviados sem custom properties. O canal de aquisição por compartilhamento deve permanecer disponível somente nas UTMs genéricas da URL recebida.
 
 Sem:
 
@@ -2234,9 +2232,9 @@ income_band
 top_percent
 ```
 
-ou faixas/equivalentes que revelem informação financeira.
+ou faixas/equivalentes que revelem informação financeira. A URL enviada ao Plausible deve preservar somente o caminho e, quando válidas, as UTMs genéricas de compartilhamento.
 
-Se Vercel Web Analytics for adotado, testar também `beforeSend` e confirmar que URL/query não carregam dados financeiros.
+Usar em teste local `RENDA_SENTINELA = 12345678` e `MORADORES_SENTINELA = 7`; nenhum valor pode aparecer em chamadas mockadas, propriedades, URLs, UTMs, logs, storage, cookies ou payload intermediário.
 
 ---
 
@@ -2340,11 +2338,11 @@ três vezes por acidente.
 
 # 104. calculation_started
 
-Não deve disparar:
+Deve disparar uma vez quando o formulário é submetido pelo CTA de cálculo, inclusive se a tentativa terminar na validação dos campos. Não deve disparar:
 
 > uma vez por tecla.
 
-Definir gatilho consistente.
+O gatilho não pode depender de render ou mudança de input.
 
 ---
 
@@ -2378,7 +2376,7 @@ Bloquear script de analytics.
 
 Resultado esperado:
 
-> calculadora continua funcionando.
+> cálculo, resultado e compartilhamento continuam funcionando.
 
 ---
 
