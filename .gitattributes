@@ -1,0 +1,15 @@
+data/production/brazil/brazil-income-engine-manifest.json text eol=lf
+data/production/brazil/brazil-income-cdf-2025.json text eol=lf
+data/production/brazil/brazil-price-alignment.json text eol=lf
+config/schemas/brazil-income-engine-manifest.schema.json text eol=lf
+config/schemas/brazil-price-alignment.schema.json text eol=lf
+validation/brazil/brazil-price-alignment-proposal.json text eol=lf
+validation/brazil/brazil-income-golden-cases.json text eol=lf
+data/production/world/world-income-engine-manifest.json text eol=lf
+data/production/world/world-income-cdf-2024.json text eol=lf
+data/production/world/world-price-alignment.json text eol=lf
+validation/world/world-income-golden-cases-d070-candidate.json text eol=lf
+config/schemas/world-income-engine-manifest.schema.json text eol=lf
+config/schemas/world-income-cdf.schema.json text eol=lf
+config/schemas/world-price-alignment.schema.json text eol=lf
+validation/world/world-income-cdf-2024-candidate.json text eol=lf
