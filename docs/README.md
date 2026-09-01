@@ -1,13 +1,13 @@
 ---
 title: Renda Comparada — Índice Da Documentação
 created: 2026-08-15T12:57:18.000-03:00
-modified: 2026-08-20T11:12:06.617-03:00
+modified: 2026-09-01T15:28:02.607-03:00
 ---
 
 # Renda Comparada — Índice Da Documentação
 
-**Última revisão:** 20/08/2026
-**Estado:** V1 em preparação; motores Brasil e Mundo integrados ao frontend; D066–D070 canônicas; sem autorização de deploy.
+**Última revisão:** 01/09/2026
+**Estado:** versão pública existente em `https://rendacomparada.com.br`; produção observada diferente do build atual do `HEAD`; motores Brasil e Mundo integrados ao frontend; D066–D077 canônicas. O commit de produção permanece desconhecido.
 
 Este diretório contém a documentação de autoridade do projeto. Ele deve ser lido antes de alterações relevantes de produto, dados, UX ou implementação.
 
@@ -172,7 +172,7 @@ Também estão fechados para a home V1:
 - `og:description`;
 - texto padrão de compartilhamento sem posição.
 
-Continuam abertos apenas `PRODUCTION_DOMAIN`, URL canônica, `DEFAULT_OG_IMAGE` e configuração de Search Console.
+D076 fechou `PRODUCTION_DOMAIN = rendacomparada.com.br` e `CANONICAL_URL = https://rendacomparada.com.br`. Continuam abertos `DEFAULT_OG_IMAGE` e a configuração de Search Console, cujo estado externo permanece desconhecido.
 
 Alinhamento temporal — D065:
 
@@ -227,7 +227,7 @@ Essa regra pertence somente à apresentação. A CDF conserva precisão interna 
 | D068 | **ATIVA / CANÔNICA** | `decisoes.md`; contrato e estatísticas estruturais verificados pelo pacote/teste de produção versionados |
 | D069 | **ATIVA / CANÔNICA** | `decisoes.md`; fatores PIP `aux/ppp` e `aux/cpi` preservados no alinhamento de preços versionado |
 | D070 | **ATIVA / CANÔNICA** | `decisoes.md`; o teste versionado espera 11 golden cases; o manifesto registra caminho, versão, SHA-256 e tamanho do artefato |
-| Produção Mundo | **MATERIALIZADA / VALIDADA / INCLUÍDA NO BUILD LOCAL** | `../data/production/world/`; manifesto agregador autorizado; nenhum deploy comprovado |
+| Produção Mundo | **MATERIALIZADA / VALIDADA / INCLUÍDA NO BUILD LOCAL E OBSERVADA PUBLICAMENTE** | `../data/production/world/`; manifesto agregador autorizado; os três artefatos públicos Mundo coincidiram com o build local no Gate 0A; isso não prova que o build completo do `HEAD` esteja deployed |
 | Frontend Mundo | **INTEGRADO** | bootstrap mínimo, carregamento sob demanda e falha independente do Brasil |
 
 D066 congela a versão/build PIP, o ano global de 2024 e a base PPP 2021. D067 define o resultado como **posição monetária global estimada**, baseada na distribuição harmonizada do PIP, que combina renda ou consumo domiciliar per capita conforme a fonte nacional.
@@ -284,15 +284,19 @@ Não preencher esses campos por inferência.
 
 ## 8. SEO E Analytics
 
-A taxonomia e as restrições de analytics estão especificadas, mas o fornecedor ainda não foi canonizado.
+D076 canonizou o domínio público e a URL canônica. D077 canonizou Plausible Analytics para a instrumentação mínima da Fase 2 e preserva a distinção entre implementação local, deploy e ativação em produção.
 
 ```text
-ANALYTICS_PROVIDER = [DEFINIR]
-PRODUCTION_DOMAIN = [DEFINIR]
-SEARCH_CONSOLE_PROPERTY = [CONFIGURAR]
+ANALYTICS_PROVIDER = Plausible Analytics
+IMPLEMENTADO_NO_HEAD = SIM
+DEPLOYED_NA_PRODUÇÃO_OBSERVADA = NÃO
+ATIVO_NA_PRODUÇÃO_OBSERVADA = NÃO
+PRODUCTION_DOMAIN = rendacomparada.com.br
+CANONICAL_URL = https://rendacomparada.com.br
+SEARCH_CONSOLE_STATUS = UNKNOWN
 ```
 
-Vercel Web Analytics foi estudado como candidato. A documentação oficial confirma que Web Analytics existe no Hobby, mas eventos personalizados são recurso de Pro/Enterprise. Portanto, a escolha depende do plano efetivamente utilizado e da decisão operacional final.
+O bundle atualmente servido em produção não contém a implementação Plausible presente no `HEAD`. A produção observada também difere do build atual do `HEAD`; seu deployment ID e commit de origem não foram identificados (`PRODUCTION_COMMIT = UNKNOWN`). Essas constatações não autorizam novo deploy nem configuração externa.
 
 ---
 
@@ -357,4 +361,4 @@ O gate metodológico D070 está fechado e canônico, e o pacote/runtime operacio
 
 Os motores Brasil e Mundo estão integrados. Falha no carregamento Mundo não remove o resultado Brasil, não aciona fallback numérico e não reutiliza resultado mundial anterior.
 
-O **V1 Frontend Completion** e o **V1 Pre-Release Gap Closure** estão concluídos no checkout. Não há no checkout ou no histórico Git evidência versionada de execução do **V1 Release Readiness Gate**. Até que essa evidência seja incorporada, a prontidão de release permanece não comprovada e o deploy continua não autorizado.
+O **V1 Frontend Completion** e o **V1 Pre-Release Gap Closure** estão concluídos no checkout. Não há no checkout ou no histórico Git evidência versionada de execução do **V1 Release Readiness Gate**. Essa lacuna documental não significa ausência de publicação: existe uma versão pública servida pela Vercel em `https://rendacomparada.com.br`, mas ela difere do build atual do `HEAD`, e seu deployment ID e commit de origem permanecem desconhecidos. Nenhuma mudança presente no `HEAD` está autorizada ou comprovada como deployed apenas por existir no checkout.

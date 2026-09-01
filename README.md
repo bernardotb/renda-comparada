@@ -4,14 +4,15 @@ Aplicação para comparar a renda domiciliar por pessoa com distribuições de r
 
 ## Estado atual
 
-Os motores Brasil e Mundo estão integrados ao frontend a partir de pacotes canonizados, com metodologia, CDFs, alinhamentos temporais, manifestos, schemas e validação reproduzível. A conclusão do frontend V1 e o fechamento das lacunas pré-release estão registrados no histórico Git. Isso não equivale a publicação: não há evidência versionada de execução do **V1 Release Readiness Gate**, e o deploy permanece não autorizado.
+Os motores Brasil e Mundo estão integrados ao frontend a partir de pacotes canonizados, com metodologia, CDFs, alinhamentos temporais, manifestos, schemas e validação reproduzível. Existe uma versão pública em [https://rendacomparada.com.br](https://rendacomparada.com.br), servida pela Vercel. A produção observada não corresponde ao build do `HEAD` atual, e o commit de origem do deployment público permanece desconhecido (`PRODUCTION_COMMIT = UNKNOWN`). Portanto, conteúdo presente no checkout ou no GitHub não deve ser tratado automaticamente como deployed.
 
 - Brasil: decisões D063, D065 e D071–D073 ativas; pacote de dados validado e integrado. O G2 foi registrado como PASS COM RESSALVAS, sem converter verificações dinâmicas ausentes em PASS.
 - Mundo: D066–D070 ativas e canônicas; pacote de produção materializado e validado; integração autorizada pelo manifesto agregador.
 - Frontend: Brasil e Mundo calculam resultados numéricos por loaders independentes, sob demanda e sem fallback legado.
 - V1: Frontend Completion e Pre-Release Gap Closure concluídos no checkout.
-- Release readiness: execução e resultado não comprovados no checkout, no histórico Git ou na PR remota inspecionada.
-- Deploy: não autorizado e não executado.
+- Release readiness: execução e resultado não comprovados no checkout ou no histórico Git inspecionado; essa ausência de registro não apaga a existência da versão pública observada.
+- Produção: versão pública existente, diferente do build atual do `HEAD`; deployment ID e commit de origem não identificados.
+- Analytics: Plausible Analytics está decidido e implementado no `HEAD`, mas sua implementação não está presente nem ativa na produção observada.
 
 ## Autoridade e navegação
 
